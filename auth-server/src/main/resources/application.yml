@@ -5,8 +5,9 @@ spring:
   application:
     name: auth-server
   datasource:
-    url: jdbc:postgresql://localhost:5432/locked_out
-    username: postgres
+    url:
+    username:
+    password:
   jpa:
     properties:
       hibernate:
