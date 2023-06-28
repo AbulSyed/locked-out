@@ -70,7 +70,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Order(1)
+    @Order(2)
     public SecurityFilterChain appFilterChain(HttpSecurity http) throws Exception {
         http.formLogin(Customizer.withDefaults());
 
