@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-depl
+  name: frontend-depl
   labels:
-    app: client
+    app: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: client
+      app: frontend
   template:
     metadata:
       labels:
-        app: client
+        app: frontend
     spec:
       containers:
-      - name: client
-        image: abulsy3d/locked-out-client:v202306291221
+      - name: frontend
+        image: abulsy3d/locked-out-frontend:v202306291221
         ports:
         - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: client
+  name: frontend
 spec:
   selector:
-    app: client
+    app: frontend
   type: LoadBalancer
   ports:
     - protocol: TCP
