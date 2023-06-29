@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: abulsy3d/locked-out-auth-service:v202306291351
+        image: abulsy3d/locked-out-auth-service:v202306291717
         ports:
         - containerPort: 8080
 ---

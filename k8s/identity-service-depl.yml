@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: identity-service
-        image: abulsy3d/locked-out-identity-service:v202306291521
+        image: abulsy3d/locked-out-identity-service:v202306291721
         ports:
         - containerPort: 8081
         env:

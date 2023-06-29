@@ -14,4 +14,4 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 app:
-  version: v202306291521
+  version: v202306291721
