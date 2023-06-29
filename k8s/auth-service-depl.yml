@@ -19,13 +19,6 @@ spec:
         image: abulsy3d/locked-out-auth-service:v202306291351
         ports:
         - containerPort: 8080
-        env:
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://51.137.186.0:5432/postgres
-        - name: SPRING_DATASOURCE_USERNAME
-          value: admin
-        - name: SPRING_DATASOURCE_PASSWORD
-          value: admin
 ---
 apiVersion: v1
 kind: Service

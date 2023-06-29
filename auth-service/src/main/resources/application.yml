@@ -4,14 +4,6 @@ server:
 spring:
   application:
     name: auth-service
-  datasource:
-    url:
-    username:
-    password:
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 app:
   version: v202306291351
