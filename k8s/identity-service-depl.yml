@@ -21,7 +21,7 @@ spec:
         - containerPort: 8081
         env:
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://20.254.151.16:5432/postgres
+          value: jdbc:postgresql://51.137.186.0:5432/postgres
         - name: SPRING_DATASOURCE_USERNAME
           value: admin
         - name: SPRING_DATASOURCE_PASSWORD
@@ -33,7 +33,7 @@ metadata:
   name: identity-service
 spec:
   selector:
-    app: auth-service
+    app: identity-service
   type: LoadBalancer
   ports:
     - protocol: TCP
