@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: client
-        image: abulsy3d/locked-out-client:v1
+        image: abulsy3d/locked-out-client:v202306291221
         ports:
         - containerPort: 3000
 ---

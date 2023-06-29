@@ -16,12 +16,12 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: abulsy3d/locked-out-auth-service:v1
+        image: abulsy3d/locked-out-auth-service:v202306291219
         ports:
         - containerPort: 8080
         env:
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://51.142.165.42:5432/postgres
+          value: jdbc:postgresql://20.254.151.16:5432/postgres
         - name: SPRING_DATASOURCE_USERNAME
           value: admin
         - name: SPRING_DATASOURCE_PASSWORD
