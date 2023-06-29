@@ -18,10 +18,24 @@ services:
     ports:
       - 8080:8080
     environment:
+      # SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/postgres
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
+    depends_on:
+      - postgres-db
+    restart: always
+
+  identity-service:
+    build: ../identity-service
+    container_name: identity-service
+    ports:
+      - 8081:8081
+    environment:
       # SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
     depends_on:
       - postgres-db
     restart: always
@@ -33,6 +47,7 @@ services:
       - 3000:3000
     depends_on:
       - auth-service
+      - identity-service
     # environment:
       # VITE_SOME_KEY: hello world
     restart: always
