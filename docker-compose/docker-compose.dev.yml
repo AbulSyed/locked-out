@@ -12,15 +12,6 @@ services:
       - 5432:5432
     restart: always
 
-  auth-service:
-    build: ../auth-service
-    container_name: auth-service
-    ports:
-      - 8080:8080
-#    environment:
-      # SPRING_PROFILES_ACTIVE: dev
-    restart: always
-
   identity-service:
     build: ../identity-service
     container_name: identity-service
@@ -35,14 +26,24 @@ services:
       - postgres-db
     restart: always
 
+  auth-service:
+    build: ../auth-service
+    container_name: auth-service
+    ports:
+      - 8080:8080
+    # environment:
+      # SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      - identity-service
+    restart: always
+
   frontend:
     build: ../frontend
     container_name: frontend
     ports:
       - 3000:3000
-    depends_on:
-      - auth-service
-      - identity-service
     # environment:
       # VITE_SOME_KEY: hello world
+    depends_on:
+      - identity-service
     restart: always
