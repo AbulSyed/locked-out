@@ -1,0 +1,23 @@
+name: frontend CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'frontend/**'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      working-directory: ./frontend
+      run: |
+        timestamp=$(date +'%Y%m%d%H%M')
+        tag="v$timestamp"
+        docker build . --file Dockerfile --tag abulsy3d/locked-out-frontend:$tag
+        docker push abulsy3d/locked-out-frontend:$tag
