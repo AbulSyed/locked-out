@@ -20,4 +20,5 @@ jobs:
         timestamp=$(date +'%Y%m%d%H%M')
         tag="v$timestamp"
         docker build . --file Dockerfile --tag abulsy3d/locked-out-frontend:$tag
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u abulsy3d --password-stdin
         docker push abulsy3d/locked-out-frontend:$tag
