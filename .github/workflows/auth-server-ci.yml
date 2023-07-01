@@ -17,7 +17,7 @@ jobs:
     - name: Build & Push the Docker image
       working-directory: ./auth-service
       run: |
-        timestamp=$(date +'%Y%m%d%H%M')
+        timestamp=$(TZ="Europe/London" date -u +'%Y%m%d%H%M')
         tag="v$timestamp"
         docker build . --file Dockerfile --tag abulsy3d/locked-out-auth-service:$tag
         echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u abulsy3d --password-stdin
