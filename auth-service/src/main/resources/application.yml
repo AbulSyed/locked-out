@@ -6,4 +6,4 @@ spring:
     name: auth-service
 
 app:
-  version: v202307012350
+  version: v202307020010
