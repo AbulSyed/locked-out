@@ -16,8 +16,8 @@ services:
     image: splunk/splunk:8.2
     container_name: splunk-8.2
     ports:
-      - 8000:8000
-      - 8088:8088
+      - 8000:8000 # UI
+      - 8088:8088 # HTTP event collector
     environment:
       SPLUNK_START_ARGS: --accept-license
       SPLUNK_PASSWORD: splunk123
@@ -37,6 +37,7 @@ services:
       SPLUNK_INDEX: identity_service_api
     depends_on:
       - postgres-db
+      - splunk-8.2
     restart: always
 
   auth-service:
@@ -51,15 +52,16 @@ services:
       SPLUNK_INDEX: auth_service_api
     depends_on:
       - identity-service
+      - splunk-8.2
     restart: always
 
-  # frontend:
-  #   build: ../frontend
-  #   container_name: frontend
-  #   ports:
-  #     - 3000:3000
-  #   # environment:
-  #     # VITE_SOME_KEY: hello world
-  #   depends_on:
-  #     - identity-service
-  #   restart: always
+  frontend:
+    build: ../frontend
+    container_name: frontend
+    ports:
+      - 3000:3000
+    # environment:
+      # VITE_SOME_KEY: hello world
+    depends_on:
+      - identity-service
+    restart: always
