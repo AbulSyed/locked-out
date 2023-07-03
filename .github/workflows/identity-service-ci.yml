@@ -41,7 +41,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Build and push the Docker image
+    - name: Build and Push the Docker image
       working-directory: ./identity-service
       run: |
         timestamp=$(TZ="Europe/London" date +'%Y%m%d%H%M')
