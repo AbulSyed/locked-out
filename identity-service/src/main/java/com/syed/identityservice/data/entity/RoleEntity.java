@@ -1,4 +1,4 @@
-package com.syed.identityservice.entity;
+package com.syed.identityservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,8 +11,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "authority")
-public class AuthorityEntity {
+@Table(name = "role")
+public class RoleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +22,9 @@ public class AuthorityEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "authorities", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UserEntity> users;
 
-    @ManyToMany(mappedBy = "authorities", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<ClientEntity> clients;
 }

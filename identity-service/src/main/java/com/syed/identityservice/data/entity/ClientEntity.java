@@ -1,4 +1,4 @@
-package com.syed.identityservice.entity;
+package com.syed.identityservice.data.entity;
 
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;

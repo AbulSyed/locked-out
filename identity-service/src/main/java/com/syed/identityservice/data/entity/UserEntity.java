@@ -1,4 +1,4 @@
-package com.syed.identityservice.entity;
+package com.syed.identityservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
