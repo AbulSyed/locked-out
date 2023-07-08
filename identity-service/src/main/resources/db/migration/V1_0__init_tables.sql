@@ -65,7 +65,7 @@ create table authority (
 );
 
 -- role
-create table authority (
+create table role (
    id bigserial primary key,
    name varchar(50) not null
 );
