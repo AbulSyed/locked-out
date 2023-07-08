@@ -3,6 +3,7 @@ package com.syed.identityservice.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
@@ -50,4 +51,7 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
     private Set<AuthorityEntity> authorities;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 }

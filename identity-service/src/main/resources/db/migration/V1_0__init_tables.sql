@@ -1,7 +1,8 @@
 -- app
 create table app (
     id bigserial primary key,
-    name varchar(50) not null
+    name varchar(50) not null,
+    created_at timestamp not null
 );
 
 -- user
@@ -11,7 +12,8 @@ create table users (
     password varchar(50) not null,
     email varchar(50) not null,
     phone_number varchar(50) null,
-    fk_app_id int not null references app (id)
+    fk_app_id int not null references app (id),
+    created_at timestamp not null
 );
 -- user_role many-to-many
 create table user_role (
@@ -30,7 +32,8 @@ create table client (
     client_id varchar(50) not null,
     secret varchar(50) not null,
     fk_app_id int not null references app (id),
-    redirect_uri varchar(225) not null
+    redirect_uri varchar(225) not null,
+    created_at timestamp not null
 );
 -- client_role many-to-many
 create table client_role (

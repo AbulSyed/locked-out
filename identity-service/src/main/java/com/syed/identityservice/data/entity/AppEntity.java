@@ -3,6 +3,8 @@ package com.syed.identityservice.data.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,4 +27,7 @@ public class AppEntity {
 
     @OneToOne(mappedBy = "userApp")
     private ClientEntity clients;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 }
