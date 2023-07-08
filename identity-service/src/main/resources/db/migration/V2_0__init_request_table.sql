@@ -1,0 +1,10 @@
+-- request
+create table request_audit (
+    id bigserial primary key,
+    request_id varchar(50) not null,
+    process varchar(50) not null,
+    request_type varchar(50) not null,
+    request_status varchar(50) not null,
+    created_at timestamp not null,
+    log varchar(50) null
+);

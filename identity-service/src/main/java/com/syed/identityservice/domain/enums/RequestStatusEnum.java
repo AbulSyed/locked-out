@@ -1,5 +1,5 @@
 package com.syed.identityservice.domain.enums;
 
-public enum RequestStatus {
+public enum RequestStatusEnum {
     PENDING, FULFILLED, REJECTED
 }
