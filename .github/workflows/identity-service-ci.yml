@@ -3,6 +3,8 @@ name: identity-service CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'identity-service/**'
   pull_request:
     branches: [ "main" ]
     paths:
