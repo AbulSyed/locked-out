@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
 
     @Before("com.syed.identityservice.aspect.expression.AopExpressions.forAllControllersOrServices()")
-    public void appLogger(JoinPoint joinPoint) {
+    public void loggingAdvice(JoinPoint joinPoint) {
         String signature = joinPoint.getSignature().toShortString();
         log.info("Entering {}", signature);
     }

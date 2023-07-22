@@ -3,8 +3,8 @@ package com.syed.identityservice.controller;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.service.AppService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +20,8 @@ public class AppController {
 
     @PostMapping("/create-app")
     public ResponseEntity<CreateAppResponse> createApp(
-            @RequestHeader(value = "x-correlation-id", required = false) String correlationId,
-            @RequestBody CreateAppRequest request) {
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @Valid @RequestBody CreateAppRequest request) {
         return new ResponseEntity<>(appService.createApp(correlationId, request), HttpStatus.OK);
     }
 }
