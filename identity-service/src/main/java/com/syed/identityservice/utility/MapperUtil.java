@@ -1,23 +1,22 @@
 package com.syed.identityservice.utility;
 
 import com.syed.identityservice.data.entity.AppEntity;
-import com.syed.identityservice.data.entity.RequestEntity;
+import com.syed.identityservice.data.entity.AuditRequestEntity;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 public class MapperUtil {
 
-    public static RequestEntity createInitialRequestEntity(String correlationId,
-                                                            ProcessEnum process,
-                                                            RequestTypeEnum requestType,
-                                                            RequestStatusEnum requestStatus,
-                                                            String log) {
-        return RequestEntity.builder()
+    public static AuditRequestEntity createInitialRequestEntity(String correlationId,
+                                                                ProcessEnum process,
+                                                                RequestTypeEnum requestType,
+                                                                RequestStatusEnum requestStatus,
+                                                                String log) {
+        return AuditRequestEntity.builder()
                 .correlationId(correlationId)
                 .process(process)
                 .requestType(requestType)
@@ -27,8 +26,8 @@ public class MapperUtil {
                 .build();
     }
 
-    public static RequestEntity fulfillRequestEntity(RequestEntity request) {
-        return RequestEntity.builder()
+    public static AuditRequestEntity fulfillRequestEntity(AuditRequestEntity request) {
+        return AuditRequestEntity.builder()
                 .correlationId(request.getCorrelationId())
                 .process(request.getProcess())
                 .requestType(request.getRequestType())
@@ -38,8 +37,8 @@ public class MapperUtil {
                 .build();
     }
 
-    public static RequestEntity rejectRequestEntity(RequestEntity request, String error) {
-        return RequestEntity.builder()
+    public static AuditRequestEntity rejectRequestEntity(AuditRequestEntity request, String error) {
+        return AuditRequestEntity.builder()
                 .correlationId(request.getCorrelationId())
                 .process(request.getProcess())
                 .requestType(request.getRequestType())

@@ -1,5 +1,5 @@
 -- request
-create table request_audit (
+create table audit_request (
     id bigserial primary key,
     correlation_id varchar(50) not null,
     process varchar(50) not null,
