@@ -22,8 +22,8 @@ public class RequestEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "request_id", nullable = false)
-    private String requestId;
+    @Column(name = "correlation_id", nullable = false)
+    private String correlationId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "process", nullable = false)

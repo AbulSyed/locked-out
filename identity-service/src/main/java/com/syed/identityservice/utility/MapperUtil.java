@@ -18,7 +18,7 @@ public class MapperUtil {
                                                             RequestStatusEnum requestStatus,
                                                             String log) {
         return RequestEntity.builder()
-                .requestId(correlationId)
+                .correlationId(correlationId)
                 .process(process)
                 .requestType(requestType)
                 .requestStatus(requestStatus)
@@ -29,7 +29,7 @@ public class MapperUtil {
 
     public static RequestEntity fulfillRequestEntity(RequestEntity request) {
         return RequestEntity.builder()
-                .requestId(request.getRequestId())
+                .correlationId(request.getCorrelationId())
                 .process(request.getProcess())
                 .requestType(request.getRequestType())
                 .requestStatus(RequestStatusEnum.FULFILLED)
@@ -40,7 +40,7 @@ public class MapperUtil {
 
     public static RequestEntity rejectRequestEntity(RequestEntity request, String error) {
         return RequestEntity.builder()
-                .requestId(request.getRequestId())
+                .correlationId(request.getCorrelationId())
                 .process(request.getProcess())
                 .requestType(request.getRequestType())
                 .requestStatus(RequestStatusEnum.REJECTED)
