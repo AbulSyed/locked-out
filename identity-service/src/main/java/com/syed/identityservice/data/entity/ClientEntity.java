@@ -1,4 +1,4 @@
-package com.syed.identityservice.entity;
+package com.syed.identityservice.data.entity;
 
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
@@ -6,6 +6,7 @@ import com.syed.identityservice.domain.enums.ScopeEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
@@ -68,4 +69,7 @@ public class ClientEntity {
 
     @Column(name = "redirect_uri", nullable = false)
     private String redirectUri;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 }
