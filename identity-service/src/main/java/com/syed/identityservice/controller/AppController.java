@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @AllArgsConstructor
 @RestController
 public class AppController {
@@ -23,8 +22,6 @@ public class AppController {
     public ResponseEntity<CreateAppResponse> createApp(
             @RequestHeader(value = "x-correlation-id", required = false) String correlationId,
             @RequestBody CreateAppRequest request) {
-        log.info("Entering AppController:createApp");
-
         return new ResponseEntity<>(appService.createApp(correlationId, request), HttpStatus.OK);
     }
 }

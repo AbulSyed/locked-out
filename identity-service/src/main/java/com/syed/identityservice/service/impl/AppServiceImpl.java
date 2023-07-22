@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
-@Slf4j
 @Service
 public class AppServiceImpl implements AppService {
 
@@ -25,8 +24,6 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public CreateAppResponse createApp(String correlationId, CreateAppRequest request) {
-        log.info("Entering AppServiceImpl:createApp");
-
         RequestEntity initialRequestEntity = MapperUtil.createInitialRequestEntity(
                 correlationId, ProcessEnum.APP, RequestTypeEnum.CREATE, RequestStatusEnum.PENDING, "");
         requestRepository.save(initialRequestEntity);
