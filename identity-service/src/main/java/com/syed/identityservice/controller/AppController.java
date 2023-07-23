@@ -1,5 +1,9 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.aspect.AuditRequest;
+import com.syed.identityservice.domain.enums.ProcessEnum;
+import com.syed.identityservice.domain.enums.RequestStatusEnum;
+import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.service.AppService;
@@ -18,6 +22,13 @@ public class AppController {
 
     private final AppService appService;
 
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.CREATE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "create app request initiated"
+    )
     @PostMapping("/create-app")
     public ResponseEntity<CreateAppResponse> createApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
