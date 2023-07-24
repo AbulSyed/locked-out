@@ -1,5 +1,6 @@
 package com.syed.identityservice.exception;
 
+import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

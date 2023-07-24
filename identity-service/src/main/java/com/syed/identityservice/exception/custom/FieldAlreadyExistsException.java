@@ -1,4 +1,4 @@
-package com.syed.identityservice.exception;
+package com.syed.identityservice.exception.custom;
 
 public class FieldAlreadyExistsException extends RuntimeException {
 

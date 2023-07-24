@@ -5,7 +5,7 @@ import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.exception.ErrorConstant;
-import com.syed.identityservice.exception.FieldAlreadyExistsException;
+import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.service.AppService;
 import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
