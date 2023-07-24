@@ -6,5 +6,5 @@ create table audit_request (
     request_type varchar(50) not null,
     request_status varchar(50) not null,
     created_at timestamp not null,
-    log varchar(50) null
+    log varchar(100) null
 );
