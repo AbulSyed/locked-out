@@ -34,7 +34,7 @@ public class AppController {
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
-                    description = "Success",
+                    description = "Created",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateAppResponse.class))
             ),
             @ApiResponse(
