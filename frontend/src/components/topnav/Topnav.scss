@@ -1,0 +1,36 @@
+.topnav {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 2;
+  padding: .8rem;
+
+  .main-container {
+    // inherits style also from .main-container in MainLayout.scss
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .topnav-logo {
+      height: 45px;
+      width: 45px;
+    }
+
+    .topnav-list {
+      display: flex;
+      margin-bottom: -.5rem;
+
+      .topnav-list-item {
+        padding: 0.75rem;
+        font-weight: 400;
+        transition: .2s all;
+
+        &:hover {
+          cursor: pointer;
+          background: rgb(46, 71, 80);
+          color: #fff;
+        }
+      }
+    }
+  }
+}
