@@ -9,6 +9,7 @@ const Sidenav: React.FC = () => {
         <li className='sidenav-list-item'>Clients</li>
         <li className='sidenav-list-item'>Users</li>
       </ul>
+      <span className='version'>{import.meta.env.VITE_APP_VERSION}</span>
     </div>
   )
 }

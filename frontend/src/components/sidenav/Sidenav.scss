@@ -3,6 +3,10 @@
   width: 20%;
   height: 92vh;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   .sidenav-list {
     .sidenav-list-item {
       padding: 1rem;
@@ -13,5 +17,12 @@
         background: rgb(208, 208, 208);
       }
     }
+  }
+
+  .version {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: grey;
+    font-size: .8rem;
   }
 }

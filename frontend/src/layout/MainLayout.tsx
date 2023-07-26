@@ -9,7 +9,7 @@ const MainLayout: React.FC = () => {
       <div style={{display: 'flex'}}>
         <Sidenav />
         <div style={{padding: '2rem'}}>
-          hi
+          main content
         </div>
       </div>
     </div>
