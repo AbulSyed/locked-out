@@ -5,14 +5,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from '../pages/home/Home'
 
 const MainLayout: React.FC = () => {
+  const isNotHome = false;
+
   return (
     <BrowserRouter>
       <Topnav />
-      <div style={{display: 'flex'}}>
-        <Sidenav />
-        <div style={{padding: '2rem'}}>
+      <div style={{ display: isNotHome ? 'flex' : 'initial' }}>
+        {/* <Sidenav /> */}
+        <div>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/home" element={<Home />} />
           </Routes>
         </div>
       </div>

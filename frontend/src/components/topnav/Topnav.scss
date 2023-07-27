@@ -64,3 +64,31 @@
     }
   }
 }
+
+@media(max-width: 1000px) {
+  .navbar {
+    .logo {
+      display: none;
+    }
+  
+    .primary-links {
+      margin-right: 2.5rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+  
+      .li {
+        padding: 1.8rem;
+      }
+    }
+  
+    .secondary-links {
+      margin-right: 2.5rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+  
+      .li {
+        padding: 1.8rem;
+      }
+    }
+  }
+}

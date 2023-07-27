@@ -7,7 +7,7 @@ const Topnav: React.FC = () => {
 			<div className="container">
 					<div className='logo'>LockedOut</div>
 					<ul className="primary-links">
-						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/">
+						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/home">
 							Home
 						</NavLink>
 						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/about">
