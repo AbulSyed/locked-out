@@ -8,18 +8,21 @@ const Topnav: React.FC = () => {
 					<div className='logo'>LockedOut</div>
 					<ul className="primary-links">
 						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/">
-								Discover
+							Home
 						</NavLink>
-						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/myrepos">
-								My repos
+						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/about">
+							About
 						</NavLink>
-						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/favourites">
-								Favourites
+						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/oauth">
+							OAuth2.0
 						</NavLink>
 					</ul>
 					<ul className="secondary-links">
-						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/help">
-								Help & Feedback
+						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/docs">
+							Docs
+						</NavLink>
+						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/docss">
+							Docs
 						</NavLink>
 					</ul>
 			</div>
