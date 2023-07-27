@@ -4,50 +4,63 @@
   background: #fff;
   z-index: 1;
   border-bottom: 3px solid #D2D2D2;
-}
 
-.navbar .container {
-  display: grid;
-  grid-template-columns: 1fr 4fr 4fr;
-  align-items: center;
-}
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 4fr 4fr;
+    align-items: center;
+  }
 
-.navbar .logo {
-  color: var(--primary-color);
-  font-weight: 400;
-  font-size: 1.8rem;
-}
+  .logo {
+    color: var(--primary-color);
+    font-weight: 400;
+    font-size: 1.8rem;
+  }
 
-.navbar .primary-links {
-  display: flex;
-  margin-right: 2.5rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  height: 100%;
-}
+  .primary-links {
+    display: flex;
+    margin-right: 2.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    height: 100%;
 
-.navbar .primary-links .li,
-.navbar .secondary-links .li {
-  padding: 1.8rem;
-  border-bottom: 4px solid transparent;
-}
+    .li {
+      padding: 1.8rem;
+      border-bottom: 4px solid transparent;
+      transition: all .8s;
 
-.navbar .primary-links .active,
-.navbar .secondary-links .active {
-  border-bottom: 4px solid var(--purple-color);
-}
+      &:hover {
+        border-bottom: 4px solid var(--purple-color);
+        cursor: pointer;
+      }
+    }
 
-.navbar .primary-links .li:hover,
-.navbar .secondary-links .li:hover {
-  border-bottom: 4px solid var(--purple-color);
-  cursor: pointer;
-}
+    .active {
+      border-bottom: 4px solid var(--purple-color);
+    }
+  }
 
-.navbar .secondary-links {
-  display: flex;
-  justify-self: end;
-  margin-right: 2.5rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  height: 100%;
+  .secondary-links {
+    display: flex;
+    justify-self: end;
+    margin-right: 2.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    height: 100%;
+
+    .li {
+      padding: 1.8rem;
+      border-bottom: 4px solid transparent;
+      transition: all .8s;
+
+      &:hover {
+        border-bottom: 4px solid var(--purple-color);
+        cursor: pointer;
+      }
+    }
+
+    .active {
+      border-bottom: 4px solid var(--purple-color);
+    }
+  }
 }

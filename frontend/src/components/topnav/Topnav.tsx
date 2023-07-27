@@ -21,9 +21,6 @@ const Topnav: React.FC = () => {
 						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/docs">
 							Docs
 						</NavLink>
-						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/docss">
-							Docs
-						</NavLink>
 					</ul>
 			</div>
 		</nav>
