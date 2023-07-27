@@ -1,0 +1,109 @@
+:root {
+  --white-color: #ffffff;
+  --primary-color: #E11937;
+  --secondary-color: #f99500;
+  --light-color: #F8F8F8;
+  --purple-color: #5236AB;
+  --dark-color: #333;
+  --max-width: 1650px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: 1.5;
+  background: var(--white-color);
+  overflow-y: scroll;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: auto;
+  padding: 0 2rem;
+  overflow: hidden;
+}
+
+a {
+  color: #333;
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+  text-decoration: none;
+}
+p {
+  margin: 0.5rem 0;
+}
+img {
+  width: 100%;
+}
+h1,h2,h3,h4,h5,h6 {
+  margin-bottom: 0.55rem;
+  line-height: 1.3;
+}
+
+.main-container {
+  max-width: var(--max-width);
+  margin: auto;
+  padding: 0 2rem;
+  overflow: hidden; 
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  background: var(--dark-color);
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+}
+.btn-light { background: var(--light-color); }
+.btn-primary { background: var(--primary-color); }
+.btn-secondary { background: var(--secondary-color); }
+
+.btn-block {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+.btn:hover {
+  opacity: 0.9;
+}
+.bg-primary {
+  background: var(--primary-color);
+  color: #fff;
+}
+.bg-dark {
+  background: var(--dark-color);
+  color: #fff;
+}
+.bg-secondary {
+  background: var(--secondary-color);
+  color: #fff;
+}
+
+.pt-1 {padding-top: 1rem;}
+.pt-2 {padding-top: 2rem;}
+.pt-3 {padding-top: 3rem;}
+
+.py-1 {padding: 1rem 0;}
+.py-2 {padding: 2rem 0;}
+.py-3 {padding: 3rem 0;}
+
+.p-1 {padding: 1rem;}
+.p-2 {padding: 2rem;}
+.p-3 {padding: 3rem;}
+
+.l-heading {
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.m-heading {
+  font-size: 1.8rem;
+  font-weight: 300;
+}

@@ -1,8 +1,10 @@
-import './App.css'
+import MainLayout from './layout/MainLayout'
 
 function App() {
   return (
-    <>Welcome</>
+    <div>
+      <MainLayout />
+    </div>
   )
 }
 
