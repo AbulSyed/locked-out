@@ -1,36 +1,53 @@
-.topnav {
+.navbar {
   position: sticky;
   top: 0;
   background: #fff;
-  z-index: 2;
-  padding: .8rem;
+  z-index: 1;
+  border-bottom: 3px solid #D2D2D2;
+}
 
-  .main-container {
-    // inherits style also from .main-container in MainLayout.scss
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.navbar .container {
+  display: grid;
+  grid-template-columns: 1fr 4fr 4fr;
+  align-items: center;
+}
 
-    .topnav-logo {
-      height: 45px;
-      width: 45px;
-    }
+.navbar .logo {
+  color: var(--primary-color);
+  font-weight: 400;
+  font-size: 1.8rem;
+}
 
-    .topnav-list {
-      display: flex;
-      margin-bottom: -.5rem;
+.navbar .primary-links {
+  display: flex;
+  margin-right: 2.5rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  height: 100%;
+}
 
-      .topnav-list-item {
-        padding: 0.75rem;
-        font-weight: 400;
-        transition: .2s all;
+.navbar .primary-links .li,
+.navbar .secondary-links .li {
+  padding: 1.8rem;
+  border-bottom: 4px solid transparent;
+}
 
-        &:hover {
-          cursor: pointer;
-          background: rgb(46, 71, 80);
-          color: #fff;
-        }
-      }
-    }
-  }
+.navbar .primary-links .active,
+.navbar .secondary-links .active {
+  border-bottom: 4px solid var(--purple-color);
+}
+
+.navbar .primary-links .li:hover,
+.navbar .secondary-links .li:hover {
+  border-bottom: 4px solid var(--purple-color);
+  cursor: pointer;
+}
+
+.navbar .secondary-links {
+  display: flex;
+  justify-self: end;
+  margin-right: 2.5rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  height: 100%;
 }

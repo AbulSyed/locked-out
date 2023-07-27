@@ -1,10 +1,12 @@
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  --primary-color: #c72727;
+  --white-color: #ffffff;
+  --primary-color: #E11937;
   --secondary-color: #f99500;
-  --light-color: #f3f3f3;
+  --light-color: #F8F8F8;
+  --purple-color: #5236AB;
   --dark-color: #333;
-  --max-width: 1100px;
+  --max-width: 1650px;
 }
 
 * {
@@ -14,7 +16,32 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
   line-height: 1.5;
-  background: var(--light-color);
+  background: var(--white-color);
+  overflow-y: scroll;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: auto;
+  padding: 0 2rem;
+  overflow: hidden;
+}
+
+.content {
+  margin-top: 2rem;
+}
+
+.inner-container {
+  max-width: 1450px;
+  margin: auto;
+  padding: 0 2rem;
+  overflow: hidden;
+}
+
+.heading {
+  font-size: 2rem;
+  color: #200A58;
+  margin-bottom: 2rem;
 }
