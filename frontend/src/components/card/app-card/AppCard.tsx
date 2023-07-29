@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import AppForm from '../../form/app-app/AppForm';
 
 interface CardProps {
+  id: string,
   title: string,
   description: string,
   to: string
@@ -39,7 +40,7 @@ const Card: React.FC<CardProps> = ({ title, description, to }) => {
               </div>
             </div>
           </div>
-        ) : <AppForm showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
+        ) : <AppForm type='Update' initName={title} initDesc={description} showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
       }
     </div>
   );

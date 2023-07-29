@@ -28,7 +28,7 @@ const DefaultCard: React.FC = () => {
                 </div>
             </div>
         </div> :
-        <AppForm showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
+        <AppForm type='Create' initName='' initDesc='' showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
       }
     </div>
   )

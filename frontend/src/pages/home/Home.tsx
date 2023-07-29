@@ -10,7 +10,7 @@ const Home: React.FC = () => {
         <p className='m-heading py-1'>Your Apps</p>
         <div className='card-container'>
           <DefaultCard />
-          <AppCard title="My App" description='my first cool app' to="/app-1" />
+          <AppCard id="1" title="My App" description='my first cool app' to="/app-1" />
         </div>
       </div>
     </div>
