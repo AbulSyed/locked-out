@@ -1,0 +1,33 @@
+.create-app-form-container {
+  height: 100%;
+  padding: 1rem;
+
+  .create-app-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .form-group {
+      .required {
+        color: red;
+      }
+
+      margin-bottom: 1rem;
+      .label {
+        display: block;
+      }
+
+      .form-input {
+        display: block;
+        width: 100%;
+        padding: .3rem;
+        outline: none;
+      }
+    }
+
+    .form-group-btn {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}

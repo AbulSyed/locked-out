@@ -1,0 +1,28 @@
+.home-container {
+  max-width: 1450px;
+  margin: auto;
+  padding: 0 2rem;
+  overflow: hidden;
+
+  .card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 3rem;
+  }
+}
+
+@media(max-width: 1000px) {
+  .home-container {
+    .card-container { 
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+@media(max-width: 700px) {
+  .home-container {
+    .card-container { 
+      grid-template-columns: 1fr;
+    }
+  }
+}
