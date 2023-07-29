@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-db-depl
+  name: postgres-depl
   labels:
-    app: postgres-db
+    app: postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres-db
+      app: postgres
   template:
     metadata:
       labels:
-        app: postgres-db
+        app: postgres
     spec:
       containers:
-      - name: postgres-db
+      - name: postgres
         image: postgres:14.2-alpine
         ports:
         - containerPort: 5432
@@ -30,10 +30,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-db
+  name: postgres
 spec:
   selector:
-    app: postgres-db
+    app: postgres
   type: LoadBalancer
   ports:
     - protocol: TCP
