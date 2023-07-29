@@ -1,4 +1,5 @@
-import Card from '../../components/card/Card'
+import AppCard from '../../components/card/app-card/AppCard'
+import DefaultCard from '../../components/card/default-card/DefaultCard';
 import './Home.scss'
 
 const Home: React.FC = () => {
@@ -6,12 +7,10 @@ const Home: React.FC = () => {
     <div>
       <div className='home-container'>
         <p className='l-heading pt-1'>Welcome to LockedOut</p>
-        <p className='m-heading py-1'>Create an App</p>
+        <p className='m-heading py-1'>Your Apps</p>
         <div className='card-container'>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          <DefaultCard />
+          <AppCard />
         </div>
       </div>
     </div>
