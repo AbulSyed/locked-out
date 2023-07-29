@@ -1,6 +1,6 @@
 import './MainLayout.scss'
-import Topnav from '../components/topnav/Topnav'
-import Sidenav from '../components/sidenav/Sidenav'
+import Topnav from '../components/top-nav/Topnav'
+import Sidenav from '../components/side-nav/Sidenav'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from '../pages/home/Home'
 

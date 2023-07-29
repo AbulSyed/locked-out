@@ -27,4 +27,4 @@ const Topnav: React.FC = () => {
 	);
 }
   
-  export default Topnav;
+export default Topnav;
