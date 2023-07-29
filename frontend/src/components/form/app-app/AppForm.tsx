@@ -1,4 +1,4 @@
-import './CreateAppForm.scss'
+import './AppForm.scss'
 
 interface CreateAppFormInterface {
   showAppForm: boolean,

@@ -1,7 +1,7 @@
 import './DefaultCard.scss'
 import { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
-import CreateAppForm from '../../form/create-app/CreateAppForm';
+import AppForm from '../../form/app-app/AppForm';
 
 const DefaultCard: React.FC = () => {
   const [showAppForm, setShowAppForm] = useState(true);
@@ -15,7 +15,7 @@ const DefaultCard: React.FC = () => {
                 <div>
                   <div className='default-card-top'>
                     <h2>Create an App</h2>
-                    <PlusOutlined className='icon' onClick={() => setShowAppForm(!showAppForm)} />
+                    <PlusOutlined className='default-card-icon' onClick={() => setShowAppForm(!showAppForm)} />
                   </div>
                   <hr />
                   <p className='desc'>An App represents a resource that requires authentication & authorization.</p>
@@ -28,7 +28,7 @@ const DefaultCard: React.FC = () => {
                 </div>
             </div>
         </div> :
-        <CreateAppForm showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
+        <AppForm showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
       }
     </div>
   )

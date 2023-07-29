@@ -26,14 +26,14 @@
         margin-bottom: 1rem;
       }
 
-      .icon {
-        color: rgb(174, 174, 174);
+      .default-card-icon {
+        // color: rgb(174, 174, 174);
         transition: .5s all;
         margin-top: -.8rem;
 
         &:hover {
           cursor: pointer;
-          color: var(--purple-color);
+          opacity: .8;
         }
       }
     }
