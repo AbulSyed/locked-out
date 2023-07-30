@@ -1,0 +1,30 @@
+deploymentName: splunk-depl
+deploymentLabel: splunk
+
+replicaCount: 1
+
+image:
+  repository: splunk/splunk
+  tag: 8.2
+
+service:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+    - name: hec
+      protocol: TCP
+      port: 8088
+      targetPort: 8088
+
+deployment:
+  containerPorts:
+    - containerPort: 8000 # UI
+    - containerPort: 8088 # HTTP event collector
+  envVars:
+    - name: SPLUNK_START_ARGS
+      value: --accept-license
+    - name: SPLUNK_PASSWORD
+      value: splunk123

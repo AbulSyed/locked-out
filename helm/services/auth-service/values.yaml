@@ -1,0 +1,27 @@
+deploymentName: auth-service-depl
+deploymentLabel: auth-service
+
+replicaCount: 1
+
+image:
+  repository: abulsy3d/locked-out-auth-service
+  tag: v202307222259
+
+service:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+
+deployment:
+  containerPorts:
+    - containerPort: 8080
+  envVars:
+    - name: SPLUNK_URL
+      value: http://51.140.222.18:8088
+    - name: SPLUNK_TOKEN
+      value: 8b110479-b543-4c07-818e-42b8f380aaba
+    - name: SPLUNK_INDEX
+      value: auth_service_api

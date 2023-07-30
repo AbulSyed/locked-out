@@ -1,0 +1,21 @@
+deploymentName: frontend-depl
+deploymentLabel: frontend
+
+replicaCount: 1
+
+image:
+  repository: abulsy3d/locked-out-frontend
+  tag: v202307291526
+
+service:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
+
+deployment:
+  containerPorts:
+    - containerPort: 3000
+  envVars:

@@ -1,0 +1,27 @@
+deploymentName: postgres-depl
+deploymentLabel: postgres
+
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: 14.2-alpine
+
+service:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+
+deployment:
+  containerPorts:
+    - containerPort: 5432
+  envVars:
+    - name: POSTGRES_DB
+      value: locked_out
+    - name: POSTGRES_USER
+      value: admin
+    - name: POSTGRES_PASSWORD
+      value: admin
