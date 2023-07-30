@@ -1,0 +1,33 @@
+deploymentName: identity-service-depl
+deploymentLabel: identity-service
+
+replicaCount: 1
+
+image:
+  repository: abulsy3d/locked-out-identity-service
+  tag: v202307241955
+
+service:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
+
+deployment:
+  containerPorts:
+    - containerPort: 8081
+  envVars:
+    - name: SPRING_DATASOURCE_URL
+      value: jdbc:postgresql://51.140.218.160:5432/locked_out
+    - name: SPRING_DATASOURCE_USERNAME
+      value: admin
+    - name: SPRING_DATASOURCE_PASSWORD
+      value: admin
+    - name: SPLUNK_URL
+      value: http://51.140.222.18:8088
+    - name: SPLUNK_TOKEN
+      value: e65f48ea-cd19-4389-ac00-30b39203958a
+    - name: SPLUNK_INDEX
+      value: identity_service_api
