@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: abulsy3d/locked-out-frontend:v202306291724
+        image: abulsy3d/locked-out-frontend:v202307291526
         ports:
-        - containerPort: 3000
+          - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
