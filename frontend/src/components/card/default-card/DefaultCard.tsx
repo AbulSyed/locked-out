@@ -1,7 +1,7 @@
 import './DefaultCard.scss'
 import { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons';
-import AppForm from '../../form/app-app/AppForm';
+import AppForm from '../../form/app-form/AppForm';
 
 const DefaultCard: React.FC = () => {
   const [showAppForm, setShowAppForm] = useState(true);

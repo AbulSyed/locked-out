@@ -2,7 +2,7 @@ import './AppCard.scss'
 import { ArrowRightOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import AppForm from '../../form/app-app/AppForm';
+import AppForm from '../../form/app-form/AppForm';
 
 interface CardProps {
   id: string,
@@ -13,6 +13,10 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ title, description, to }) => {
   const [showAppForm, setShowAppForm] = useState(true);
+
+  const handleDelete = () => {
+    alert('Are you sure, you want to delete?')
+  }
 
   return ( 
     <div>
@@ -25,7 +29,7 @@ const Card: React.FC<CardProps> = ({ title, description, to }) => {
                   <h2>{title}</h2>
                   <div>
                     <EditOutlined className='app-card-icon' onClick={() => setShowAppForm(false)} />
-                    <DeleteOutlined className='app-card-icon' />
+                    <DeleteOutlined className='app-card-icon' onClick={() => handleDelete()} />
                   </div>
                 </div>
                 <hr />
