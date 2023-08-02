@@ -5,5 +5,5 @@ import com.syed.identityservice.domain.model.response.CreateAppResponse;
 
 public interface AppService {
 
-    CreateAppResponse createApp(String correlationId, CreateAppRequest request);
+    CreateAppResponse createApp(CreateAppRequest request);
 }

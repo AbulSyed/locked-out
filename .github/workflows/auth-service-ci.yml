@@ -6,7 +6,7 @@ on:
     paths:
       - 'auth-service/**'
   pull_request:
-    branches: [ "main" ]
+#    branches: [ "main" ]
     paths:
       - 'auth-service/**'
 

@@ -6,7 +6,7 @@ on:
     paths:
       - 'identity-service/**'
   pull_request:
-    branches: [ "main" ]
+#    branches: [ "main" ]
     paths:
       - 'identity-service/**'
 
