@@ -33,6 +33,6 @@ public class AppController {
     public ResponseEntity<CreateAppResponse> createApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @Valid @RequestBody CreateAppRequest request) {
-        return new ResponseEntity<>(appService.createApp(correlationId, request), HttpStatus.OK);
+        return new ResponseEntity<>(appService.createApp(request), HttpStatus.OK);
     }
 }
