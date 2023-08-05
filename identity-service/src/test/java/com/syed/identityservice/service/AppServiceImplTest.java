@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
@@ -67,6 +68,8 @@ public class AppServiceImplTest {
     void createApp_ThrowsAlreadyExistsException() {
         when(appRepository.existsByName("app")).thenReturn(true);
 
-        assertThrows(FieldAlreadyExistsException.class, () -> appService.createApp(createAppRequest));
+        Throwable throwable = assertThrows(FieldAlreadyExistsException.class, () -> appService.createApp(createAppRequest));
+
+        assertEquals("Name field is already in use, please try another name", throwable.getMessage());
     }
 }
