@@ -2,7 +2,8 @@ package com.syed.identityservice.repository;
 
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class AppRepositoryTest {
 
         boolean state = appRepository.existsByName("test");
 
-        Assertions.assertTrue(state);
+        assertTrue(state);
     }
 
     @Test
@@ -41,6 +42,6 @@ public class AppRepositoryTest {
 
         boolean state = appRepository.existsByName("negative");
 
-        Assertions.assertFalse(state);
+        assertFalse(state);
     }
 }
