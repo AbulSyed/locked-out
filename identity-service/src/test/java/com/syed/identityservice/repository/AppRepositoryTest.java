@@ -28,7 +28,7 @@ public class AppRepositoryTest {
     }
 
     @Test
-    void existsByNameTestPositive() {
+    void existsByName_Positive() {
         appRepository.save(app);
 
         boolean state = appRepository.existsByName("test");
@@ -37,7 +37,7 @@ public class AppRepositoryTest {
     }
 
     @Test
-    void existsByNameTestNegative() {
+    void existsByName_Negative() {
         appRepository.save(app);
 
         boolean state = appRepository.existsByName("negative");
