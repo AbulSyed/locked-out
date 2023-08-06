@@ -65,7 +65,7 @@ public class AppServiceImplTest {
     }
 
     @Test
-    void createApp_ThrowsAlreadyExistsException() {
+    void createApp_ThrowsFieldAlreadyExistsException() {
         when(appRepository.existsByName("app")).thenReturn(true);
 
         Throwable throwable = assertThrows(FieldAlreadyExistsException.class, () -> appService.createApp(createAppRequest));
