@@ -1,4 +1,4 @@
-package com.syed.identityservice.repository;
+package com.syed.identityservice.data.repository;
 
 import com.syed.identityservice.data.repository.AppRepository;
 import static org.junit.jupiter.api.Assertions.assertTrue;
