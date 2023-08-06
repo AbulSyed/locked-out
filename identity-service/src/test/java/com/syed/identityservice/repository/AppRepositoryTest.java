@@ -16,7 +16,7 @@ public class AppRepositoryTest {
     private AppRepository appRepository;
 
     @Test
-    void existsByName_Positive() {
+    void existsByName_ReturnTrue() {
         when(appRepository.existsByName("app")).thenReturn(true);
 
         boolean state = appRepository.existsByName("app");
@@ -25,7 +25,7 @@ public class AppRepositoryTest {
     }
 
     @Test
-    void existsByName_Negative() {
+    void existsByName_ReturnFalse() {
         when(appRepository.existsByName("app")).thenReturn(false);
 
         boolean state = appRepository.existsByName("app");
