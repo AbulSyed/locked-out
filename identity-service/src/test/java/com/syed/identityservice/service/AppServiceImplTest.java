@@ -53,7 +53,7 @@ public class AppServiceImplTest {
     @Test
     void createApp_Success() {
         when(appRepository.existsByName("app")).thenReturn(false);
-        when(appRepository.save(any())).thenReturn(appEntity);
+        when(appRepository.save(any(AppEntity.class))).thenReturn(appEntity);
 
         CreateAppResponse res = appService.createApp(createAppRequest);
 
