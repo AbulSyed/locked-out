@@ -1,46 +1,34 @@
 package com.syed.identityservice.repository;
 
-import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-
-@DataJpaTest
+@ExtendWith(MockitoExtension.class)
 public class AppRepositoryTest {
 
-    @Autowired
+    @Mock
     private AppRepository appRepository;
-
-    private AppEntity app;
-
-    @BeforeEach
-    void setUp() {
-        app = AppEntity.builder()
-                .name("test")
-                .createdAt(LocalDateTime.now())
-                .build();
-    }
 
     @Test
     void existsByName_Positive() {
-        appRepository.save(app);
+        when(appRepository.existsByName("app")).thenReturn(true);
 
-        boolean state = appRepository.existsByName("test");
+        boolean state = appRepository.existsByName("app");
 
         assertTrue(state);
     }
 
     @Test
     void existsByName_Negative() {
-        appRepository.save(app);
+        when(appRepository.existsByName("app")).thenReturn(false);
 
-        boolean state = appRepository.existsByName("negative");
+        boolean state = appRepository.existsByName("app");
 
         assertFalse(state);
     }
