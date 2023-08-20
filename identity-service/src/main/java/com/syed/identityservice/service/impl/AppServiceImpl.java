@@ -18,17 +18,17 @@ public class AppServiceImpl implements AppService {
     private final AppRepository appRepository;
 
     @Override
-    public CreateAppResponse createApp(String correlationId, CreateAppRequest request) {
+    public CreateAppResponse createApp(CreateAppRequest request) {
         if (appRepository.existsByName(request.getName())) {
             throw new FieldAlreadyExistsException(ErrorConstant.FIELD_ALREADY_USED.formatMessage("Name"));
         }
 
-        AppEntity appEntity = MapperUtil.mapAppModelToEntity(request);
-        appRepository.save(appEntity);
+        AppEntity appEntity = appRepository.save(MapperUtil.mapAppModelToEntity(request));
 
         return CreateAppResponse.builder()
                 .id(appEntity.getId())
                 .name(appEntity.getName())
+                .createdAt(appEntity.getCreatedAt())
                 .build();
     }
 }
