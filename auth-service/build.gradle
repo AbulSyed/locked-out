@@ -15,29 +15,19 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	implementation.exclude module: 'spring-boot-starter-logging'
 }
 
 repositories {
 	mavenCentral()
-	maven {
-		url = uri('https://splunk.jfrog.io/splunk/ext-releases-local')
-		name = 'Splunk Releases'
-		content {
-			includeGroup 'com.splunk.logging'
-		}
-	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'com.microsoft.azure:applicationinsights-runtime-attach:3.4.16'
 
 	compileOnly 'org.projectlombok:lombok'
-
-	runtimeOnly 'com.splunk.logging:splunk-library-javalogging:1.8.0'
 
 	annotationProcessor 'org.projectlombok:lombok'
 
