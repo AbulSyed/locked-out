@@ -7,6 +7,6 @@ public class AppControllerIntegrationTest {
 
     @Test
     void test() {
-        Assertions.assertEquals(1, 1);
+        Assertions.assertEquals(1, 2);
     }
 }
