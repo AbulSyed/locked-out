@@ -1,6 +1,7 @@
-package com.syed.identityservice;
+package com.syed.identityservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import org.hamcrest.CoreMatchers;
@@ -25,18 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@Testcontainers
-public class AppControllerIntegrationTest {
-
-    @Container
-    private static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:14.2-alpine");
-
-    @DynamicPropertySource
-    public static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-        registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
-    }
+public class AppControllerIntegrationTest extends BaseTest {
 
     @Autowired
     private MockMvc mockMvc;
