@@ -55,7 +55,7 @@ services:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=a2b305e0-a7ef-4148-8c41-80d2e7b0890d;IngestionEndpoint=https://ukwest-0.in.applicationinsights.azure.com/;LiveEndpoint=https://ukwest.livediagnostics.monitor.azure.com/"
     depends_on:
       - identity-service
-      - splunk-8.2
+      # - splunk-8.2
     restart: always
 
   frontend:
