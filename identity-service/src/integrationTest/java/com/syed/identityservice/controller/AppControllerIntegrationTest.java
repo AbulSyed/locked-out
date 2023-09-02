@@ -1,6 +1,7 @@
-package com.syed.identityservice;
+package com.syed.identityservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import org.hamcrest.CoreMatchers;
@@ -10,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -20,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class AppControllerIntegrationTest {
+public class AppControllerIntegrationTest extends BaseTest {
 
     @Autowired
     private MockMvc mockMvc;
