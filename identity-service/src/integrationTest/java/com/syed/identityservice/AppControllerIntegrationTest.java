@@ -68,6 +68,6 @@ public class AppControllerIntegrationTest {
 
         response.andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", CoreMatchers.is(appRequest.getName())));
+                .andExpect(jsonPath("$.name", CoreMatchers.is("app2")));
     }
 }
