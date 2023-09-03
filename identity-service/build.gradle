@@ -33,6 +33,22 @@ dependencies {
 	testImplementation "org.testcontainers:testcontainers:1.19.0"
 	testImplementation "org.testcontainers:junit-jupiter:1.19.0"
 	testImplementation "org.testcontainers:postgresql:1.19.0"
+	testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+	testImplementation 'io.cucumber:cucumber-java:6.10.4'
+	testImplementation 'io.cucumber:cucumber-spring:6.10.4'
+	testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+
+	integrationTestImplementation.extendsFrom(testImplementation)
+	integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+	functionalTestImplementation.extendsFrom(testImplementation)
+	functionalTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+	cucumberRuntime.extendsFrom(testImplementation)
 }
 
 test {
@@ -46,6 +62,17 @@ sourceSets {
 		compileClasspath += sourceSets.main.output + sourceSets.test.output
 		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
 	}
+
+	functionalTest {
+		java.srcDir 'src/functionalTest/java'
+		resources.srcDir 'src/functionalTest/resources'
+		compileClasspath += sourceSets.main.output + sourceSets.test.output
+		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+
+		// to remove error Entry features/*.feature is a duplicate but no duplicate handling strategy has been set
+		// duplicate file added to ./build/..
+		resources.exclude '**/features/**'
+	}
 }
 
 task integrationTest(type: Test) {
@@ -57,10 +84,11 @@ task integrationTest(type: Test) {
 	classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	integrationTestImplementation.extendsFrom(testImplementation)
-	integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+task functionalTest(type: Test) {
+	useJUnitPlatform()
+
+	description = "Run functional tests"
+	group = "verification"
+	testClassesDirs = sourceSets.functionalTest.output.classesDirs
+	classpath = sourceSets.functionalTest.runtimeClasspath
 }
