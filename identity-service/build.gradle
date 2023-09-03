@@ -11,12 +11,6 @@ java {
 	sourceCompatibility = '17'
 }
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-
 repositories {
 	mavenCentral()
 }
@@ -36,8 +30,37 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "org.testcontainers:testcontainers:1.19.0"
+	testImplementation "org.testcontainers:junit-jupiter:1.19.0"
+	testImplementation "org.testcontainers:postgresql:1.19.0"
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
+}
+
+sourceSets {
+	integrationTest {
+		java.srcDir 'src/integrationTest/java'
+		resources.srcDir 'src/integrationTest/resources'
+		compileClasspath += sourceSets.main.output + sourceSets.test.output
+		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+	}
+}
+
+task integrationTest(type: Test) {
+	useJUnitPlatform()
+
+	description = "Run integration tests"
+	group = "verification"
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	integrationTestImplementation.extendsFrom(testImplementation)
+	integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
