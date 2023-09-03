@@ -18,26 +18,24 @@ public class HealthCheckSteps {
     private final RestTemplate restTemplate = new RestTemplate();
     private ResponseEntity<String> response;
 
-    @Given("the API is running locally")
-    public void setBaseUri() {
-
+    @Given("the API is running")
+    public void givenApiRunning() {
     }
 
-    @When("a user calls the Health Check endpoint")
-    public void callHealthCheckEndpoint() {
-        response = restTemplate.exchange("http://localhost:" + port + "/health", HttpMethod.GET, null, String.class);
+    @When("a user calls the Health Check endpoint {string}")
+    public void callHealthCheckEndpoint(String endpoint) {
+        response = restTemplate.exchange("http://localhost:" + port + endpoint, HttpMethod.GET, null, String.class);
     }
 
-    @Then("the response status code should be 200 OK")
-    public void verifyResponseStatusCode() {
+    @Then("the response status code should be {string}")
+    public void verifyResponseStatusCode(String status) {
         String statusCode = response.getStatusCode().toString();
-        assertEquals("200 OK", statusCode);
+        assertEquals(status, statusCode);
     }
 
-    @And("the response body should contain the message 'Identity service v2023082139 running'")
-    public void verifyResponseBody() {
+    @And("the response should contain the message {string}")
+    public void verifyResponse(String message) {
         String responseBody = response.getBody();
-        String expectedMessage = "Identity service v2023082139 running";
-        assertEquals(expectedMessage, responseBody);
+        assertEquals(message, responseBody);
     }
 }
