@@ -1,4 +1,4 @@
-package com.syed.identityservice.cucumberglue;
+package com.syed.identityservice.glue;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
