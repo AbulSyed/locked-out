@@ -37,7 +37,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Run Functional Tests
-        working-directory: ./identity-service
+        working-directory: ./auth-service
         run: ./gradlew functionalTest
 
   build_and_push_image:
