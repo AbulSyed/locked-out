@@ -11,12 +11,6 @@ java {
 	sourceCompatibility = '17'
 }
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-
 repositories {
 	mavenCentral()
 }
@@ -32,8 +26,44 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+	testImplementation 'io.cucumber:cucumber-java:6.10.4'
+	testImplementation 'io.cucumber:cucumber-spring:6.10.4'
+	testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
 }
 
-tasks.named('test') {
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+
+	functionalTestImplementation.extendsFrom(testImplementation)
+	functionalTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+	cucumberRuntime.extendsFrom(testImplementation)
+}
+
+test {
 	useJUnitPlatform()
+}
+
+sourceSets {
+	functionalTest {
+		java.srcDir 'src/functionalTest/java'
+		resources.srcDir 'src/functionalTest/resources'
+		compileClasspath += sourceSets.main.output + sourceSets.test.output
+		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+
+		// to remove error Entry features/*.feature is a duplicate but no duplicate handling strategy has been set
+		// duplicate file added to ./build/..
+		resources.exclude '**/features/**'
+	}
+}
+
+task functionalTest(type: Test) {
+	useJUnitPlatform()
+
+	description = "Run functional tests"
+	group = "verification"
+	testClassesDirs = sourceSets.functionalTest.output.classesDirs
+	classpath = sourceSets.functionalTest.runtimeClasspath
 }
