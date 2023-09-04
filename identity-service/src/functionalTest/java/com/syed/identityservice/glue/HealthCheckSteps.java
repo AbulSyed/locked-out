@@ -1,7 +1,6 @@
 package com.syed.identityservice.glue;
 
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -17,10 +16,6 @@ public class HealthCheckSteps {
     private String port;
     private final RestTemplate restTemplate = new RestTemplate();
     private ResponseEntity<String> response;
-
-    @Given("the API is running")
-    public void givenApiRunning() {
-    }
 
     @When("a user calls the Health Check endpoint {string}")
     public void callHealthCheckEndpoint(String endpoint) {

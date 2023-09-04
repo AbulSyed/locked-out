@@ -18,10 +18,6 @@ public class HealthCheckSteps {
     private final RestTemplate restTemplate = new RestTemplate();
     private ResponseEntity<String> response;
 
-    @Given("the API is running")
-    public void givenApiRunning() {
-    }
-
     @When("a user calls the Health Check endpoint {string}")
     public void callHealthCheckEndpoint(String endpoint) {
         response = restTemplate.exchange("http://localhost:" + port + endpoint, HttpMethod.GET, null, String.class);
