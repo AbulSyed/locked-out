@@ -18,18 +18,18 @@ public class HealthCheckSteps {
     private ResponseEntity<String> response;
 
     @When("a user calls the Health Check endpoint {string}")
-    public void callHealthCheckEndpoint(String endpoint) {
+    public void a_user_calls_the_health_check_endpoint(String endpoint) {
         response = restTemplate.exchange("http://localhost:" + port + endpoint, HttpMethod.GET, null, String.class);
     }
 
     @Then("the response status code should be {string}")
-    public void verifyResponseStatusCode(String status) {
+    public void the_response_status_code_should_be(String status) {
         String statusCode = response.getStatusCode().toString();
         assertEquals(status, statusCode);
     }
 
     @And("the response should contain the message {string}")
-    public void verifyResponse(String message) {
+    public void the_response_should_contain_the_message(String message) {
         String responseBody = response.getBody();
         assertEquals(message, responseBody);
     }
