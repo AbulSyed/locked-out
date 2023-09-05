@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
 
-    @Value("spring.application.name")
+    @Value("${spring.application.name}")
     private String applicationName;
 
     private static final String HANDLING_EXCEPTION_LOG_MESSAGE = "{} handling exception {}";
