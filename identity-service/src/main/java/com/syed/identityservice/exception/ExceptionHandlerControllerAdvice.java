@@ -1,6 +1,8 @@
 package com.syed.identityservice.exception;
 
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -9,37 +11,46 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@Slf4j
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
 
+    @Value("${spring.application.name}")
+    private String applicationName;
+
+    private static final String HANDLING_EXCEPTION_LOG_MESSAGE = "{} handling exception {}";
+
+    // this exception is thrown by the @Valid annotation
     @ExceptionHandler
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> errorMap = new HashMap<>();
+        StringBuilder errorMessage = new StringBuilder();
+
         ex.getBindingResult().getAllErrors().forEach(error -> {
-            errorMap.put(((FieldError)error).getField(), error.getDefaultMessage());
+            errorMessage.append(((FieldError) error).getField())
+                    .append(": ")
+                    .append(error.getDefaultMessage());
         });
 
-        return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
+        return errorDetailsResponseEntity(errorMessage.toString(), HttpStatus.BAD_REQUEST, ex);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorMessage> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
-        ErrorMessage errorMessage = new ErrorMessage();
-        errorMessage.setMessage(ex.getMessage());
-        errorMessage.setStatus(HttpStatus.BAD_REQUEST);
-
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
+        return errorDetailsResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST, ex);
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorMessage> handleFieldAlreadyExistsException(FieldAlreadyExistsException ex) {
-        ErrorMessage errorMessage = new ErrorMessage();
-        errorMessage.setMessage(ex.getMessage());
-        errorMessage.setStatus(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> handleFieldAlreadyExistsException(FieldAlreadyExistsException ex) {
+        return errorDetailsResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST, ex);
+    }
 
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> errorDetailsResponseEntity(String errorMessage, HttpStatus status, Exception ex) {
+        log.info(HANDLING_EXCEPTION_LOG_MESSAGE, applicationName, errorMessage, ex);
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(errorMessage);
+        errorResponse.setStatus(status);
+
+        return new ResponseEntity<>(errorResponse, status);
     }
 }
