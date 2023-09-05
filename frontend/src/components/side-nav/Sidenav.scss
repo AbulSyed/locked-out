@@ -1,5 +1,5 @@
 .sidenav {
-  background: rgb(233, 232, 232);
+  background: var(--light-color);
   width: 20%;
   height: 90vh;
 
@@ -12,27 +12,37 @@
     display: flex;
     flex-direction: column;
 
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 500;
     width: 100%;
+
+    .app-select {
+      margin: 1rem;
+      padding: .4rem;
+    }
+
+    .sidenav-hr {
+      margin-bottom: 1rem;
+      opacity: 60%;
+    }
 
     .li {
       // prevent weird effect on hover
       border-left: 4px solid transparent;
       // top right bottom left
       padding: 1rem 0rem 1rem 2rem;
-      transition: all .8s;
+      // transition: all .8s;
 
       &:hover {
-        border-left: 4px solid var(--purple-color);
+        border-left: 4px solid var(--dark-grey-color);
         cursor: pointer;
-        background: rgb(208, 208, 208);
+        background: var(--light-grey);
       }
     }
 
     .active {
-      border-left: 4px solid var(--purple-color);
-      background: rgb(208, 208, 208);
+      border-left: 4px solid var(--dark-grey-color);
+      background: var(--light-grey);
     }
   }
 

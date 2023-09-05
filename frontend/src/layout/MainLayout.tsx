@@ -5,12 +5,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from '../pages/home/Home'
 
 const MainLayout: React.FC = () => {
-  const isNotHome = false;
+  const isShowingSidenav = false;
 
   return (
     <BrowserRouter>
       <Topnav />
-      <div style={{ display: isNotHome ? 'flex' : 'initial' }}>
+      <div style={{ display: isShowingSidenav ? 'flex' : 'initial' }}>
         {/* <Sidenav /> */}
         <div>
           <Routes>

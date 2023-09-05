@@ -6,8 +6,7 @@ const Home: React.FC = () => {
   return (
     <div>
       <div className='home-container'>
-        <p className='l-heading pt-1'>Welcome to LockedOut</p>
-        <p className='m-heading py-1'>Your Apps</p>
+        <p className='m-heading py-2'>Welcome to LockedOut</p>
         <div className='card-container'>
           <DefaultCard />
           <AppCard id="1" title="My App" description='my first cool app' to="/app-1" />

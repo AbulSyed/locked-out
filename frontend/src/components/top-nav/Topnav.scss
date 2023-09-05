@@ -12,8 +12,7 @@
   }
 
   .logo {
-    color: var(--red-color);
-    font-weight: 400;
+    color: var(--dark-color);
     font-size: 1.8rem;
   }
 
@@ -27,16 +26,15 @@
     .li {
       padding: 1.4rem;
       border-bottom: 4px solid transparent;
-      transition: all .8s;
 
       &:hover {
-        border-bottom: 4px solid var(--purple-color);
+        border-bottom: 4px solid var(--dark-grey-color);
         cursor: pointer;
       }
     }
 
     .active {
-      border-bottom: 4px solid var(--purple-color);
+      border-bottom: 4px solid var(--dark-grey-color);
     }
   }
 
@@ -51,16 +49,15 @@
     .li {
       padding: 1.4rem;
       border-bottom: 4px solid transparent;
-      transition: all .8s;
 
       &:hover {
-        border-bottom: 4px solid var(--purple-color);
+        border-bottom: 4px solid var(--dark-grey-color);
         cursor: pointer;
       }
     }
 
     .active {
-      border-bottom: 4px solid var(--purple-color);
+      border-bottom: 4px solid var(--dark-grey-color);
     }
   }
 }
