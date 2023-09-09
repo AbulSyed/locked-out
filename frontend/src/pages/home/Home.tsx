@@ -9,7 +9,7 @@ const Home: React.FC = () => {
         <p className='m-heading py-2'>Welcome to LockedOut</p>
         <div className='card-container'>
           <DefaultCard />
-          <AppCard id="1" title="My App" description='my first cool app' to="/app-1" />
+          <AppCard id="1" title="My App" description='my first cool app' to="/app-1/overview" />
         </div>
       </div>
     </div>
