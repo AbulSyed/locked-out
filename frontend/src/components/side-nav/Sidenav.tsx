@@ -1,7 +1,11 @@
 import './Sidenav.scss'
 import { NavLink } from 'react-router-dom';
 
-const Sidenav: React.FC = () => {
+interface SidenavProps {
+  route: string
+}
+
+const Sidenav: React.FC<SidenavProps> = ({ route }) => {
   return (
     <div className='sidenav'>
       <ul className='sidenav-list'>
@@ -11,22 +15,22 @@ const Sidenav: React.FC = () => {
           <option value="app-3">app-3</option>
         </select>
         <hr className="sidenav-hr"/>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/overview">
+        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/overview"}>
           Overview
         </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/users">
+        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/users"}>
           Users
         </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/clients">
+        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/clients"}>
           Clients
         </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/roles">
+        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/roles"}>
           Roles
         </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/scopes">
+        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/scopes"}>
           Scopes
         </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/token">
+        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/token"}>
           Token
         </NavLink>
       </ul>
