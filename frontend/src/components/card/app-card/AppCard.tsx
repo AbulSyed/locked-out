@@ -37,7 +37,7 @@ const Card: React.FC<CardProps> = ({ title, description, to }) => {
               </div>
               <div>
                 <hr className='hr' />
-                <Link className='bottom-card' to={to} >
+                <Link className='bottom-card' to={'/apps' + to} >
                   <p className='bottom-card-p'>Go to</p>
                   <ArrowRightOutlined />
                 </Link>

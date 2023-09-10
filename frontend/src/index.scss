@@ -2,8 +2,11 @@
   --white-color: #ffffff;
   --red-color: #E11937;
   --light-color: #F8F8F8;
+  --light-grey: #d0d0d0;
   --purple-color: #5236AB;
+  --green-color: #44a15d;
   --dark-color: #333;
+  --dark-grey-color: #4e4e4e;
   --max-width: 1650px;
 }
 
@@ -57,8 +60,8 @@ h1,h2,h3,h4,h5,h6 {
   transition: 0.8s all;
 }
 
-.btn-primary { background: var(--purple-color); }
-.btn-cancel { background: var(--red-color); }
+.btn-primary { background: var(--green-color); }
+.btn-cancel { background: var(--dark-grey-color); }
 
 .btn:hover {
   opacity: 0.8;

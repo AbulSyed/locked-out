@@ -1,24 +1,36 @@
 import './MainLayout.scss'
 import Topnav from '../components/top-nav/Topnav'
 import Sidenav from '../components/side-nav/Sidenav'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from '../pages/home/Home'
+import { useEffect, useState } from 'react'
 
 const MainLayout: React.FC = () => {
-  const isNotHome = false;
+  const [isShowingSidenav, setIsShowingSidenav] = useState(true)
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/apps')) {
+      setIsShowingSidenav(true)
+    } else {
+      setIsShowingSidenav(false)
+    }
+  })
 
   return (
-    <BrowserRouter>
+    <>
       <Topnav />
-      <div style={{ display: isNotHome ? 'flex' : 'initial' }}>
-        {/* <Sidenav /> */}
+      <div style={{ display: isShowingSidenav ? 'flex' : 'initial' }}>
+        {
+          isShowingSidenav ? <Sidenav route='/apps/app-1' /> : null
+        }
         <div>
           <Routes>
             <Route path="/home" element={<Home />} />
           </Routes>
         </div>
       </div>
-    </BrowserRouter>
+    </>
   )
 }
 
