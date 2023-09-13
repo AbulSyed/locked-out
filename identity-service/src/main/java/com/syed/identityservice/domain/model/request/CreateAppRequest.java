@@ -14,4 +14,7 @@ public class CreateAppRequest {
     @NotEmpty(message = "Name can't be empty")
     @Size(max = 15, message = "Maximum length of app name is 15")
     private String name;
+
+    @NotEmpty(message = "Description can't be empty")
+    private String description;
 }

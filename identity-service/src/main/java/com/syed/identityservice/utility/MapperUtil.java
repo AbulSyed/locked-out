@@ -51,6 +51,7 @@ public class MapperUtil {
     public static AppEntity mapAppModelToEntity(CreateAppRequest request) {
         return AppEntity.builder()
                 .name(request.getName())
+                .description(request.getDescription())
                 .createdAt(LocalDateTime.now())
                 .build();
     }

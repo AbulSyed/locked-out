@@ -28,6 +28,7 @@ public class AppServiceImpl implements AppService {
         return CreateAppResponse.builder()
                 .id(appEntity.getId())
                 .name(appEntity.getName())
+                .description(appEntity.getDescription())
                 .createdAt(appEntity.getCreatedAt())
                 .build();
     }

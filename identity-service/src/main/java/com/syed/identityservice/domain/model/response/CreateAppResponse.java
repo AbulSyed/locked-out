@@ -13,5 +13,6 @@ public class CreateAppResponse {
 
     private Long id;
     private String name;
+    private String description;
     private LocalDateTime createdAt;
 }
