@@ -38,11 +38,13 @@ public class AppControllerTest {
 
         createAppRequest = CreateAppRequest.builder()
                 .name("app")
+                .description("test")
                 .build();
 
         createAppResponse = CreateAppResponse.builder()
                 .id(1L)
                 .name("app")
+                .description("test")
                 .createdAt(LocalDateTime.now())
                 .build();
 
