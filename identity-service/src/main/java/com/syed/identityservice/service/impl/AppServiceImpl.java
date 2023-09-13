@@ -32,4 +32,9 @@ public class AppServiceImpl implements AppService {
                 .createdAt(appEntity.getCreatedAt())
                 .build();
     }
+
+    @Override
+    public Object getApp(Long appId) {
+        return appRepository.findById(appId);
+    }
 }

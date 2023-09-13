@@ -11,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
@@ -34,5 +31,20 @@ public class AppController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @Valid @RequestBody CreateAppRequest request) {
         return new ResponseEntity<>(appService.createApp(request), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get app request initiated"
+    )
+    @GetMapping("/get-app/{appId}")
+    public ResponseEntity<Object> getApp(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long appId
+    ) {
+        return new ResponseEntity<>(appService.getApp(appId), HttpStatus.OK);
     }
 }
