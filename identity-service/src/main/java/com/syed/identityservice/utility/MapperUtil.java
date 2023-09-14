@@ -2,10 +2,12 @@ package com.syed.identityservice.utility;
 
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.AuditRequestEntity;
+import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.CreateUserRequest;
 
 import java.time.LocalDateTime;
 
@@ -52,6 +54,16 @@ public class MapperUtil {
         return AppEntity.builder()
                 .name(request.getName())
                 .description(request.getDescription())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static UserEntity mapUserModelToEntity(CreateUserRequest request) {
+        return UserEntity.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
