@@ -1,9 +1,18 @@
 package com.syed.identityservice.domain.model.response;
 
-import com.syed.identityservice.domain.model.AppModel;
+import lombok.*;
 
+import java.time.LocalDateTime;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class GetAppResponse {
 
-    private AppModel app;
-
+    private Long id;
+    private String name;
+    private String description;
+    private LocalDateTime createdAt;
 }

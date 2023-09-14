@@ -6,6 +6,7 @@ import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
+import com.syed.identityservice.domain.model.response.GetAppResponse;
 import com.syed.identityservice.service.AppService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,7 @@ public class AppController {
             log = "get app request initiated"
     )
     @GetMapping("/get-app/{appId}")
-    public ResponseEntity<Object> getApp(
+    public ResponseEntity<GetAppResponse> getApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId
     ) {

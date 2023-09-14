@@ -6,6 +6,8 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.response.CreateAppResponse;
+import com.syed.identityservice.domain.model.response.GetAppResponse;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +33,24 @@ public class MapperUtil {
                 .name(request.getName())
                 .description(request.getDescription())
                 .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static CreateAppResponse mapAppEntityToCreateAppResponse(AppEntity entity) {
+        return CreateAppResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    public static GetAppResponse mapAppEntityToGetAppResponse(AppEntity entity) {
+        return GetAppResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
                 .build();
     }
 }

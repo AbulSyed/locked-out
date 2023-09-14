@@ -4,8 +4,10 @@ import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
+import com.syed.identityservice.domain.model.response.GetAppResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
+import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.AppService;
 import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
@@ -25,16 +27,15 @@ public class AppServiceImpl implements AppService {
 
         AppEntity appEntity = appRepository.save(MapperUtil.mapAppModelToEntity(request));
 
-        return CreateAppResponse.builder()
-                .id(appEntity.getId())
-                .name(appEntity.getName())
-                .description(appEntity.getDescription())
-                .createdAt(appEntity.getCreatedAt())
-                .build();
+        return MapperUtil.mapAppEntityToCreateAppResponse(appEntity);
     }
 
     @Override
-    public Object getApp(Long appId) {
-        return appRepository.findById(appId);
+    public GetAppResponse getApp(Long appId) {
+        AppEntity appEntity = appRepository.findById(appId).orElseThrow(
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+        );
+
+        return MapperUtil.mapAppEntityToGetAppResponse(appEntity);
     }
 }

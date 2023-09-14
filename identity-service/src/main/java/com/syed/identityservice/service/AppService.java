@@ -7,5 +7,5 @@ import com.syed.identityservice.domain.model.response.GetAppResponse;
 public interface AppService {
 
     CreateAppResponse createApp(CreateAppRequest request);
-    Object getApp(Long appId);
+    GetAppResponse getApp(Long appId);
 }
