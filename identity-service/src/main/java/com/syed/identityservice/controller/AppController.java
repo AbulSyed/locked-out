@@ -6,6 +6,7 @@ import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
+import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
 import com.syed.identityservice.service.AppService;
 import jakarta.validation.Valid;
@@ -49,6 +50,21 @@ public class AppController {
             @PathVariable Long appId
     ) {
         return new ResponseEntity<>(appService.getApp(appId), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get app request v2 initiated"
+    )
+    @GetMapping("/get-app-v2/{appId}")
+    public ResponseEntity<GetAppDetailsResponse> getAppV2(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long appId
+    ) {
+        return new ResponseEntity<>(appService.getAppV2(appId), HttpStatus.OK);
     }
 
     @AuditRequest(

@@ -1,12 +1,15 @@
 package com.syed.identityservice.domain.model;
 
-import com.syed.identityservice.data.entity.AppEntity;
-import com.syed.identityservice.data.entity.AuthorityEntity;
-import com.syed.identityservice.data.entity.RoleEntity;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class UserModel {
 
     private Long id;
@@ -14,8 +17,7 @@ public class UserModel {
     private String password;
     private String email;
     private String phoneNumber;
-    private AppEntity userApp;
-    private Set<RoleEntity> roles;
-    private Set<AuthorityEntity> authorities;
+    private Set<RoleModel> roles;
+    private Set<AuthorityModel> authorities;
     private LocalDateTime createdAt;
 }
