@@ -28,7 +28,7 @@ public class AuditAspect {
         RequestStatusEnum requestStatus = auditRequest.requestStatus();
         String log = auditRequest.log();
 
-        AuditRequestEntity initialRequestEntity = MapperUtil.createInitialRequestEntity(
+        AuditRequestEntity initialRequestEntity = MapperUtil.createAuditRequestEntity(
                 correlationId, process, requestType, requestStatus, log
         );
         requestRepository.save(initialRequestEntity);
@@ -39,7 +39,7 @@ public class AuditAspect {
         ProcessEnum process = auditRequest.process();
         RequestTypeEnum requestType = auditRequest.requestType();
 
-        AuditRequestEntity fulfilledRequestEntity = MapperUtil.createInitialRequestEntity(
+        AuditRequestEntity fulfilledRequestEntity = MapperUtil.createAuditRequestEntity(
                 correlationId, process, requestType, RequestStatusEnum.FULFILLED, ""
         );
         requestRepository.save(fulfilledRequestEntity);
@@ -50,7 +50,7 @@ public class AuditAspect {
         ProcessEnum process = auditRequest.process();
         RequestTypeEnum requestType = auditRequest.requestType();
 
-        AuditRequestEntity rejectedRequestEntity = MapperUtil.createInitialRequestEntity(
+        AuditRequestEntity rejectedRequestEntity = MapperUtil.createAuditRequestEntity(
                 correlationId, process, requestType, RequestStatusEnum.REJECTED, ex.getMessage()
         );
         requestRepository.save(rejectedRequestEntity);

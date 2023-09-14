@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public class MapperUtil {
 
-    public static AuditRequestEntity createInitialRequestEntity(String correlationId,
+    public static AuditRequestEntity createAuditRequestEntity(String correlationId,
                                                                 ProcessEnum process,
                                                                 RequestTypeEnum requestType,
                                                                 RequestStatusEnum requestStatus,
@@ -22,28 +22,6 @@ public class MapperUtil {
                 .requestType(requestType)
                 .requestStatus(requestStatus)
                 .log(log)
-                .createdAt(LocalDateTime.now())
-                .build();
-    }
-
-    public static AuditRequestEntity fulfillRequestEntity(AuditRequestEntity request) {
-        return AuditRequestEntity.builder()
-                .correlationId(request.getCorrelationId())
-                .process(request.getProcess())
-                .requestType(request.getRequestType())
-                .requestStatus(RequestStatusEnum.FULFILLED)
-                .log(request.getLog())
-                .createdAt(LocalDateTime.now())
-                .build();
-    }
-
-    public static AuditRequestEntity rejectRequestEntity(AuditRequestEntity request, String error) {
-        return AuditRequestEntity.builder()
-                .correlationId(request.getCorrelationId())
-                .process(request.getProcess())
-                .requestType(request.getRequestType())
-                .requestStatus(RequestStatusEnum.REJECTED)
-                .log(error)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
