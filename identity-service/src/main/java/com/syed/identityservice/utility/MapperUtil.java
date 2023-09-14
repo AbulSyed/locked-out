@@ -99,6 +99,8 @@ public class MapperUtil {
             userSet.add(user);
         }
 
+        // TODO add logic to add client set to GetAppDetailsResponse
+
         return GetAppDetailsResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())

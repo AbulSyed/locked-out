@@ -17,5 +17,6 @@ public class GetAppDetailsResponse {
     private String name;
     private String description;
     private Set<UserModel> users;
+    // TODO add clients set
     private LocalDateTime createdAt;
 }
