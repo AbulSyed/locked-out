@@ -10,6 +10,8 @@ import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapperUtil {
 
@@ -52,5 +54,22 @@ public class MapperUtil {
                 .description(entity.getDescription())
                 .createdAt(entity.getCreatedAt())
                 .build();
+    }
+
+    public static List<GetAppResponse> mapAppEntityListToGetAppResponseList(List<AppEntity> entityList) {
+        List<GetAppResponse> appResponseList = new ArrayList<>();
+
+        for (AppEntity entity : entityList) {
+            GetAppResponse appResponse = GetAppResponse.builder()
+                    .id(entity.getId())
+                    .name(entity.getName())
+                    .description(entity.getDescription())
+                    .createdAt(entity.getCreatedAt())
+                    .build();
+
+            appResponseList.add(appResponse);
+        }
+
+        return appResponseList;
     }
 }

@@ -13,6 +13,8 @@ import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class AppServiceImpl implements AppService {
@@ -37,5 +39,12 @@ public class AppServiceImpl implements AppService {
         );
 
         return MapperUtil.mapAppEntityToGetAppResponse(appEntity);
+    }
+
+    @Override
+    public List<GetAppResponse> getAppList() {
+        List<AppEntity> appEntityList = appRepository.findAll();
+
+        return MapperUtil.mapAppEntityListToGetAppResponseList(appEntityList);
     }
 }

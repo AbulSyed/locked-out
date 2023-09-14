@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 public class AppController {
@@ -47,5 +49,19 @@ public class AppController {
             @PathVariable Long appId
     ) {
         return new ResponseEntity<>(appService.getApp(appId), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get app list request initiated"
+    )
+    @GetMapping("/get-app-list")
+    public ResponseEntity<List<GetAppResponse>> getAppList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    ) {
+        return new ResponseEntity<>(appService.getAppList(), HttpStatus.OK);
     }
 }
