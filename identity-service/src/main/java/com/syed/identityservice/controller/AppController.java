@@ -6,15 +6,15 @@ import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
+import com.syed.identityservice.domain.model.response.GetAppResponse;
 import com.syed.identityservice.service.AppService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -34,5 +34,34 @@ public class AppController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @Valid @RequestBody CreateAppRequest request) {
         return new ResponseEntity<>(appService.createApp(request), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get app request initiated"
+    )
+    @GetMapping("/get-app/{appId}")
+    public ResponseEntity<GetAppResponse> getApp(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long appId
+    ) {
+        return new ResponseEntity<>(appService.getApp(appId), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get app list request initiated"
+    )
+    @GetMapping("/get-app-list")
+    public ResponseEntity<List<GetAppResponse>> getAppList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    ) {
+        return new ResponseEntity<>(appService.getAppList(), HttpStatus.OK);
     }
 }
