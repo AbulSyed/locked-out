@@ -26,11 +26,11 @@ public class AppEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
-//    @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL)
-//    private Set<UserEntity> users;
-//
-//    @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL)
-//    private Set<ClientEntity> clients;
+    @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL)
+    private Set<UserEntity> users;
+
+    @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL)
+    private Set<ClientEntity> clients;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

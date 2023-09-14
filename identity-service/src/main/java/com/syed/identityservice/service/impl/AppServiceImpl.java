@@ -4,6 +4,7 @@ import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
+import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
@@ -39,6 +40,15 @@ public class AppServiceImpl implements AppService {
         );
 
         return MapperUtil.mapAppEntityToGetAppResponse(appEntity);
+    }
+
+    @Override
+    public GetAppDetailsResponse getAppV2(Long appId) {
+        AppEntity appEntity = appRepository.findById(appId).orElseThrow(
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+        );
+
+        return MapperUtil.mapAppEntityToGetAppDetailsResponse(appEntity);
     }
 
     @Override
