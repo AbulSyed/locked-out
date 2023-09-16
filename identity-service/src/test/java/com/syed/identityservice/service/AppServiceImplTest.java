@@ -5,9 +5,11 @@ import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.UpdateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
+import com.syed.identityservice.domain.model.response.UpdateAppResponse;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.AppServiceImpl;
@@ -44,6 +46,8 @@ public class AppServiceImplTest {
     private ClientEntity clientEntity;
     private LocalDateTime createdAt;
     private List<AppEntity> appEntityList;
+    private UpdateAppRequest updateAppRequest;
+    private AppEntity updatedAppEntity;
 
     @BeforeEach
     void setUp() {
@@ -98,6 +102,18 @@ public class AppServiceImplTest {
                         LocalDateTime.now()
                 )
         );
+
+        updateAppRequest = UpdateAppRequest.builder()
+                .name("new name")
+                .description("new desc")
+                .build();
+
+        updatedAppEntity = AppEntity.builder()
+                .id(1L)
+                .name("new name")
+                .description("new desc")
+                .createdAt(createdAt)
+                .build();
     }
 
     @Test
@@ -170,5 +186,21 @@ public class AppServiceImplTest {
         assertThat(res)
                 .isNotNull()
                 .hasSize(1);
+    }
+
+    @Test
+    void updateApp() {
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appEntity));
+        when(appRepository.existsByName("new name")).thenReturn(false);
+        when(appRepository.save(any(AppEntity.class))).thenReturn(updatedAppEntity);
+
+        UpdateAppResponse res = appService.updateApp(1L, updateAppRequest);
+
+        assertThat(res)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("id", 1L)
+                .hasFieldOrPropertyWithValue("name", "new name")
+                .hasFieldOrPropertyWithValue("description", "new desc")
+                .hasFieldOrPropertyWithValue("createdAt", createdAt);
     }
 }
