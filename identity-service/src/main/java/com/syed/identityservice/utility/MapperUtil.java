@@ -12,6 +12,7 @@ import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
+import com.syed.identityservice.domain.model.response.UpdateAppResponse;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -163,5 +164,14 @@ public class MapperUtil {
         }
 
         return appResponseList;
+    }
+
+    public static UpdateAppResponse mapAppEntityToUpdateAppResponse(AppEntity entity) {
+        return UpdateAppResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .build();
     }
 }
