@@ -1,5 +1,6 @@
 package com.syed.identityservice.domain.model.response;
 
+import com.syed.identityservice.domain.model.ClientModel;
 import com.syed.identityservice.domain.model.UserModel;
 import lombok.*;
 
@@ -17,6 +18,6 @@ public class GetAppDetailsResponse {
     private String name;
     private String description;
     private Set<UserModel> users;
-    // TODO add clients set
+    private Set<ClientModel> clients;
     private LocalDateTime createdAt;
 }
