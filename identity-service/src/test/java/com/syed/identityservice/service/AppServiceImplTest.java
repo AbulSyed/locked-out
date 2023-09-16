@@ -1,6 +1,7 @@
 package com.syed.identityservice.service;
 
 import com.syed.identityservice.data.entity.AppEntity;
+import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
@@ -40,6 +41,7 @@ public class AppServiceImplTest {
     private AppEntity appEntity;
     private AppEntity appDetailsEntity;
     private UserEntity userEntity;
+    private ClientEntity clientEntity;
     private LocalDateTime createdAt;
     private List<AppEntity> appEntityList;
 
@@ -69,12 +71,20 @@ public class AppServiceImplTest {
                 .authorities(Collections.emptySet())
                 .createdAt(createdAt)
                 .build();
+        clientEntity = ClientEntity.builder()
+                .id(1L)
+                .clientId("abc")
+                .secret("secret")
+                .roles(Collections.emptySet())
+                .authorities(Collections.emptySet())
+                .build();
 
         appDetailsEntity = AppEntity.builder()
                 .id(1L)
                 .name("app")
                 .description("desc")
                 .users(Set.of(userEntity))
+                .clients(Set.of(clientEntity))
                 .createdAt(createdAt)
                 .build();
 
