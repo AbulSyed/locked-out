@@ -3,9 +3,11 @@ package com.syed.identityservice.service.impl;
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.UpdateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
+import com.syed.identityservice.domain.model.response.UpdateAppResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
@@ -56,6 +58,24 @@ public class AppServiceImpl implements AppService {
         List<AppEntity> appEntityList = appRepository.findAll();
 
         return MapperUtil.mapAppEntityListToGetAppResponseList(appEntityList);
+    }
+
+    @Override
+    public UpdateAppResponse updateApp(Long appId, UpdateAppRequest request) {
+        AppEntity appEntity = appRepository.findById(appId).orElseThrow(
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+        );
+
+        if (!request.getName().equals(appEntity.getName()) && appRepository.existsByName(request.getName())) {
+            throw new FieldAlreadyExistsException(ErrorConstant.FIELD_ALREADY_USED.formatMessage("Name"));
+        }
+
+        appEntity.setName(request.getName());
+        appEntity.setDescription(request.getDescription());
+
+        appRepository.save(appEntity);
+
+        return MapperUtil.mapAppEntityToUpdateAppResponse(appEntity);
     }
 
     @Override

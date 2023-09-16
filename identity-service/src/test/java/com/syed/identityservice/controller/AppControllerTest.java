@@ -1,9 +1,11 @@
 package com.syed.identityservice.controller;
 
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.UpdateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
+import com.syed.identityservice.domain.model.response.UpdateAppResponse;
 import com.syed.identityservice.service.AppService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,6 +42,9 @@ public class AppControllerTest {
     private ResponseEntity<GetAppDetailsResponse> getAppDetailsExpectedResponse;
     private List<GetAppResponse> getAppListResponse;
     private ResponseEntity<List<GetAppResponse>> getAppListExpectedResponse;
+    private UpdateAppRequest updateAppRequest;
+    private UpdateAppResponse updateAppResponse;
+    private ResponseEntity<UpdateAppResponse> updateAppExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -82,6 +87,18 @@ public class AppControllerTest {
                 )
         );
         getAppListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppListResponse);
+
+        updateAppRequest = UpdateAppRequest.builder()
+                .name("new name")
+                .description("new desc")
+                .build();
+        updateAppResponse = UpdateAppResponse.builder()
+                .id(1L)
+                .name("new name")
+                .description("new desc")
+                .createdAt(LocalDateTime.now())
+                .build();
+        updateAppExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(updateAppResponse);
     }
 
     @Test
@@ -126,6 +143,17 @@ public class AppControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAppListExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), getAppListExpectedResponse.getBody());
+    }
+
+    @Test
+    void updateApp() {
+        when(appService.updateApp(any(Long.class), any(UpdateAppRequest.class))).thenReturn(updateAppResponse);
+
+        ResponseEntity<UpdateAppResponse> res = appController.updateApp(correlationId, 1L, updateAppRequest);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), updateAppExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), updateAppExpectedResponse.getBody());
     }
 
     @Test

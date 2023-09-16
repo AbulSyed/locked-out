@@ -5,9 +5,11 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.UpdateAppRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
 import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
+import com.syed.identityservice.domain.model.response.UpdateAppResponse;
 import com.syed.identityservice.service.AppService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -79,6 +81,22 @@ public class AppController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(appService.getAppList(), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.UPDATE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "update app request initiated"
+    )
+    @PutMapping("/update-app/{appId}")
+    public ResponseEntity<UpdateAppResponse> updateApp(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long appId,
+            @Valid @RequestBody UpdateAppRequest updateAppRequest
+    ) {
+        return new ResponseEntity<>(appService.updateApp(appId, updateAppRequest), HttpStatus.OK);
     }
 
     @AuditRequest(
