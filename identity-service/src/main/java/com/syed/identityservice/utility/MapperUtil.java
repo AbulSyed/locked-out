@@ -5,6 +5,7 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.AuthorityModel;
+import com.syed.identityservice.domain.model.ClientModel;
 import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
@@ -99,13 +100,50 @@ public class MapperUtil {
             userSet.add(user);
         }
 
-        // TODO add logic to add client set to GetAppDetailsResponse
+        Set<ClientModel> clientSet = new HashSet<>();
+        for (ClientEntity clientEntity : entity.getClients()) {
+            ClientModel client = ClientModel.builder()
+                    .id(clientEntity.getId())
+                    .clientId(clientEntity.getClientId())
+                    .secret(clientEntity.getSecret())
+                    .scopes(clientEntity.getScope())
+                    .authMethods(clientEntity.getAuthMethod())
+                    .authGrantTypes(clientEntity.getAuthGrantType())
+                    .redirectUri(clientEntity.getRedirectUri())
+                    .createdAt(clientEntity.getCreatedAt())
+                    .build();
+
+            Set<RoleModel> roles = new HashSet<>();
+            for (RoleEntity roleEntity : clientEntity.getRoles()) {
+                RoleModel roleModel = RoleModel.builder()
+                        .id(roleEntity.getId())
+                        .name(roleEntity.getName())
+                        .build();
+
+                roles.add(roleModel);
+            }
+            client.setRoles(roles);
+
+            Set<AuthorityModel> authorities = new HashSet<>();
+            for (AuthorityEntity authorityEntity : clientEntity.getAuthorities()) {
+                AuthorityModel authorityModel = AuthorityModel.builder()
+                        .id(authorityEntity.getId())
+                        .name(authorityEntity.getName())
+                        .build();
+
+                authorities.add(authorityModel);
+            }
+            client.setAuthorities(authorities);
+
+            clientSet.add(client);
+        }
 
         return GetAppDetailsResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .users(userSet)
+                .clients(clientSet)
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
