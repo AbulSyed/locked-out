@@ -13,4 +13,5 @@ public interface AppService {
     GetAppResponse getApp(Long appId);
     GetAppDetailsResponse getAppV2(Long appId);
     List<GetAppResponse> getAppList();
+    void deleteApp(Long appId);
 }

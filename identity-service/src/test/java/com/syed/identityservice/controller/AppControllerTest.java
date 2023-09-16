@@ -7,13 +7,13 @@ import com.syed.identityservice.domain.model.response.GetAppResponse;
 import com.syed.identityservice.service.AppService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -126,5 +126,14 @@ public class AppControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAppListExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), getAppListExpectedResponse.getBody());
+    }
+
+    @Test
+    void deleteApp() {
+        doNothing().when(appService).deleteApp(any(Long.class));
+
+        appService.deleteApp(1L);
+
+        verify(appService, times(1)).deleteApp(1L);
     }
 }
