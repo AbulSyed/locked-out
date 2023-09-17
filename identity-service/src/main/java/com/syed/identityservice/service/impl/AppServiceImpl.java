@@ -77,4 +77,13 @@ public class AppServiceImpl implements AppService {
 
         return MapperUtil.mapAppEntityToUpdateAppResponse(appEntity);
     }
+
+    @Override
+    public void deleteApp(Long appId) {
+        AppEntity appEntity = appRepository.findById(appId).orElseThrow(
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+        );
+
+        appRepository.delete(appEntity);
+    }
 }

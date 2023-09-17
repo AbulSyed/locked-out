@@ -98,4 +98,19 @@ public class AppController {
     ) {
         return new ResponseEntity<>(appService.updateApp(appId, updateAppRequest), HttpStatus.OK);
     }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.APP,
+            requestType = RequestTypeEnum.DELETE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "delete app request initiated"
+    )
+    @DeleteMapping("/delete-app/{appId}")
+    public void deleteApp(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long appId
+    ) {
+        appService.deleteApp(appId);
+    }
 }
