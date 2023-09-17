@@ -5,6 +5,7 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
+import com.syed.identityservice.domain.model.response.CreateUserResponse;
 import com.syed.identityservice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class UserController {
             log = "create user request initiated"
     )
     @PostMapping("/create-user/{appId}")
-    public ResponseEntity<Object> createUser(
+    public ResponseEntity<CreateUserResponse> createUser(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId,
             @RequestBody CreateUserRequest request

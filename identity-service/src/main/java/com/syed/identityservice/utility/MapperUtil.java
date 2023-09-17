@@ -11,6 +11,7 @@ import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.CreateAppResponse;
+import com.syed.identityservice.domain.model.response.CreateUserResponse;
 import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
 import com.syed.identityservice.domain.model.response.GetAppResponse;
 import com.syed.identityservice.domain.model.response.UpdateAppResponse;
@@ -183,6 +184,17 @@ public class MapperUtil {
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static CreateUserResponse mapUserEntityToCreateAppResponse(UserEntity entity) {
+        return CreateUserResponse.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .password(entity.getPassword())
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
+                .createdAt(entity.getCreatedAt())
                 .build();
     }
 }
