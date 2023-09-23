@@ -64,7 +64,7 @@ public class UserControllerTest {
                 .phoneNumber("079")
                 .createdAt(LocalDateTime.now())
                 .build();
-        getUserExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(getUserResponse);
+        getUserExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getUserResponse);
     }
 
     @Test
