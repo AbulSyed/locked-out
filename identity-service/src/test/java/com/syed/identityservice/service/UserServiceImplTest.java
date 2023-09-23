@@ -6,6 +6,7 @@ import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.CreateUserResponse;
+import com.syed.identityservice.domain.model.response.GetUserResponse;
 import com.syed.identityservice.service.impl.UserServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,6 +71,19 @@ public class UserServiceImplTest {
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
         CreateUserResponse res = userService.createUser(1L, createUserRequest);
+
+        assertThat(res).isNotNull()
+                .hasFieldOrPropertyWithValue("username", "joe")
+                .hasFieldOrPropertyWithValue("password", "123")
+                .hasFieldOrPropertyWithValue("email", "joe@mail.com")
+                .hasFieldOrPropertyWithValue("phoneNumber", "079");
+    }
+
+    @Test
+    void getUser() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
+
+        GetUserResponse res = userService.getUser(1L);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("username", "joe")

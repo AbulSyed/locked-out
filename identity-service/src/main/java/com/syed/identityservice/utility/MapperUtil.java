@@ -10,11 +10,7 @@ import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
-import com.syed.identityservice.domain.model.response.CreateAppResponse;
-import com.syed.identityservice.domain.model.response.CreateUserResponse;
-import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
-import com.syed.identityservice.domain.model.response.GetAppResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
+import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -189,6 +185,17 @@ public class MapperUtil {
 
     public static CreateUserResponse mapUserEntityToCreateAppResponse(UserEntity entity) {
         return CreateUserResponse.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .password(entity.getPassword())
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    public static GetUserResponse mapUserEntitytoGetUserResponse(UserEntity entity) {
+        return GetUserResponse.builder()
                 .id(entity.getId())
                 .username(entity.getUsername())
                 .password(entity.getPassword())

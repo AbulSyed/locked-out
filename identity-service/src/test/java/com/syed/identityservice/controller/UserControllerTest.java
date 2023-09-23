@@ -2,6 +2,7 @@ package com.syed.identityservice.controller;
 
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.CreateUserResponse;
+import com.syed.identityservice.domain.model.response.GetUserResponse;
 import com.syed.identityservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,8 @@ public class UserControllerTest {
     private CreateUserRequest createUserRequest;
     private CreateUserResponse createUserResponse;
     private ResponseEntity<CreateUserResponse> createUserExpectedResponse;
+    private GetUserResponse getUserResponse;
+    private ResponseEntity<GetUserResponse> getUserExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -52,6 +55,16 @@ public class UserControllerTest {
                 .createdAt(LocalDateTime.now())
                 .build();
         createUserExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createUserResponse);
+
+        getUserResponse = GetUserResponse.builder()
+                .id(1L)
+                .username("joe")
+                .password("123")
+                .email("joe@mail.com")
+                .phoneNumber("079")
+                .createdAt(LocalDateTime.now())
+                .build();
+        getUserExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(getUserResponse);
     }
 
     @Test
@@ -63,5 +76,16 @@ public class UserControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), createUserExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), createUserExpectedResponse.getBody());
+    }
+
+    @Test
+    void getUser() {
+        when(userService.getUser(any(Long.class))).thenReturn(getUserResponse);
+
+        ResponseEntity<GetUserResponse> res = userController.getUser(correlationId, 1L);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), getUserExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getUserExpectedResponse.getBody());
     }
 }

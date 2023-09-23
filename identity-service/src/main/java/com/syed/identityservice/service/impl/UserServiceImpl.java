@@ -6,6 +6,7 @@ import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.CreateUserResponse;
+import com.syed.identityservice.domain.model.response.GetUserResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
@@ -34,5 +35,13 @@ public class UserServiceImpl implements UserService {
         user.setUserApp(app);
 
         return MapperUtil.mapUserEntityToCreateAppResponse(userRepository.save(user));
+    }
+
+    @Override
+    public GetUserResponse getUser(Long userId) {
+        UserEntity user = userRepository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId)));
+
+        return MapperUtil.mapUserEntitytoGetUserResponse(user);
     }
 }

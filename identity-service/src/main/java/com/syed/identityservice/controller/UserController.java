@@ -6,6 +6,7 @@ import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.CreateUserResponse;
+import com.syed.identityservice.domain.model.response.GetUserResponse;
 import com.syed.identityservice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,5 +33,20 @@ public class UserController {
             @RequestBody CreateUserRequest request
     ) {
         return new ResponseEntity<>(userService.createUser(appId, request), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.USER,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get user request initiated"
+    )
+    @GetMapping("/get-user/{userId}")
+    public ResponseEntity<GetUserResponse> getUser(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long userId
+    ) {
+        return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
     }
 }
