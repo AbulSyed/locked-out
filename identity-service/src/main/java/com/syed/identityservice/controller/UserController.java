@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 public class UserController {
@@ -48,5 +50,19 @@ public class UserController {
             @PathVariable Long userId
     ) {
         return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.USER,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get user list request initiated"
+    )
+    @GetMapping("/get-user-list")
+    public ResponseEntity<List<GetUserResponse>> getUserList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    ) {
+        return new ResponseEntity<>(userService.getUserList(), HttpStatus.OK);
     }
 }

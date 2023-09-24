@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -90,5 +91,15 @@ public class UserServiceImplTest {
                 .hasFieldOrPropertyWithValue("password", "123")
                 .hasFieldOrPropertyWithValue("email", "joe@mail.com")
                 .hasFieldOrPropertyWithValue("phoneNumber", "079");
+    }
+
+    @Test
+    void getUserList() {
+        when(userRepository.findAll()).thenReturn(List.of(userEntity));
+
+        List<GetUserResponse> res = userService.getUserList();
+
+        assertThat(res).isNotNull()
+                .hasSize(1);
     }
 }

@@ -15,6 +15,8 @@ import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,5 +45,12 @@ public class UserServiceImpl implements UserService {
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId)));
 
         return MapperUtil.mapUserEntitytoGetUserResponse(user);
+    }
+
+    @Override
+    public List<GetUserResponse> getUserList() {
+        List<UserEntity> userEntityList = userRepository.findAll();
+
+        return MapperUtil.mapUserEntityListToGetUserResponseList(userEntityList);
     }
 }

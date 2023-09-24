@@ -204,4 +204,23 @@ public class MapperUtil {
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
+
+    public static List<GetUserResponse> mapUserEntityListToGetUserResponseList(List<UserEntity> userEntityList) {
+        List<GetUserResponse> userResponseList = new ArrayList<>();
+
+        for (UserEntity userEntity : userEntityList) {
+            GetUserResponse getUserResponse = GetUserResponse.builder()
+                    .id(userEntity.getId())
+                    .username(userEntity.getUsername())
+                    .password(userEntity.getPassword())
+                    .email(userEntity.getEmail())
+                    .phoneNumber(userEntity.getPhoneNumber())
+                    .createdAt(userEntity.getCreatedAt())
+                    .build();
+
+            userResponseList.add(getUserResponse);
+        }
+
+        return userResponseList;
+    }
 }

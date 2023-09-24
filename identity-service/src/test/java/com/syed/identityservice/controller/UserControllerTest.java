@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,6 +36,8 @@ public class UserControllerTest {
     private ResponseEntity<CreateUserResponse> createUserExpectedResponse;
     private GetUserResponse getUserResponse;
     private ResponseEntity<GetUserResponse> getUserExpectedResponse;
+    private List<GetUserResponse> getUserListResponse;
+    private ResponseEntity<List<GetUserResponse>> getUserListExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -65,6 +68,16 @@ public class UserControllerTest {
                 .createdAt(LocalDateTime.now())
                 .build();
         getUserExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getUserResponse);
+
+        getUserListResponse = List.of(GetUserResponse.builder()
+                .id(1L)
+                .username("joe")
+                .password("123")
+                .email("joe@mail.com")
+                .phoneNumber("079")
+                .createdAt(LocalDateTime.now())
+                .build());
+        getUserListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getUserListResponse);
     }
 
     @Test
@@ -87,5 +100,16 @@ public class UserControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), getUserExpectedResponse.getBody());
+    }
+
+    @Test
+    void getUserList() {
+        when(userService.getUserList()).thenReturn(getUserListResponse);
+
+        ResponseEntity<List<GetUserResponse>> res = userController.getUserList(correlationId);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getUserListExpectedResponse.getBody());
     }
 }
