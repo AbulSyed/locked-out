@@ -65,4 +65,19 @@ public class UserController {
     ) {
         return new ResponseEntity<>(userService.getUserList(), HttpStatus.OK);
     }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.USER,
+            requestType = RequestTypeEnum.DELETE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "delete user request initiated"
+    )
+    @DeleteMapping("/delete-user/{userId}")
+    public void deleteUser(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long userId
+    ) {
+        userService.deleteUser(userId);
+    }
 }

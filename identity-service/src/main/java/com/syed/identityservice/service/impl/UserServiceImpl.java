@@ -53,4 +53,13 @@ public class UserServiceImpl implements UserService {
 
         return MapperUtil.mapUserEntityListToGetUserResponseList(userEntityList);
     }
+
+    @Override
+    public void deleteUser(Long userId) {
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId))
+        );
+
+        userRepository.delete(userEntity);
+    }
 }

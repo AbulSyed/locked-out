@@ -19,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
@@ -111,5 +111,14 @@ public class UserControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), getUserListExpectedResponse.getBody());
+    }
+
+    @Test
+    void deleteUser() {
+        doNothing().when(userService).deleteUser(1L);
+
+        userService.deleteUser(1L);
+        
+        verify(userService, times(1)).deleteUser(1L);
     }
 }
