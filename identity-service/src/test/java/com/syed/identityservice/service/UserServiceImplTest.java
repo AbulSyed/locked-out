@@ -134,6 +134,6 @@ public class UserServiceImplTest {
 
         assertThat(res)
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("name", "new username");
+                .hasFieldOrPropertyWithValue("username", "new username");
     }
 }
