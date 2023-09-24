@@ -1,11 +1,9 @@
 package com.syed.identityservice.controller;
 
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
 import com.syed.identityservice.domain.model.request.UpdateUserRequest;
 import com.syed.identityservice.domain.model.response.CreateUserResponse;
 import com.syed.identityservice.domain.model.response.GetUserResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
 import com.syed.identityservice.domain.model.response.UpdateUserResponse;
 import com.syed.identityservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
