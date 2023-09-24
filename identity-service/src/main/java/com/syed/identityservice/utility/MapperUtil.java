@@ -223,4 +223,15 @@ public class MapperUtil {
 
         return userResponseList;
     }
+
+    public static UpdateUserResponse mapUserEntitytoUpdateUserResponse(UserEntity entity) {
+        return UpdateUserResponse.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .password(entity.getPassword())
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
 }

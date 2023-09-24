@@ -5,8 +5,10 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
+import com.syed.identityservice.domain.model.request.UpdateUserRequest;
 import com.syed.identityservice.domain.model.response.CreateUserResponse;
 import com.syed.identityservice.domain.model.response.GetUserResponse;
+import com.syed.identityservice.domain.model.response.UpdateUserResponse;
 import com.syed.identityservice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,6 +66,22 @@ public class UserController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(userService.getUserList(), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.USER,
+            requestType = RequestTypeEnum.UPDATE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "update user request initiated"
+    )
+    @PutMapping("/update-user/{userId}")
+    public ResponseEntity<UpdateUserResponse> updateUser(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long userId,
+            @RequestBody UpdateUserRequest request
+    ) {
+        return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
     }
 
     @AuditRequest(
