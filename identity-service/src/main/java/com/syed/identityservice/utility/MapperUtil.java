@@ -9,10 +9,8 @@ import com.syed.identityservice.domain.model.ClientModel;
 import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.response.CreateAppResponse;
-import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
-import com.syed.identityservice.domain.model.response.GetAppResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
+import com.syed.identityservice.domain.model.request.CreateUserRequest;
+import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -171,6 +169,68 @@ public class MapperUtil {
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    public static UserEntity mapUserModelToEntity(CreateUserRequest request) {
+        return UserEntity.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+                .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static CreateUserResponse mapUserEntityToCreateAppResponse(UserEntity entity) {
+        return CreateUserResponse.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .password(entity.getPassword())
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    public static GetUserResponse mapUserEntitytoGetUserResponse(UserEntity entity) {
+        return GetUserResponse.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .password(entity.getPassword())
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    public static List<GetUserResponse> mapUserEntityListToGetUserResponseList(List<UserEntity> userEntityList) {
+        List<GetUserResponse> userResponseList = new ArrayList<>();
+
+        for (UserEntity userEntity : userEntityList) {
+            GetUserResponse getUserResponse = GetUserResponse.builder()
+                    .id(userEntity.getId())
+                    .username(userEntity.getUsername())
+                    .password(userEntity.getPassword())
+                    .email(userEntity.getEmail())
+                    .phoneNumber(userEntity.getPhoneNumber())
+                    .createdAt(userEntity.getCreatedAt())
+                    .build();
+
+            userResponseList.add(getUserResponse);
+        }
+
+        return userResponseList;
+    }
+
+    public static UpdateUserResponse mapUserEntitytoUpdateUserResponse(UserEntity entity) {
+        return UpdateUserResponse.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .password(entity.getPassword())
+                .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
