@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
@@ -22,11 +23,14 @@ public class AppEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @OneToOne(mappedBy = "userApp")
-    private UserEntity users;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-    @OneToOne(mappedBy = "userApp")
-    private ClientEntity clients;
+    @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL)
+    private Set<UserEntity> users;
+
+    @OneToMany(mappedBy = "userApp", cascade = CascadeType.ALL)
+    private Set<ClientEntity> clients;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

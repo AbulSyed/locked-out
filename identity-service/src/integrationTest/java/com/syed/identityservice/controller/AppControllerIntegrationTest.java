@@ -11,13 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -46,6 +41,7 @@ public class AppControllerIntegrationTest extends BaseTest {
 
         appRequest = CreateAppRequest.builder()
                 .name("app")
+                .description("desc")
                 .build();
     }
 
@@ -58,6 +54,7 @@ public class AppControllerIntegrationTest extends BaseTest {
 
         response.andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", CoreMatchers.is(appRequest.getName())));
+                .andExpect(jsonPath("$.name", CoreMatchers.is(appRequest.getName())))
+                .andExpect(jsonPath("$.description", CoreMatchers.is(appRequest.getDescription())));
     }
 }

@@ -9,10 +9,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Setter
 @Getter
-public class CreateAppResponse {
+public class CreateUserResponse {
 
     private Long id;
-    private String name;
-    private String description;
+    private String username;
+    private String password;
+    private String email;
+    private String phoneNumber;
     private LocalDateTime createdAt;
 }

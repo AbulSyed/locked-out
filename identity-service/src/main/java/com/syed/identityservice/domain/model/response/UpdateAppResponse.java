@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Setter
 @Getter
-public class CreateAppResponse {
+public class UpdateAppResponse {
 
     private Long id;
     private String name;

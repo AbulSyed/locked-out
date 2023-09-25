@@ -32,7 +32,9 @@ public class UserEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY
+//            , cascade = CascadeType.ALL
+    )
     @JoinColumn(name = "fk_app_id")
     private AppEntity userApp;
 

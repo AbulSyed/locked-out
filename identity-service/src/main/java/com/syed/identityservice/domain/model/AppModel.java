@@ -1,4 +1,4 @@
-package com.syed.identityservice.domain.model.response;
+package com.syed.identityservice.domain.model;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Setter
 @Getter
-public class CreateAppResponse {
+public class AppModel {
 
     private Long id;
     private String name;
