@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MapperUtil {
 
@@ -196,7 +197,7 @@ public class MapperUtil {
     }
 
     public static GetUserResponse mapUserEntitytoGetUserResponse(UserEntity entity) {
-        return GetUserResponse.builder()
+        GetUserResponse user = GetUserResponse.builder()
                 .id(entity.getId())
                 .username(entity.getUsername())
                 .password(entity.getPassword())
@@ -204,6 +205,30 @@ public class MapperUtil {
                 .phoneNumber(entity.getPhoneNumber())
                 .createdAt(entity.getCreatedAt())
                 .build();
+
+        Set<RoleModel> roles = new HashSet<>();
+        for (RoleEntity roleEntity : entity.getRoles()) {
+            RoleModel roleModel = RoleModel.builder()
+                    .id(roleEntity.getId())
+                    .name(roleEntity.getName())
+                    .build();
+
+            roles.add(roleModel);
+        }
+        user.setRoles(roles);
+
+        Set<AuthorityModel> authorities = new HashSet<>();
+        for (AuthorityEntity authorityEntity : entity.getAuthorities()) {
+            AuthorityModel authorityModel = AuthorityModel.builder()
+                    .id(authorityEntity.getId())
+                    .name(authorityEntity.getName())
+                    .build();
+
+            authorities.add(authorityModel);
+        }
+        user.setAuthorities(authorities);
+
+        return user;
     }
 
     public static List<GetUserResponse> mapUserEntityListToGetUserResponseList(List<UserEntity> userEntityList) {
