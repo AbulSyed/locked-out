@@ -9,6 +9,7 @@ import com.syed.identityservice.domain.model.ClientModel;
 import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.CreateClientRequest;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.*;
 
@@ -183,7 +184,7 @@ public class MapperUtil {
                 .build();
     }
 
-    public static CreateUserResponse mapUserEntityToCreateAppResponse(UserEntity entity) {
+    public static CreateUserResponse mapUserEntityToCreateUserResponse(UserEntity entity) {
         return CreateUserResponse.builder()
                 .id(entity.getId())
                 .username(entity.getUsername())
@@ -231,6 +232,29 @@ public class MapperUtil {
                 .password(entity.getPassword())
                 .email(entity.getEmail())
                 .phoneNumber(entity.getPhoneNumber())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    public static ClientEntity mapClientModelToEntity(CreateClientRequest request) {
+        return ClientEntity.builder()
+                .clientId(request.getClientId())
+                .secret(request.getClientSecret())
+                .authMethod(request.getAuthMethod())
+                .authGrantType(request.getAuthGrantType())
+                .redirectUri(request.getRedirectUri())
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static CreateClientResponse mapClientEntityToCreateClientResponse(ClientEntity entity) {
+        return CreateClientResponse.builder()
+                .id(entity.getId())
+                .clientId(entity.getClientId())
+                .clientSecret(entity.getSecret())
+                .authMethod(entity.getAuthMethod())
+                .authGrantType(entity.getAuthGrantType())
+                .redirectUri(entity.getRedirectUri())
                 .createdAt(entity.getCreatedAt())
                 .build();
     }

@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = MapperUtil.mapUserModelToEntity(request);
         user.setUserApp(app);
 
-        return MapperUtil.mapUserEntityToCreateAppResponse(userRepository.save(user));
+        return MapperUtil.mapUserEntityToCreateUserResponse(userRepository.save(user));
     }
 
     @Override

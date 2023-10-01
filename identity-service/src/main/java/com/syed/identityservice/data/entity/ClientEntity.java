@@ -29,7 +29,9 @@ public class ClientEntity {
     @Column(name = "secret", nullable = false)
     private String secret;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY
+//            , cascade = CascadeType.ALL
+    )
     @JoinColumn(name = "fk_app_id")
     private AppEntity userApp;
 
