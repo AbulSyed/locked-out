@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,8 @@ public class UserServiceImplTest {
                 .email("joe@mail.com")
                 .phoneNumber("079")
                 .userApp(appEntity)
+                .roles(Collections.emptySet())
+                .authorities(Collections.emptySet())
                 .createdAt(LocalDateTime.now())
                 .build();
 
