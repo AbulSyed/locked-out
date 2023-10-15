@@ -8,6 +8,8 @@ import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.CreateClientRequest;
 import com.syed.identityservice.domain.model.response.CreateClientResponse;
+import com.syed.identityservice.domain.model.response.GetClientResponse;
+import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.ClientServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +24,8 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -83,5 +87,27 @@ public class ClientServiceImplTest {
                 .hasFieldOrPropertyWithValue("clientSecret", "secret")
                 .hasFieldOrPropertyWithValue("authMethod", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
                 .hasFieldOrPropertyWithValue("authGrantType", Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE));
+    }
+
+    @Test
+    void getClient() {
+        when(clientRepository.findById(any(Long.class))).thenReturn(Optional.of(clientEntity));
+
+        GetClientResponse res = clientService.getClient(1L);
+
+        assertThat(res).isNotNull()
+                .hasFieldOrPropertyWithValue("clientId", "1")
+                .hasFieldOrPropertyWithValue("clientSecret", "secret")
+                .hasFieldOrPropertyWithValue("authMethod", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                .hasFieldOrPropertyWithValue("authGrantType", Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE));
+    }
+
+    @Test
+    void getClient_ThrowsResourceNotFoundException() {
+        when(clientRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+
+        Throwable throwable = assertThrows(ResourceNotFoundException.class, () -> clientService.getClient(1L));
+
+        assertEquals("Client with id 1 not found", throwable.getMessage());
     }
 }

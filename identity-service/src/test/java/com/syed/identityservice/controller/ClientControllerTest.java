@@ -4,6 +4,7 @@ import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.CreateClientRequest;
 import com.syed.identityservice.domain.model.response.CreateClientResponse;
+import com.syed.identityservice.domain.model.response.GetClientResponse;
 import com.syed.identityservice.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,8 @@ public class ClientControllerTest {
     private CreateClientRequest createClientRequest;
     private CreateClientResponse createClientResponse;
     private ResponseEntity<CreateClientResponse> createClientExpectedResponse;
+    private GetClientResponse getClientResponse;
+    private ResponseEntity<GetClientResponse> getClientExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -57,6 +60,17 @@ public class ClientControllerTest {
                 .createdAt(LocalDateTime.now())
                 .build();
         createClientExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createClientResponse);
+
+        getClientResponse = GetClientResponse.builder()
+                .id(1L)
+                .clientId("1")
+                .clientSecret("secret")
+                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
+                .redirectUri("http://localhost:3000")
+                .createdAt(LocalDateTime.now())
+                .build();
+        getClientExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getClientResponse);
     }
 
     @Test
@@ -68,5 +82,16 @@ public class ClientControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), createClientExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), createClientExpectedResponse.getBody());
+    }
+
+    @Test
+    void getClient() {
+        when(clientService.getClient(any(Long.class))).thenReturn(getClientResponse);
+
+        ResponseEntity<GetClientResponse> res = clientController.getClient(correlationId, 1L);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), getClientExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getClientExpectedResponse.getBody());
     }
 }

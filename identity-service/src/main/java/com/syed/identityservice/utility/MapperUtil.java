@@ -282,4 +282,16 @@ public class MapperUtil {
                 .createdAt(entity.getCreatedAt())
                 .build();
     }
+
+    public static GetClientResponse mapClientEntitytoGetClientResponse(ClientEntity entity) {
+        return GetClientResponse.builder()
+                .id(entity.getId())
+                .clientId(entity.getClientId())
+                .clientSecret(entity.getSecret())
+                .authMethod(entity.getAuthMethod())
+                .authGrantType(entity.getAuthGrantType())
+                .redirectUri(entity.getRedirectUri())
+                .createdAt(entity.getCreatedAt())
+                .build();
+    }
 }
