@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,6 +39,8 @@ public class ClientControllerTest {
     private ResponseEntity<CreateClientResponse> createClientExpectedResponse;
     private GetClientResponse getClientResponse;
     private ResponseEntity<GetClientResponse> getClientExpectedResponse;
+    private List<GetClientResponse> getClientListResponse;
+    private ResponseEntity<List<GetClientResponse>> getClientListExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -71,6 +74,19 @@ public class ClientControllerTest {
                 .createdAt(LocalDateTime.now())
                 .build();
         getClientExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getClientResponse);
+
+        getClientListResponse = List.of(
+                GetClientResponse.builder()
+                        .id(1L)
+                        .clientId("1")
+                        .clientSecret("secret")
+                        .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                        .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
+                        .redirectUri("http://localhost:3000")
+                        .createdAt(LocalDateTime.now())
+                        .build()
+        );
+        getClientListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getClientListResponse);
     }
 
     @Test
@@ -93,5 +109,16 @@ public class ClientControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), getClientExpectedResponse.getBody());
+    }
+
+    @Test
+    void getClientList() {
+        when(clientService.getClientList()).thenReturn(getClientListResponse);
+
+        ResponseEntity<List<GetClientResponse>> res = clientController.getClientList(correlationId);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), getClientListExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getClientListExpectedResponse.getBody());
     }
 }

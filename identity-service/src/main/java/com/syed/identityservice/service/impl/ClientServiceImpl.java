@@ -15,6 +15,8 @@ import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -42,6 +44,13 @@ public class ClientServiceImpl implements ClientService {
         ClientEntity client = clientRepository.findById(clientId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + clientId)));
 
-        return MapperUtil.mapClientEntitytoGetClientResponse(client);
+        return MapperUtil.mapClientEntityToGetClientResponse(client);
+    }
+
+    @Override
+    public List<GetClientResponse> getClientList() {
+        List<ClientEntity> clients = clientRepository.findAll();
+
+        return MapperUtil.mapClientEntityListToGetClientListResponse(clients);
     }
 }

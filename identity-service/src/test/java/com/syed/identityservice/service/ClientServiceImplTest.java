@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,6 +44,7 @@ public class ClientServiceImplTest {
     private AppEntity appEntity;
     private ClientEntity clientEntity;
     private CreateClientRequest createClientRequest;
+    private List<ClientEntity> clientEntityList;
 
     @BeforeEach
     void setUp() {
@@ -72,6 +74,21 @@ public class ClientServiceImplTest {
                 .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
                 .redirectUri("http://localhost:3000")
                 .build();
+
+        clientEntityList = List.of(
+                ClientEntity.builder()
+                        .id(1L)
+                        .clientId("1")
+                        .secret("secret")
+                        .roles(Collections.emptySet())
+                        .authorities(Collections.emptySet())
+                        .scope(Collections.emptySet())
+                        .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                        .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
+                        .redirectUri("http://localhost:3000")
+                        .createdAt(LocalDateTime.now())
+                        .build()
+        );
     }
 
     @Test
@@ -109,5 +126,15 @@ public class ClientServiceImplTest {
         Throwable throwable = assertThrows(ResourceNotFoundException.class, () -> clientService.getClient(1L));
 
         assertEquals("Client with id 1 not found", throwable.getMessage());
+    }
+
+    @Test
+    void getClientList() {
+        when(clientRepository.findAll()).thenReturn(clientEntityList);
+
+        List<GetClientResponse> res = clientService.getClientList();
+
+        assertThat(res).isNotNull()
+                .hasSize(1);
     }
 }
