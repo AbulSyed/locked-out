@@ -5,8 +5,10 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateClientRequest;
+import com.syed.identityservice.domain.model.request.UpdateClientRequest;
 import com.syed.identityservice.domain.model.response.CreateClientResponse;
 import com.syed.identityservice.domain.model.response.GetClientResponse;
+import com.syed.identityservice.domain.model.response.UpdateClientResponse;
 import com.syed.identityservice.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,5 +66,21 @@ public class ClientController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(clientService.getClientList(), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.CLIENT,
+            requestType = RequestTypeEnum.UPDATE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "update client request initiated"
+    )
+    @PostMapping("/update-client/{clientId}")
+    public ResponseEntity<UpdateClientResponse> updateClient(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long clientId,
+            @RequestBody UpdateClientRequest request
+            ) {
+        return new ResponseEntity<>(clientService.updateClient(clientId, request), HttpStatus.OK);
     }
 }

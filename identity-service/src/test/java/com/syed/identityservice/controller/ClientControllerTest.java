@@ -3,8 +3,10 @@ package com.syed.identityservice.controller;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.CreateClientRequest;
+import com.syed.identityservice.domain.model.request.UpdateClientRequest;
 import com.syed.identityservice.domain.model.response.CreateClientResponse;
 import com.syed.identityservice.domain.model.response.GetClientResponse;
+import com.syed.identityservice.domain.model.response.UpdateClientResponse;
 import com.syed.identityservice.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,9 @@ public class ClientControllerTest {
     private ResponseEntity<GetClientResponse> getClientExpectedResponse;
     private List<GetClientResponse> getClientListResponse;
     private ResponseEntity<List<GetClientResponse>> getClientListExpectedResponse;
+    private UpdateClientResponse updateClientResponse;
+    private UpdateClientRequest updateClientRequest;
+    private ResponseEntity<UpdateClientResponse> updateClientExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -87,6 +92,22 @@ public class ClientControllerTest {
                         .build()
         );
         getClientListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getClientListResponse);
+
+        updateClientResponse = UpdateClientResponse.builder()
+                .clientId("new client id")
+                .clientSecret("secret")
+                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
+                .redirectUri("http://localhost:3000")
+                .build();
+        updateClientRequest = UpdateClientRequest.builder()
+                .clientId("new client id")
+                .clientSecret("secret")
+                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
+                .redirectUri("http://localhost:3000")
+                .build();
+        updateClientExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(updateClientResponse);
     }
 
     @Test
@@ -120,5 +141,16 @@ public class ClientControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientListExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), getClientListExpectedResponse.getBody());
+    }
+
+    @Test
+    void updateClient() {
+        when(clientService.updateClient(any(Long.class), any(UpdateClientRequest.class))).thenReturn(updateClientResponse);
+
+        ResponseEntity<UpdateClientResponse> res = clientController.updateClient(correlationId, 1L, updateClientRequest);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), updateClientExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), updateClientExpectedResponse.getBody());
     }
 }

@@ -7,8 +7,10 @@ import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.CreateClientRequest;
+import com.syed.identityservice.domain.model.request.UpdateClientRequest;
 import com.syed.identityservice.domain.model.response.CreateClientResponse;
 import com.syed.identityservice.domain.model.response.GetClientResponse;
+import com.syed.identityservice.domain.model.response.UpdateClientResponse;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.ClientServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,6 +47,8 @@ public class ClientServiceImplTest {
     private ClientEntity clientEntity;
     private CreateClientRequest createClientRequest;
     private List<ClientEntity> clientEntityList;
+    private ClientEntity updatedClientEntity;
+    private UpdateClientRequest updateClientRequest;
 
     @BeforeEach
     void setUp() {
@@ -89,6 +93,26 @@ public class ClientServiceImplTest {
                         .createdAt(LocalDateTime.now())
                         .build()
         );
+
+        updatedClientEntity = ClientEntity.builder()
+                .id(1L)
+                .clientId("1")
+                .secret("secret")
+//                .roles(Collections.emptySet())
+//                .authorities(Collections.emptySet())
+//                .scope(Collections.emptySet())
+                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
+                .redirectUri("http://localhost:3000")
+                .createdAt(LocalDateTime.now())
+                .build();
+        updateClientRequest = UpdateClientRequest.builder()
+                .clientId("new client id")
+                .clientSecret("secret")
+                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
+                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
+                .redirectUri("http://localhost:3000")
+                .build();
     }
 
     @Test
@@ -136,5 +160,18 @@ public class ClientServiceImplTest {
 
         assertThat(res).isNotNull()
                 .hasSize(1);
+    }
+
+    @Test
+    void updateClient() {
+        when(clientRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(clientEntity));
+        when(clientRepository.existsByClientId("new client id")).thenReturn(false);
+        when(clientRepository.save(any(ClientEntity.class))).thenReturn(updatedClientEntity);
+
+        UpdateClientResponse res = clientService.updateClient(1L, updateClientRequest);
+
+        assertThat(res)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("clientId", "new client id");
     }
 }
