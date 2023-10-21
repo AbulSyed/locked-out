@@ -23,8 +23,8 @@ import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -202,5 +202,14 @@ public class AppServiceImplTest {
                 .hasFieldOrPropertyWithValue("name", "new name")
                 .hasFieldOrPropertyWithValue("description", "new desc")
                 .hasFieldOrPropertyWithValue("createdAt", createdAt);
+    }
+
+    @Test
+    void deleteApp() {
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appEntity));
+
+        appService.deleteApp(1L);
+
+        verify(appRepository).delete(appEntity);
     }
 }

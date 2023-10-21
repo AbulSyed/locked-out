@@ -158,10 +158,8 @@ public class AppControllerTest {
 
     @Test
     void deleteApp() {
-        doNothing().when(appService).deleteApp(any(Long.class));
+        appController.deleteApp(correlationId, any(Long.class));
 
-        appService.deleteApp(1L);
-
-        verify(appService, times(1)).deleteApp(1L);
+        verify(appService, times(1)).deleteApp(any(Long.class));
     }
 }

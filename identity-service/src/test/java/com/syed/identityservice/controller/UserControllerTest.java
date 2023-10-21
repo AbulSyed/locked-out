@@ -146,10 +146,8 @@ public class UserControllerTest {
 
     @Test
     void deleteUser() {
-        doNothing().when(userService).deleteUser(1L);
+        userController.deleteUser(correlationId, any(Long.class));
 
-        userService.deleteUser(1L);
-        
-        verify(userService, times(1)).deleteUser(1L);
+        verify(userService, times(1)).deleteUser(any(Long.class));
     }
 }

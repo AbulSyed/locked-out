@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -138,5 +139,14 @@ public class UserServiceImplTest {
         assertThat(res)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("username", "new username");
+    }
+
+    @Test
+    void deleteUser() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(userEntity));
+
+        userService.deleteUser(1L);
+
+        verify(userRepository).delete(userEntity);
     }
 }
