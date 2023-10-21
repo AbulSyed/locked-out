@@ -76,4 +76,13 @@ public class ClientServiceImpl implements ClientService {
 
         return MapperUtil.clientEntityToUpdateClientResponse(clientEntity);
     }
+
+    @Override
+    public void deleteClient(Long clientId) {
+        ClientEntity clientEntity = clientRepository.findById(clientId).orElseThrow(
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + clientId))
+        );
+
+        clientRepository.delete(clientEntity);
+    }
 }

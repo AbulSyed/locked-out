@@ -30,6 +30,7 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -173,5 +174,14 @@ public class ClientServiceImplTest {
         assertThat(res)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("clientId", "new client id");
+    }
+
+    @Test
+    void deleteClient() {
+        when(clientRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(clientEntity));
+
+        clientService.deleteClient(1L);
+
+        verify(clientRepository).delete(clientEntity);
     }
 }

@@ -24,7 +24,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ClientControllerTest {
@@ -152,5 +152,12 @@ public class ClientControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), updateClientExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), updateClientExpectedResponse.getBody());
+    }
+
+    @Test
+    void deleteClient() {
+        clientController.deleteClient(correlationId, any(Long.class));
+
+        verify(clientService, times(1)).deleteClient(any(Long.class));
     }
 }

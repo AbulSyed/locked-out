@@ -14,4 +14,5 @@ public interface ClientService {
     GetClientResponse getClient(Long clientId);
     List<GetClientResponse> getClientList();
     UpdateClientResponse updateClient(Long clientId, UpdateClientRequest request);
+    void deleteClient(Long clientId);
 }

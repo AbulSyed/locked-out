@@ -83,4 +83,19 @@ public class ClientController {
             ) {
         return new ResponseEntity<>(clientService.updateClient(clientId, request), HttpStatus.OK);
     }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.CLIENT,
+            requestType = RequestTypeEnum.DELETE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "delete client request initiated"
+    )
+    @DeleteMapping("/delete-client/{clientId}")
+    public void deleteClient(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long clientId
+    ) {
+        clientService.deleteClient(clientId);
+    }
 }
