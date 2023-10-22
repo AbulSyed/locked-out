@@ -13,6 +13,7 @@ public interface ClientService {
     CreateClientResponse createClient(Long appId, CreateClientRequest request);
     GetClientResponse getClient(Long clientId);
     List<GetClientResponse> getClientList();
+    List<GetClientResponse> getClientListByAppId(Long appId);
     UpdateClientResponse updateClient(Long clientId, UpdateClientRequest request);
     void deleteClient(Long clientId);
 }

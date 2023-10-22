@@ -57,6 +57,16 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public List<GetClientResponse> getClientListByAppId(Long appId) {
+        AppEntity app = appRepository.findById(appId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId)));
+
+        List<ClientEntity> clients = clientRepository.getClientEntitiesByUserApp(app);
+
+        return MapperUtil.mapClientEntityListToGetClientListResponse(clients);
+    }
+
+    @Override
     public UpdateClientResponse updateClient(Long clientId, UpdateClientRequest request) {
         ClientEntity clientEntity = clientRepository.findById(clientId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + clientId))

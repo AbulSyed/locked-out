@@ -164,6 +164,17 @@ public class ClientServiceImplTest {
     }
 
     @Test
+    void getClientListByAppId() {
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
+        when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class))).thenReturn(clientEntityList);
+
+        List<GetClientResponse> res = clientService.getClientListByAppId(1L);
+
+        assertThat(res).isNotNull()
+                .hasSize(1);
+    }
+
+    @Test
     void updateClient() {
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(clientEntity));
         when(clientRepository.existsByClientId("new client id")).thenReturn(false);

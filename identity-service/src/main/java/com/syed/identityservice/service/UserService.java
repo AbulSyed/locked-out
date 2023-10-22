@@ -13,6 +13,7 @@ public interface UserService {
     CreateUserResponse createUser(Long appId, CreateUserRequest request);
     GetUserResponse getUser(Long userId);
     List<GetUserResponse> getUserList();
+    List<GetUserResponse> getUserListByAppId(Long appId);
     UpdateUserResponse updateUser(Long userId, UpdateUserRequest request);
     void deleteUser(Long userId);
 }

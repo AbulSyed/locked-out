@@ -129,6 +129,17 @@ public class UserServiceImplTest {
     }
 
     @Test
+    void getUserListByAppId() {
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
+        when(userRepository.getUserEntitiesByUserApp(any(AppEntity.class))).thenReturn(List.of(userEntity));
+
+        List<GetUserResponse> res = userService.getUserListByAppId(1L);
+
+        assertThat(res).isNotNull()
+                .hasSize(1);
+    }
+
+    @Test
     void updateUser() {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(userEntity));
         when(userRepository.existsByUsername("new username")).thenReturn(false);

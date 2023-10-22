@@ -57,6 +57,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<GetUserResponse> getUserListByAppId(Long appId) {
+        AppEntity app = appRepository.findById(appId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId)));
+
+        List<UserEntity> userEntityList = userRepository.getUserEntitiesByUserApp(app);
+
+        return MapperUtil.mapUserEntityListToGetUserResponseList(userEntityList);
+    }
+
+    @Override
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         UserEntity userEntity = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId))

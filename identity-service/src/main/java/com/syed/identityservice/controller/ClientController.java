@@ -71,6 +71,21 @@ public class ClientController {
     @AuditRequest(
             correlationId = "#correlationId",
             process = ProcessEnum.CLIENT,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get client list by app id request initiated"
+    )
+    @GetMapping("/get-client-list/{appId}")
+    public ResponseEntity<List<GetClientResponse>> getClientListByAppId(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long appId
+    ) {
+        return new ResponseEntity<>(clientService.getClientListByAppId(appId), HttpStatus.OK);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.CLIENT,
             requestType = RequestTypeEnum.UPDATE,
             requestStatus = RequestStatusEnum.PENDING,
             log = "update client request initiated"
