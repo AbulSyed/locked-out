@@ -134,6 +134,17 @@ public class UserControllerTest {
     }
 
     @Test
+    void getUserListByAppId() {
+        when(userService.getUserListByAppId(any(Long.class))).thenReturn(getUserListResponse);
+
+        ResponseEntity<List<GetUserResponse>> res = userController.getUserListByAppId(correlationId, 1L);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getUserListExpectedResponse.getBody());
+    }
+
+    @Test
     void updateUser() {
         when(userService.updateUser(any(Long.class), any(UpdateUserRequest.class))).thenReturn(updateUserResponse);
 
@@ -146,10 +157,8 @@ public class UserControllerTest {
 
     @Test
     void deleteUser() {
-        doNothing().when(userService).deleteUser(1L);
+        userController.deleteUser(correlationId, any(Long.class));
 
-        userService.deleteUser(1L);
-        
-        verify(userService, times(1)).deleteUser(1L);
+        verify(userService, times(1)).deleteUser(any(Long.class));
     }
 }

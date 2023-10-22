@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = MapperUtil.mapUserModelToEntity(request);
         user.setUserApp(app);
 
-        return MapperUtil.mapUserEntityToCreateAppResponse(userRepository.save(user));
+        return MapperUtil.mapUserEntityToCreateUserResponse(userRepository.save(user));
     }
 
     @Override
@@ -52,6 +52,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<GetUserResponse> getUserList() {
         List<UserEntity> userEntityList = userRepository.findAll();
+
+        return MapperUtil.mapUserEntityListToGetUserResponseList(userEntityList);
+    }
+
+    @Override
+    public List<GetUserResponse> getUserListByAppId(Long appId) {
+        AppEntity app = appRepository.findById(appId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId)));
+
+        List<UserEntity> userEntityList = userRepository.getUserEntitiesByUserApp(app);
 
         return MapperUtil.mapUserEntityListToGetUserResponseList(userEntityList);
     }

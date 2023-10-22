@@ -19,10 +19,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,6 +60,8 @@ public class UserServiceImplTest {
                 .email("joe@mail.com")
                 .phoneNumber("079")
                 .userApp(appEntity)
+                .roles(Collections.emptySet())
+                .authorities(Collections.emptySet())
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -125,6 +129,17 @@ public class UserServiceImplTest {
     }
 
     @Test
+    void getUserListByAppId() {
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
+        when(userRepository.getUserEntitiesByUserApp(any(AppEntity.class))).thenReturn(List.of(userEntity));
+
+        List<GetUserResponse> res = userService.getUserListByAppId(1L);
+
+        assertThat(res).isNotNull()
+                .hasSize(1);
+    }
+
+    @Test
     void updateUser() {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(userEntity));
         when(userRepository.existsByUsername("new username")).thenReturn(false);
@@ -135,5 +150,14 @@ public class UserServiceImplTest {
         assertThat(res)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("username", "new username");
+    }
+
+    @Test
+    void deleteUser() {
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(userEntity));
+
+        userService.deleteUser(1L);
+
+        verify(userRepository).delete(userEntity);
     }
 }
