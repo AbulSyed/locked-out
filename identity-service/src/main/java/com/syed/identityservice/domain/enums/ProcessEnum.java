@@ -1,5 +1,5 @@
 package com.syed.identityservice.domain.enums;
 
 public enum ProcessEnum {
-    APP, USER, CLIENT
+    APP, USER, CLIENT, ROLE
 }
