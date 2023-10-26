@@ -10,6 +10,7 @@ import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.request.CreateClientRequest;
+import com.syed.identityservice.domain.model.request.CreateRoleRequest;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.*;
 
@@ -324,6 +325,19 @@ public class MapperUtil {
                 .authGrantType(entity.getAuthGrantType())
                 .redirectUri(entity.getRedirectUri())
                 .createdAt(entity.getCreatedAt())
+                .build();
+    }
+
+    public static RoleEntity mapRoleModelToEntity(CreateRoleRequest request) {
+        return RoleEntity.builder()
+                .name(request.getName())
+                .build();
+    }
+
+    public static CreateRoleResponse mapRoleEntityToModel(RoleEntity entity) {
+        return CreateRoleResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
                 .build();
     }
 }
