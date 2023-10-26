@@ -34,7 +34,6 @@ public class RoleServiceImplTest {
 
     private RoleEntity roleEntity;
     private CreateRoleRequest createRoleRequest;
-    private CreateRoleResponse createRoleResponse;
 
     @BeforeEach
     void setUp() {
