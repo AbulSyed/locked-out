@@ -4,11 +4,8 @@ import com.syed.identityservice.aspect.AuditRequest;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
-import com.syed.identityservice.domain.model.request.CreateClientRequest;
-import com.syed.identityservice.domain.model.request.UpdateClientRequest;
-import com.syed.identityservice.domain.model.response.CreateClientResponse;
-import com.syed.identityservice.domain.model.response.GetClientResponse;
-import com.syed.identityservice.domain.model.response.UpdateClientResponse;
+import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,10 +28,10 @@ public class ClientController {
             log = "create client request initiated"
     )
     @PostMapping("/create-client/{appId}")
-    public ResponseEntity<CreateClientResponse> createClient(
+    public ResponseEntity<ClientResponse> createClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId,
-            @RequestBody CreateClientRequest request
+            @RequestBody ClientRequest request
     ) {
         return new ResponseEntity<>(clientService.createClient(appId, request), HttpStatus.CREATED);
     }
@@ -47,7 +44,7 @@ public class ClientController {
             log = "get client request initiated"
     )
     @GetMapping("/get-client/{clientId}")
-    public ResponseEntity<GetClientResponse> getClient(
+    public ResponseEntity<ClientResponse> getClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long clientId
     ) {
@@ -62,7 +59,7 @@ public class ClientController {
             log = "get client list request initiated"
     )
     @GetMapping("/get-client-list")
-    public ResponseEntity<List<GetClientResponse>> getClientList(
+    public ResponseEntity<List<ClientResponse>> getClientList(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(clientService.getClientList(), HttpStatus.OK);
@@ -76,7 +73,7 @@ public class ClientController {
             log = "get client list by app id request initiated"
     )
     @GetMapping("/get-client-list/{appId}")
-    public ResponseEntity<List<GetClientResponse>> getClientListByAppId(
+    public ResponseEntity<List<ClientResponse>> getClientListByAppId(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId
     ) {
@@ -91,10 +88,10 @@ public class ClientController {
             log = "update client request initiated"
     )
     @PostMapping("/update-client/{clientId}")
-    public ResponseEntity<UpdateClientResponse> updateClient(
+    public ResponseEntity<ClientResponse> updateClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long clientId,
-            @RequestBody UpdateClientRequest request
+            @RequestBody ClientRequest request
             ) {
         return new ResponseEntity<>(clientService.updateClient(clientId, request), HttpStatus.OK);
     }

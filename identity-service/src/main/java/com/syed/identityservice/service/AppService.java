@@ -1,20 +1,17 @@
 package com.syed.identityservice.service;
 
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
-import com.syed.identityservice.domain.model.response.CreateAppResponse;
-import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
-import com.syed.identityservice.domain.model.response.GetAppResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
+import com.syed.identityservice.domain.model.request.AppRequest;
+import com.syed.identityservice.domain.model.response.AppResponse;
+import com.syed.identityservice.domain.model.response.AppV2Response;
 
 import java.util.List;
 
 public interface AppService {
 
-    CreateAppResponse createApp(CreateAppRequest request);
-    GetAppResponse getApp(Long appId);
-    GetAppDetailsResponse getAppV2(Long appId);
-    List<GetAppResponse> getAppList();
-    UpdateAppResponse updateApp(Long appId, UpdateAppRequest request);
+    AppResponse createApp(AppRequest request);
+    AppResponse getApp(Long appId);
+    AppV2Response getAppV2(Long appId);
+    List<AppResponse> getAppList();
+    AppResponse updateApp(Long appId, AppRequest request);
     void deleteApp(Long appId);
 }

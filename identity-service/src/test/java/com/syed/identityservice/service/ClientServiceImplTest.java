@@ -6,11 +6,8 @@ import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
-import com.syed.identityservice.domain.model.request.CreateClientRequest;
-import com.syed.identityservice.domain.model.request.UpdateClientRequest;
-import com.syed.identityservice.domain.model.response.CreateClientResponse;
-import com.syed.identityservice.domain.model.response.GetClientResponse;
-import com.syed.identityservice.domain.model.response.UpdateClientResponse;
+import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.ClientServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,10 +43,10 @@ public class ClientServiceImplTest {
 
     private AppEntity appEntity;
     private ClientEntity clientEntity;
-    private CreateClientRequest createClientRequest;
+    private ClientRequest createClientRequest;
     private List<ClientEntity> clientEntityList;
     private ClientEntity updatedClientEntity;
-    private UpdateClientRequest updateClientRequest;
+    private ClientRequest updateClientRequest;
 
     @BeforeEach
     void setUp() {
@@ -72,7 +69,7 @@ public class ClientServiceImplTest {
                 .redirectUri("http://localhost:3000")
                 .createdAt(LocalDateTime.now())
                 .build();
-        createClientRequest = CreateClientRequest.builder()
+        createClientRequest = ClientRequest.builder()
                 .clientId("1")
                 .clientSecret("secret")
                 .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
@@ -107,7 +104,7 @@ public class ClientServiceImplTest {
                 .redirectUri("http://localhost:3000")
                 .createdAt(LocalDateTime.now())
                 .build();
-        updateClientRequest = UpdateClientRequest.builder()
+        updateClientRequest = ClientRequest.builder()
                 .clientId("new client id")
                 .clientSecret("secret")
                 .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
@@ -122,7 +119,7 @@ public class ClientServiceImplTest {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(clientEntity);
 
-        CreateClientResponse res = clientService.createClient(1L, createClientRequest);
+        ClientResponse res = clientService.createClient(1L, createClientRequest);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("clientId", "1")
@@ -135,7 +132,7 @@ public class ClientServiceImplTest {
     void getClient() {
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.of(clientEntity));
 
-        GetClientResponse res = clientService.getClient(1L);
+        ClientResponse res = clientService.getClient(1L);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("clientId", "1")
@@ -157,7 +154,7 @@ public class ClientServiceImplTest {
     void getClientList() {
         when(clientRepository.findAll()).thenReturn(clientEntityList);
 
-        List<GetClientResponse> res = clientService.getClientList();
+        List<ClientResponse> res = clientService.getClientList();
 
         assertThat(res).isNotNull()
                 .hasSize(1);
@@ -168,7 +165,7 @@ public class ClientServiceImplTest {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class))).thenReturn(clientEntityList);
 
-        List<GetClientResponse> res = clientService.getClientListByAppId(1L);
+        List<ClientResponse> res = clientService.getClientListByAppId(1L);
 
         assertThat(res).isNotNull()
                 .hasSize(1);
@@ -180,7 +177,7 @@ public class ClientServiceImplTest {
         when(clientRepository.existsByClientId("new client id")).thenReturn(false);
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(updatedClientEntity);
 
-        UpdateClientResponse res = clientService.updateClient(1L, updateClientRequest);
+        ClientResponse res = clientService.updateClient(1L, updateClientRequest);
 
         assertThat(res)
                 .isNotNull()

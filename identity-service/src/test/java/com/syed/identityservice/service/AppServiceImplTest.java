@@ -4,12 +4,9 @@ import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AppRepository;
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
-import com.syed.identityservice.domain.model.response.CreateAppResponse;
-import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
-import com.syed.identityservice.domain.model.response.GetAppResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
+import com.syed.identityservice.domain.model.request.AppRequest;
+import com.syed.identityservice.domain.model.response.AppResponse;
+import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.AppServiceImpl;
@@ -39,21 +36,21 @@ public class AppServiceImplTest {
     @InjectMocks
     private AppServiceImpl appService;
 
-    private CreateAppRequest createAppRequest;
+    private AppRequest createAppRequest;
     private AppEntity appEntity;
-    private AppEntity appDetailsEntity;
+    private AppEntity appV2Entity;
     private UserEntity userEntity;
     private ClientEntity clientEntity;
     private LocalDateTime createdAt;
     private List<AppEntity> appEntityList;
-    private UpdateAppRequest updateAppRequest;
+    private AppRequest updateAppRequest;
     private AppEntity updatedAppEntity;
 
     @BeforeEach
     void setUp() {
         createdAt = LocalDateTime.now();
 
-        createAppRequest = CreateAppRequest.builder()
+        createAppRequest = AppRequest.builder()
                 .name("app")
                 .description("desc")
                 .build();
@@ -83,7 +80,7 @@ public class AppServiceImplTest {
                 .authorities(Collections.emptySet())
                 .build();
 
-        appDetailsEntity = AppEntity.builder()
+        appV2Entity = AppEntity.builder()
                 .id(1L)
                 .name("app")
                 .description("desc")
@@ -103,7 +100,7 @@ public class AppServiceImplTest {
                 )
         );
 
-        updateAppRequest = UpdateAppRequest.builder()
+        updateAppRequest = AppRequest.builder()
                 .name("new name")
                 .description("new desc")
                 .build();
@@ -121,7 +118,7 @@ public class AppServiceImplTest {
         when(appRepository.existsByName("app")).thenReturn(false);
         when(appRepository.save(any(AppEntity.class))).thenReturn(appEntity);
 
-        CreateAppResponse res = appService.createApp(createAppRequest);
+        AppResponse res = appService.createApp(createAppRequest);
 
         assertThat(res)
                 .isNotNull()
@@ -144,7 +141,7 @@ public class AppServiceImplTest {
     void getApp_Success() {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appEntity));
 
-        GetAppResponse res = appService.getApp(1L);
+        AppResponse res = appService.getApp(1L);
 
         assertThat(res)
                 .isNotNull()
@@ -165,9 +162,9 @@ public class AppServiceImplTest {
 
     @Test
     void getAppV2_Success() {
-        when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appDetailsEntity));
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appV2Entity));
 
-        GetAppDetailsResponse res = appService.getAppV2(1L);
+        AppV2Response res = appService.getAppV2(1L);
 
         assertThat(res)
                 .isNotNull()
@@ -181,7 +178,7 @@ public class AppServiceImplTest {
     void getAppList_Success() {
         when(appRepository.findAll()).thenReturn(appEntityList);
 
-        List<GetAppResponse> res = appService.getAppList();
+        List<AppResponse> res = appService.getAppList();
 
         assertThat(res)
                 .isNotNull()
@@ -194,7 +191,7 @@ public class AppServiceImplTest {
         when(appRepository.existsByName("new name")).thenReturn(false);
         when(appRepository.save(any(AppEntity.class))).thenReturn(updatedAppEntity);
 
-        UpdateAppResponse res = appService.updateApp(1L, updateAppRequest);
+        AppResponse res = appService.updateApp(1L, updateAppRequest);
 
         assertThat(res)
                 .isNotNull()
