@@ -4,7 +4,6 @@ import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
@@ -12,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
-public class UpdateClientRequest {
+public class ClientRequest {
 
     private String clientId;
     private String clientSecret;

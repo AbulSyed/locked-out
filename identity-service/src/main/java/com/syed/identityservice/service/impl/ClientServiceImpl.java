@@ -4,11 +4,8 @@ import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.ClientRepository;
-import com.syed.identityservice.domain.model.request.CreateClientRequest;
-import com.syed.identityservice.domain.model.request.UpdateClientRequest;
-import com.syed.identityservice.domain.model.response.CreateClientResponse;
-import com.syed.identityservice.domain.model.response.GetClientResponse;
-import com.syed.identityservice.domain.model.response.UpdateClientResponse;
+import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
@@ -27,7 +24,7 @@ public class ClientServiceImpl implements ClientService {
     private final AppRepository appRepository;
 
     @Override
-    public CreateClientResponse createClient(Long appId, CreateClientRequest request) {
+    public ClientResponse createClient(Long appId, ClientRequest request) {
         if (clientRepository.existsByClientId(request.getClientId())) {
             throw new FieldAlreadyExistsException(ErrorConstant.FIELD_ALREADY_USED.formatMessage("Client Id"));
         }
@@ -38,26 +35,26 @@ public class ClientServiceImpl implements ClientService {
         ClientEntity client = MapperUtil.mapClientModelToEntity(request);
         client.setUserApp(app);
 
-        return MapperUtil.mapClientEntityToCreateClientResponse(clientRepository.save(client));
+        return MapperUtil.mapClientEntityToClientResponse(clientRepository.save(client));
     }
 
     @Override
-    public GetClientResponse getClient(Long clientId) {
+    public ClientResponse getClient(Long clientId) {
         ClientEntity client = clientRepository.findById(clientId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + clientId)));
 
-        return MapperUtil.mapClientEntityToGetClientResponse(client);
+        return MapperUtil.mapClientEntityToClientResponse(client);
     }
 
     @Override
-    public List<GetClientResponse> getClientList() {
+    public List<ClientResponse> getClientList() {
         List<ClientEntity> clients = clientRepository.findAll();
 
         return MapperUtil.mapClientEntityListToGetClientListResponse(clients);
     }
 
     @Override
-    public List<GetClientResponse> getClientListByAppId(Long appId) {
+    public List<ClientResponse> getClientListByAppId(Long appId) {
         AppEntity app = appRepository.findById(appId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId)));
 
@@ -67,7 +64,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public UpdateClientResponse updateClient(Long clientId, UpdateClientRequest request) {
+    public ClientResponse updateClient(Long clientId, ClientRequest request) {
         ClientEntity clientEntity = clientRepository.findById(clientId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + clientId))
         );
@@ -84,7 +81,7 @@ public class ClientServiceImpl implements ClientService {
 
         clientRepository.save(clientEntity);
 
-        return MapperUtil.clientEntityToUpdateClientResponse(clientEntity);
+        return MapperUtil.mapClientEntityToClientResponse(clientEntity);
     }
 
     @Override

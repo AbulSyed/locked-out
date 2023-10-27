@@ -1,11 +1,7 @@
 package com.syed.identityservice.controller;
 
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
-import com.syed.identityservice.domain.model.response.CreateAppResponse;
-import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
-import com.syed.identityservice.domain.model.response.GetAppResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
+import com.syed.identityservice.domain.model.request.AppRequest;
+import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.AppService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,28 +29,28 @@ public class AppControllerTest {
     private AppController appController;
 
     private String correlationId;
-    private CreateAppRequest createAppRequest;
-    private CreateAppResponse createAppResponse;
-    private ResponseEntity<CreateAppResponse> createAppExpectedResponse;
-    private GetAppResponse getAppResponse;
-    private ResponseEntity<GetAppResponse> getAppExpectedResponse;
-    private GetAppDetailsResponse getAppDetailsResponse;
-    private ResponseEntity<GetAppDetailsResponse> getAppDetailsExpectedResponse;
-    private List<GetAppResponse> getAppListResponse;
-    private ResponseEntity<List<GetAppResponse>> getAppListExpectedResponse;
-    private UpdateAppRequest updateAppRequest;
-    private UpdateAppResponse updateAppResponse;
-    private ResponseEntity<UpdateAppResponse> updateAppExpectedResponse;
+    private AppRequest createAppRequest;
+    private AppResponse createAppResponse;
+    private ResponseEntity<AppResponse> createAppExpectedResponse;
+    private AppResponse getAppResponse;
+    private ResponseEntity<AppResponse> getAppExpectedResponse;
+    private AppV2Response getAppV2Response;
+    private ResponseEntity<AppV2Response> getAppV2ExpectedResponse;
+    private List<AppResponse> getAppListResponse;
+    private ResponseEntity<List<AppResponse>> getAppListExpectedResponse;
+    private AppRequest updateAppRequest;
+    private AppResponse updateAppResponse;
+    private ResponseEntity<AppResponse> updateAppExpectedResponse;
 
     @BeforeEach
     void setUp() {
         correlationId = "1";
 
-        createAppRequest = CreateAppRequest.builder()
+        createAppRequest = AppRequest.builder()
                 .name("app")
                 .description("test")
                 .build();
-        createAppResponse = CreateAppResponse.builder()
+        createAppResponse = AppResponse.builder()
                 .id(1L)
                 .name("app")
                 .description("test")
@@ -62,7 +58,7 @@ public class AppControllerTest {
                 .build();
         createAppExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createAppResponse);
 
-        getAppResponse = GetAppResponse.builder()
+        getAppResponse = AppResponse.builder()
                 .id(1L)
                 .name("app")
                 .description("test")
@@ -70,16 +66,16 @@ public class AppControllerTest {
                 .build();
         getAppExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppResponse);
 
-        getAppDetailsResponse = GetAppDetailsResponse.builder()
+        getAppV2Response = AppV2Response.builder()
                 .id(1L)
                 .name("app")
                 .description("test")
                 .createdAt(LocalDateTime.now())
                 .build();
-        getAppDetailsExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppDetailsResponse);
+        getAppV2ExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppV2Response);
 
         getAppListResponse = List.of(
-                new GetAppResponse(
+                new AppResponse(
                         1L,
                         "app",
                         "test",
@@ -88,11 +84,11 @@ public class AppControllerTest {
         );
         getAppListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppListResponse);
 
-        updateAppRequest = UpdateAppRequest.builder()
+        updateAppRequest = AppRequest.builder()
                 .name("new name")
                 .description("new desc")
                 .build();
-        updateAppResponse = UpdateAppResponse.builder()
+        updateAppResponse = AppResponse.builder()
                 .id(1L)
                 .name("new name")
                 .description("new desc")
@@ -103,9 +99,9 @@ public class AppControllerTest {
 
     @Test
     void createApp() {
-        when(appService.createApp(any(CreateAppRequest.class))).thenReturn(createAppResponse);
+        when(appService.createApp(any(AppRequest.class))).thenReturn(createAppResponse);
 
-        ResponseEntity<CreateAppResponse> res = appController.createApp(correlationId, createAppRequest);
+        ResponseEntity<AppResponse> res = appController.createApp(correlationId, createAppRequest);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), createAppExpectedResponse.getStatusCode());
@@ -116,7 +112,7 @@ public class AppControllerTest {
     void getApp() {
         when(appService.getApp(any(Long.class))).thenReturn(getAppResponse);
 
-        ResponseEntity<GetAppResponse> res = appController.getApp(correlationId, 1L);
+        ResponseEntity<AppResponse> res = appController.getApp(correlationId, 1L);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAppExpectedResponse.getStatusCode());
@@ -125,20 +121,20 @@ public class AppControllerTest {
 
     @Test
     void getAppV2() {
-        when(appService.getAppV2(any(Long.class))).thenReturn(getAppDetailsResponse);
+        when(appService.getAppV2(any(Long.class))).thenReturn(getAppV2Response);
 
-        ResponseEntity<GetAppDetailsResponse> res = appController.getAppV2(correlationId, 1L);
+        ResponseEntity<AppV2Response> res = appController.getAppV2(correlationId, 1L);
 
         assertNotNull(res);
-        assertEquals(res.getStatusCode(), getAppDetailsExpectedResponse.getStatusCode());
-        assertEquals(res.getBody(), getAppDetailsExpectedResponse.getBody());
+        assertEquals(res.getStatusCode(), getAppV2ExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getAppV2ExpectedResponse.getBody());
     }
 
     @Test
     void getAppList() {
         when(appService.getAppList()).thenReturn(getAppListResponse);
 
-        ResponseEntity<List<GetAppResponse>> res = appController.getAppList(correlationId);
+        ResponseEntity<List<AppResponse>> res = appController.getAppList(correlationId);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAppListExpectedResponse.getStatusCode());
@@ -147,9 +143,9 @@ public class AppControllerTest {
 
     @Test
     void updateApp() {
-        when(appService.updateApp(any(Long.class), any(UpdateAppRequest.class))).thenReturn(updateAppResponse);
+        when(appService.updateApp(any(Long.class), any(AppRequest.class))).thenReturn(updateAppResponse);
 
-        ResponseEntity<UpdateAppResponse> res = appController.updateApp(correlationId, 1L, updateAppRequest);
+        ResponseEntity<AppResponse> res = appController.updateApp(correlationId, 1L, updateAppRequest);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), updateAppExpectedResponse.getStatusCode());

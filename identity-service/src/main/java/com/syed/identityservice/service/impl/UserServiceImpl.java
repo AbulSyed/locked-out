@@ -4,11 +4,9 @@ import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.UserRepository;
-import com.syed.identityservice.domain.model.request.CreateUserRequest;
-import com.syed.identityservice.domain.model.request.UpdateUserRequest;
-import com.syed.identityservice.domain.model.response.CreateUserResponse;
-import com.syed.identityservice.domain.model.response.GetUserResponse;
-import com.syed.identityservice.domain.model.response.UpdateUserResponse;
+import com.syed.identityservice.domain.model.request.UserRequest;
+import com.syed.identityservice.domain.model.response.UserResponse;
+import com.syed.identityservice.domain.model.response.UserV2Response;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
@@ -27,7 +25,7 @@ public class UserServiceImpl implements UserService {
     private final AppRepository appRepository;
 
     @Override
-    public CreateUserResponse createUser(Long appId, CreateUserRequest request) {
+    public UserResponse createUser(Long appId, UserRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new FieldAlreadyExistsException(ErrorConstant.FIELD_ALREADY_USED.formatMessage("Username"));
         }
@@ -38,36 +36,36 @@ public class UserServiceImpl implements UserService {
         UserEntity user = MapperUtil.mapUserModelToEntity(request);
         user.setUserApp(app);
 
-        return MapperUtil.mapUserEntityToCreateUserResponse(userRepository.save(user));
+        return MapperUtil.mapUserEntityToUserResponse(userRepository.save(user));
     }
 
     @Override
-    public GetUserResponse getUser(Long userId) {
+    public UserV2Response getUser(Long userId) {
         UserEntity user = userRepository.findById(userId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId)));
 
-        return MapperUtil.mapUserEntitytoGetUserResponse(user);
+        return MapperUtil.mapUserEntityToUserV2Response(user);
     }
 
     @Override
-    public List<GetUserResponse> getUserList() {
+    public List<UserV2Response> getUserList() {
         List<UserEntity> userEntityList = userRepository.findAll();
 
-        return MapperUtil.mapUserEntityListToGetUserResponseList(userEntityList);
+        return MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);
     }
 
     @Override
-    public List<GetUserResponse> getUserListByAppId(Long appId) {
+    public List<UserV2Response> getUserListByAppId(Long appId) {
         AppEntity app = appRepository.findById(appId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId)));
 
         List<UserEntity> userEntityList = userRepository.getUserEntitiesByUserApp(app);
 
-        return MapperUtil.mapUserEntityListToGetUserResponseList(userEntityList);
+        return MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);
     }
 
     @Override
-    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
+    public UserResponse updateUser(Long userId, UserRequest request) {
         UserEntity userEntity = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId))
         );
@@ -83,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(userEntity);
 
-        return MapperUtil.mapUserEntitytoUpdateUserResponse(userEntity);
+        return MapperUtil.mapUserEntityToUserResponse(userEntity);
     }
 
     @Override

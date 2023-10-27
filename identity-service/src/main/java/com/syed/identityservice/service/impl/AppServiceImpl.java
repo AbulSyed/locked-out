@@ -2,12 +2,9 @@ package com.syed.identityservice.service.impl;
 
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
-import com.syed.identityservice.domain.model.response.CreateAppResponse;
-import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
-import com.syed.identityservice.domain.model.response.GetAppResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
+import com.syed.identityservice.domain.model.request.AppRequest;
+import com.syed.identityservice.domain.model.response.AppResponse;
+import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
@@ -25,43 +22,43 @@ public class AppServiceImpl implements AppService {
     private final AppRepository appRepository;
 
     @Override
-    public CreateAppResponse createApp(CreateAppRequest request) {
+    public AppResponse createApp(AppRequest request) {
         if (appRepository.existsByName(request.getName())) {
             throw new FieldAlreadyExistsException(ErrorConstant.FIELD_ALREADY_USED.formatMessage("Name"));
         }
 
         AppEntity appEntity = appRepository.save(MapperUtil.mapAppModelToEntity(request));
 
-        return MapperUtil.mapAppEntityToCreateAppResponse(appEntity);
+        return MapperUtil.mapAppEntityToAppResponse(appEntity);
     }
 
     @Override
-    public GetAppResponse getApp(Long appId) {
+    public AppResponse getApp(Long appId) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
         );
 
-        return MapperUtil.mapAppEntityToGetAppResponse(appEntity);
+        return MapperUtil.mapAppEntityToAppResponse(appEntity);
     }
 
     @Override
-    public GetAppDetailsResponse getAppV2(Long appId) {
+    public AppV2Response getAppV2(Long appId) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
         );
 
-        return MapperUtil.mapAppEntityToGetAppDetailsResponse(appEntity);
+        return MapperUtil.mapAppEntityToAppV2Response(appEntity);
     }
 
     @Override
-    public List<GetAppResponse> getAppList() {
+    public List<AppResponse> getAppList() {
         List<AppEntity> appEntityList = appRepository.findAll();
 
-        return MapperUtil.mapAppEntityListToGetAppResponseList(appEntityList);
+        return MapperUtil.mapAppEntityListToAppListResponse(appEntityList);
     }
 
     @Override
-    public UpdateAppResponse updateApp(Long appId, UpdateAppRequest request) {
+    public AppResponse updateApp(Long appId, AppRequest request) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
         );
@@ -75,7 +72,7 @@ public class AppServiceImpl implements AppService {
 
         appRepository.save(appEntity);
 
-        return MapperUtil.mapAppEntityToUpdateAppResponse(appEntity);
+        return MapperUtil.mapAppEntityToAppResponse(appEntity);
     }
 
     @Override
