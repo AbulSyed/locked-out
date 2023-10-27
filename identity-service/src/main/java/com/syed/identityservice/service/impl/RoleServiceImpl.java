@@ -40,34 +40,34 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public AddRoleResponse addRole(AddRoleToEnum addRoleTo, Long id, Long roleId) {
-        if (addRoleTo.toString().equals("USER")) {
-            System.out.println("we need to a role to a user with id " + id);
-            RoleEntity role = roleRepository.findById(roleId).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + id)));
-
-            UserEntity user = userRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
-
-            RoleModel roleModel = MapperUtil.mapRoleE
-//            addRoleToEntity(userRepository, null, id);
-        } else if (addRoleTo.toString().equals("CLIENT")) {
-            System.out.println("we need to a role to a client with id " + id);
-//            addRoleToEntity(null, clientRepository, id);
-        }
-        // no need for else clause as DefaultHandlerExceptionResolver exception
-        // will be thrown by controller before we enter service layer
+//        if (addRoleTo.toString().equals("USER")) {
+//            System.out.println("we need to a role to a user with id " + id);
+//            RoleEntity role = roleRepository.findById(roleId).orElseThrow(() ->
+//                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + id)));
+//
+//            UserEntity user = userRepository.findById(id).orElseThrow(() ->
+//                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
+//
+//            RoleModel roleModel = MapperUtil.mapRoleE
+////            addRoleToEntity(userRepository, null, id);
+//        } else if (addRoleTo.toString().equals("CLIENT")) {
+//            System.out.println("we need to a role to a client with id " + id);
+////            addRoleToEntity(null, clientRepository, id);
+//        }
+//        // no need for else clause as DefaultHandlerExceptionResolver exception
+//        // will be thrown by controller before we enter service layer
         return null;
     }
 
-    private void addRoleToEntity(UserRepository userRepository, ClientRepository clientRepository, Long id) {
-        if (userRepository != null) {
-            System.out.println("userRepository != null");
-            UserEntity user = userRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
-
-            user.setr
-        } else if (clientRepository != null) {
-            System.out.println("clientRepository != null");
-        }
-    }
+//    private void addRoleToEntity(UserRepository userRepository, ClientRepository clientRepository, Long id) {
+//        if (userRepository != null) {
+//            System.out.println("userRepository != null");
+//            UserEntity user = userRepository.findById(id).orElseThrow(() ->
+//                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
+//
+//            user.setr
+//        } else if (clientRepository != null) {
+//            System.out.println("clientRepository != null");
+//        }
+//    }
 }
