@@ -3,7 +3,7 @@ package com.syed.identityservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.data.repository.AppRepository;
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.AppRequest;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class AppControllerIntegrationTest extends BaseTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private CreateAppRequest appRequest;
+    private AppRequest appRequest;
 
     private static final String X_CORRELATION_ID = "x-correlation-id";
     private static final Integer X_CORRELATION_VALUE = 1;
@@ -39,7 +39,7 @@ public class AppControllerIntegrationTest extends BaseTest {
     void setUp() {
         appRepository.deleteAll();
 
-        appRequest = CreateAppRequest.builder()
+        appRequest = AppRequest.builder()
                 .name("app")
                 .description("desc")
                 .build();
