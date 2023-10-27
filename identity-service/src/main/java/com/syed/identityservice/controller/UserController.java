@@ -4,11 +4,9 @@ import com.syed.identityservice.aspect.AuditRequest;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
-import com.syed.identityservice.domain.model.request.CreateUserRequest;
-import com.syed.identityservice.domain.model.request.UpdateUserRequest;
-import com.syed.identityservice.domain.model.response.CreateUserResponse;
-import com.syed.identityservice.domain.model.response.GetUserResponse;
-import com.syed.identityservice.domain.model.response.UpdateUserResponse;
+import com.syed.identityservice.domain.model.request.UserRequest;
+import com.syed.identityservice.domain.model.response.UserResponse;
+import com.syed.identityservice.domain.model.response.UserV2Response;
 import com.syed.identityservice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,10 +29,10 @@ public class UserController {
             log = "create user request initiated"
     )
     @PostMapping("/create-user/{appId}")
-    public ResponseEntity<CreateUserResponse> createUser(
+    public ResponseEntity<UserResponse> createUser(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId,
-            @RequestBody CreateUserRequest request
+            @RequestBody UserRequest request
     ) {
         return new ResponseEntity<>(userService.createUser(appId, request), HttpStatus.CREATED);
     }
@@ -47,7 +45,7 @@ public class UserController {
             log = "get user request initiated"
     )
     @GetMapping("/get-user/{userId}")
-    public ResponseEntity<GetUserResponse> getUser(
+    public ResponseEntity<UserV2Response> getUser(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long userId
     ) {
@@ -62,7 +60,7 @@ public class UserController {
             log = "get user list request initiated"
     )
     @GetMapping("/get-user-list")
-    public ResponseEntity<List<GetUserResponse>> getUserList(
+    public ResponseEntity<List<UserV2Response>> getUserList(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(userService.getUserList(), HttpStatus.OK);
@@ -76,7 +74,7 @@ public class UserController {
             log = "get user list by app id request initiated"
     )
     @GetMapping("/get-user-list/{appId}")
-    public ResponseEntity<List<GetUserResponse>> getUserListByAppId(
+    public ResponseEntity<List<UserV2Response>> getUserListByAppId(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId
     ) {
@@ -91,10 +89,10 @@ public class UserController {
             log = "update user request initiated"
     )
     @PutMapping("/update-user/{userId}")
-    public ResponseEntity<UpdateUserResponse> updateUser(
+    public ResponseEntity<UserResponse> updateUser(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long userId,
-            @RequestBody UpdateUserRequest request
+            @RequestBody UserRequest request
     ) {
         return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
     }

@@ -1,19 +1,17 @@
 package com.syed.identityservice.service;
 
-import com.syed.identityservice.domain.model.request.CreateUserRequest;
-import com.syed.identityservice.domain.model.request.UpdateUserRequest;
-import com.syed.identityservice.domain.model.response.CreateUserResponse;
-import com.syed.identityservice.domain.model.response.GetUserResponse;
-import com.syed.identityservice.domain.model.response.UpdateUserResponse;
+import com.syed.identityservice.domain.model.request.UserRequest;
+import com.syed.identityservice.domain.model.response.UserResponse;
+import com.syed.identityservice.domain.model.response.UserV2Response;
 
 import java.util.List;
 
 public interface UserService {
 
-    CreateUserResponse createUser(Long appId, CreateUserRequest request);
-    GetUserResponse getUser(Long userId);
-    List<GetUserResponse> getUserList();
-    List<GetUserResponse> getUserListByAppId(Long appId);
-    UpdateUserResponse updateUser(Long userId, UpdateUserRequest request);
+    UserResponse createUser(Long appId, UserRequest request);
+    UserV2Response getUser(Long userId);
+    List<UserV2Response> getUserList();
+    List<UserV2Response> getUserListByAppId(Long appId);
+    UserResponse updateUser(Long userId, UserRequest request);
     void deleteUser(Long userId);
 }

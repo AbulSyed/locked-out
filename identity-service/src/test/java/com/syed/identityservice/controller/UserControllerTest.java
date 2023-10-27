@@ -1,10 +1,8 @@
 package com.syed.identityservice.controller;
 
-import com.syed.identityservice.domain.model.request.CreateUserRequest;
-import com.syed.identityservice.domain.model.request.UpdateUserRequest;
-import com.syed.identityservice.domain.model.response.CreateUserResponse;
-import com.syed.identityservice.domain.model.response.GetUserResponse;
-import com.syed.identityservice.domain.model.response.UpdateUserResponse;
+import com.syed.identityservice.domain.model.request.UserRequest;
+import com.syed.identityservice.domain.model.response.UserResponse;
+import com.syed.identityservice.domain.model.response.UserV2Response;
 import com.syed.identityservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,28 +31,28 @@ public class UserControllerTest {
     private UserController userController;
 
     private String correlationId;
-    private CreateUserRequest createUserRequest;
-    private CreateUserResponse createUserResponse;
-    private ResponseEntity<CreateUserResponse> createUserExpectedResponse;
-    private GetUserResponse getUserResponse;
-    private ResponseEntity<GetUserResponse> getUserExpectedResponse;
-    private List<GetUserResponse> getUserListResponse;
-    private ResponseEntity<List<GetUserResponse>> getUserListExpectedResponse;
-    private UpdateUserRequest updateUserRequest;
-    private UpdateUserResponse updateUserResponse;
-    private ResponseEntity<UpdateUserResponse> updateUserExpectedResponse;
+    private UserRequest createUserRequest;
+    private UserResponse createUserResponse;
+    private ResponseEntity<UserResponse> createUserExpectedResponse;
+    private UserV2Response getUserResponse;
+    private ResponseEntity<UserV2Response> getUserExpectedResponse;
+    private List<UserV2Response> getUserListResponse;
+    private ResponseEntity<List<UserV2Response>> getUserListExpectedResponse;
+    private UserRequest updateUserRequest;
+    private UserResponse updateUserResponse;
+    private ResponseEntity<UserResponse> updateUserExpectedResponse;
 
     @BeforeEach
     void setUp() {
         correlationId = "1";
 
-        createUserRequest = CreateUserRequest.builder()
+        createUserRequest = UserRequest.builder()
                 .username("joe")
                 .password("123")
                 .email("joe@mail.com")
                 .phoneNumber("079")
                 .build();
-        createUserResponse = CreateUserResponse.builder()
+        createUserResponse = UserResponse.builder()
                 .id(1L)
                 .username("joe")
                 .password("123")
@@ -64,7 +62,7 @@ public class UserControllerTest {
                 .build();
         createUserExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createUserResponse);
 
-        getUserResponse = GetUserResponse.builder()
+        getUserResponse = UserV2Response.builder()
                 .id(1L)
                 .username("joe")
                 .password("123")
@@ -74,7 +72,7 @@ public class UserControllerTest {
                 .build();
         getUserExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getUserResponse);
 
-        getUserListResponse = List.of(GetUserResponse.builder()
+        getUserListResponse = List.of(UserV2Response.builder()
                 .id(1L)
                 .username("joe")
                 .password("123")
@@ -84,13 +82,13 @@ public class UserControllerTest {
                 .build());
         getUserListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getUserListResponse);
 
-        updateUserRequest = UpdateUserRequest.builder()
+        updateUserRequest = UserRequest.builder()
                 .username("joe")
                 .password("123")
                 .email("joe@mail.com")
                 .phoneNumber("079")
                 .build();
-        updateUserResponse = UpdateUserResponse.builder()
+        updateUserResponse = UserResponse.builder()
                 .id(1L)
                 .username("joe")
                 .password("123")
@@ -102,9 +100,9 @@ public class UserControllerTest {
 
     @Test
     void createUser() {
-        when(userService.createUser(any(Long.class), any(CreateUserRequest.class))).thenReturn(createUserResponse);
+        when(userService.createUser(any(Long.class), any(UserRequest.class))).thenReturn(createUserResponse);
 
-        ResponseEntity<CreateUserResponse> res = userController.createUser(correlationId, 1L, createUserRequest);
+        ResponseEntity<UserResponse> res = userController.createUser(correlationId, 1L, createUserRequest);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), createUserExpectedResponse.getStatusCode());
@@ -115,7 +113,7 @@ public class UserControllerTest {
     void getUser() {
         when(userService.getUser(any(Long.class))).thenReturn(getUserResponse);
 
-        ResponseEntity<GetUserResponse> res = userController.getUser(correlationId, 1L);
+        ResponseEntity<UserV2Response> res = userController.getUser(correlationId, 1L);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserExpectedResponse.getStatusCode());
@@ -126,7 +124,7 @@ public class UserControllerTest {
     void getUserList() {
         when(userService.getUserList()).thenReturn(getUserListResponse);
 
-        ResponseEntity<List<GetUserResponse>> res = userController.getUserList(correlationId);
+        ResponseEntity<List<UserV2Response>> res = userController.getUserList(correlationId);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());
@@ -137,7 +135,7 @@ public class UserControllerTest {
     void getUserListByAppId() {
         when(userService.getUserListByAppId(any(Long.class))).thenReturn(getUserListResponse);
 
-        ResponseEntity<List<GetUserResponse>> res = userController.getUserListByAppId(correlationId, 1L);
+        ResponseEntity<List<UserV2Response>> res = userController.getUserListByAppId(correlationId, 1L);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());
@@ -146,9 +144,9 @@ public class UserControllerTest {
 
     @Test
     void updateUser() {
-        when(userService.updateUser(any(Long.class), any(UpdateUserRequest.class))).thenReturn(updateUserResponse);
+        when(userService.updateUser(any(Long.class), any(UserRequest.class))).thenReturn(updateUserResponse);
 
-        ResponseEntity<UpdateUserResponse> res = userController.updateUser(correlationId, 1L, updateUserRequest);
+        ResponseEntity<UserResponse> res = userController.updateUser(correlationId, 1L, updateUserRequest);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), updateUserExpectedResponse.getStatusCode());

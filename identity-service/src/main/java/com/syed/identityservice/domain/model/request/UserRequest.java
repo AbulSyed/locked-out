@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
-public class UpdateUserRequest {
+@Setter
+public class UserRequest {
 
     @NotEmpty(message = "Username can't be empty")
     @Size(max = 15, message = "Maximum length of username is 15")

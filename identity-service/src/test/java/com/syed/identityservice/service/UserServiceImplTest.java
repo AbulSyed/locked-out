@@ -4,11 +4,9 @@ import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.UserRepository;
-import com.syed.identityservice.domain.model.request.CreateUserRequest;
-import com.syed.identityservice.domain.model.request.UpdateUserRequest;
-import com.syed.identityservice.domain.model.response.CreateUserResponse;
-import com.syed.identityservice.domain.model.response.GetUserResponse;
-import com.syed.identityservice.domain.model.response.UpdateUserResponse;
+import com.syed.identityservice.domain.model.request.UserRequest;
+import com.syed.identityservice.domain.model.response.UserResponse;
+import com.syed.identityservice.domain.model.response.UserV2Response;
 import com.syed.identityservice.service.impl.UserServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,8 +38,8 @@ public class UserServiceImplTest {
 
     private AppEntity appEntity;
     private UserEntity userEntity;
-    private CreateUserRequest createUserRequest;
-    private UpdateUserRequest updateUserRequest;
+    private UserRequest createUserRequest;
+    private UserRequest updateUserRequest;
     private UserEntity updatedUserEntity;
 
     @BeforeEach
@@ -65,14 +63,14 @@ public class UserServiceImplTest {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        createUserRequest = CreateUserRequest.builder()
+        createUserRequest = UserRequest.builder()
                 .username("joe")
                 .password("123")
                 .email("joe@mail.com")
                 .phoneNumber("079")
                 .build();
 
-        updateUserRequest = UpdateUserRequest.builder()
+        updateUserRequest = UserRequest.builder()
                 .username("new username")
                 .password("123")
                 .email("joe@mail.com")
@@ -96,7 +94,7 @@ public class UserServiceImplTest {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
 
-        CreateUserResponse res = userService.createUser(1L, createUserRequest);
+        UserResponse res = userService.createUser(1L, createUserRequest);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("username", "joe")
@@ -109,7 +107,7 @@ public class UserServiceImplTest {
     void getUser() {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
-        GetUserResponse res = userService.getUser(1L);
+        UserV2Response res = userService.getUser(1L);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("username", "joe")
@@ -122,7 +120,7 @@ public class UserServiceImplTest {
     void getUserList() {
         when(userRepository.findAll()).thenReturn(List.of(userEntity));
 
-        List<GetUserResponse> res = userService.getUserList();
+        List<UserV2Response> res = userService.getUserList();
 
         assertThat(res).isNotNull()
                 .hasSize(1);
@@ -133,7 +131,7 @@ public class UserServiceImplTest {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(userRepository.getUserEntitiesByUserApp(any(AppEntity.class))).thenReturn(List.of(userEntity));
 
-        List<GetUserResponse> res = userService.getUserListByAppId(1L);
+        List<UserV2Response> res = userService.getUserListByAppId(1L);
 
         assertThat(res).isNotNull()
                 .hasSize(1);
@@ -145,7 +143,7 @@ public class UserServiceImplTest {
         when(userRepository.existsByUsername("new username")).thenReturn(false);
         when(userRepository.save(any(UserEntity.class))).thenReturn(updatedUserEntity);
 
-        UpdateUserResponse res = userService.updateUser(1L, updateUserRequest);
+        UserResponse res = userService.updateUser(1L, updateUserRequest);
 
         assertThat(res)
                 .isNotNull()

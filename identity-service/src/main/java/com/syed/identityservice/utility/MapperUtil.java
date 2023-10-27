@@ -10,7 +10,7 @@ import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.request.ClientRequest;
-import com.syed.identityservice.domain.model.request.CreateUserRequest;
+import com.syed.identityservice.domain.model.request.UserRequest;
 import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
@@ -156,7 +156,7 @@ public class MapperUtil {
         return appResponseList;
     }
 
-    public static UserEntity mapUserModelToEntity(CreateUserRequest request) {
+    public static UserEntity mapUserModelToEntity(UserRequest request) {
         return UserEntity.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
@@ -166,8 +166,8 @@ public class MapperUtil {
                 .build();
     }
 
-    public static CreateUserResponse mapUserEntityToCreateUserResponse(UserEntity entity) {
-        return CreateUserResponse.builder()
+    public static UserResponse mapUserEntityToUserResponse(UserEntity entity) {
+        return UserResponse.builder()
                 .id(entity.getId())
                 .username(entity.getUsername())
                 .password(entity.getPassword())
@@ -177,8 +177,8 @@ public class MapperUtil {
                 .build();
     }
 
-    public static GetUserResponse mapUserEntitytoGetUserResponse(UserEntity entity) {
-        GetUserResponse user = GetUserResponse.builder()
+    public static UserV2Response mapUserEntityToUserV2Response(UserEntity entity) {
+        UserV2Response user = UserV2Response.builder()
                 .id(entity.getId())
                 .username(entity.getUsername())
                 .password(entity.getPassword())
@@ -212,11 +212,11 @@ public class MapperUtil {
         return user;
     }
 
-    public static List<GetUserResponse> mapUserEntityListToGetUserResponseList(List<UserEntity> userEntityList) {
-        List<GetUserResponse> userResponseList = new ArrayList<>();
+    public static List<UserV2Response> mapUserEntityListToUserV2ResponseList(List<UserEntity> userEntityList) {
+        List<UserV2Response> userResponseList = new ArrayList<>();
 
         for (UserEntity userEntity : userEntityList) {
-            GetUserResponse getUserResponse = GetUserResponse.builder()
+            UserV2Response getUserResponse = UserV2Response.builder()
                     .id(userEntity.getId())
                     .username(userEntity.getUsername())
                     .password(userEntity.getPassword())
@@ -229,17 +229,6 @@ public class MapperUtil {
         }
 
         return userResponseList;
-    }
-
-    public static UpdateUserResponse mapUserEntitytoUpdateUserResponse(UserEntity entity) {
-        return UpdateUserResponse.builder()
-                .id(entity.getId())
-                .username(entity.getUsername())
-                .password(entity.getPassword())
-                .email(entity.getEmail())
-                .phoneNumber(entity.getPhoneNumber())
-                .createdAt(entity.getCreatedAt())
-                .build();
     }
 
     public static ClientEntity mapClientModelToEntity(ClientRequest request) {
