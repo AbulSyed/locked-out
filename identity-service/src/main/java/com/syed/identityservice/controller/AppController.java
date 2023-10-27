@@ -6,10 +6,8 @@ import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateAppRequest;
 import com.syed.identityservice.domain.model.request.UpdateAppRequest;
-import com.syed.identityservice.domain.model.response.CreateAppResponse;
-import com.syed.identityservice.domain.model.response.GetAppDetailsResponse;
-import com.syed.identityservice.domain.model.response.GetAppResponse;
-import com.syed.identityservice.domain.model.response.UpdateAppResponse;
+import com.syed.identityservice.domain.model.response.AppResponse;
+import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.service.AppService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -33,7 +31,7 @@ public class AppController {
             log = "create app request initiated"
     )
     @PostMapping("/create-app")
-    public ResponseEntity<CreateAppResponse> createApp(
+    public ResponseEntity<AppResponse> createApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @Valid @RequestBody CreateAppRequest request) {
         return new ResponseEntity<>(appService.createApp(request), HttpStatus.CREATED);
@@ -47,7 +45,7 @@ public class AppController {
             log = "get app request initiated"
     )
     @GetMapping("/get-app/{appId}")
-    public ResponseEntity<GetAppResponse> getApp(
+    public ResponseEntity<AppResponse> getApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId
     ) {
@@ -62,7 +60,7 @@ public class AppController {
             log = "get app request v2 initiated"
     )
     @GetMapping("/get-app-v2/{appId}")
-    public ResponseEntity<GetAppDetailsResponse> getAppV2(
+    public ResponseEntity<AppV2Response> getAppV2(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId
     ) {
@@ -77,7 +75,7 @@ public class AppController {
             log = "get app list request initiated"
     )
     @GetMapping("/get-app-list")
-    public ResponseEntity<List<GetAppResponse>> getAppList(
+    public ResponseEntity<List<AppResponse>> getAppList(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(appService.getAppList(), HttpStatus.OK);
@@ -91,7 +89,7 @@ public class AppController {
             log = "update app request initiated"
     )
     @PutMapping("/update-app/{appId}")
-    public ResponseEntity<UpdateAppResponse> updateApp(
+    public ResponseEntity<AppResponse> updateApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId,
             @Valid @RequestBody UpdateAppRequest updateAppRequest

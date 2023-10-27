@@ -44,8 +44,8 @@ public class MapperUtil {
                 .build();
     }
 
-    public static CreateAppResponse mapAppEntityToCreateAppResponse(AppEntity entity) {
-        return CreateAppResponse.builder()
+    public static AppResponse mapAppEntityToAppResponse(AppEntity entity) {
+        return AppResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
@@ -53,16 +53,7 @@ public class MapperUtil {
                 .build();
     }
 
-    public static GetAppResponse mapAppEntityToGetAppResponse(AppEntity entity) {
-        return GetAppResponse.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .description(entity.getDescription())
-                .createdAt(entity.getCreatedAt())
-                .build();
-    }
-
-    public static GetAppDetailsResponse mapAppEntityToGetAppDetailsResponse(AppEntity entity) {
+    public static AppV2Response mapAppEntityToAppV2Response(AppEntity entity) {
         Set<UserModel> userSet = new HashSet<>();
 
         for (UserEntity userEntity : entity.getUsers()) {
@@ -138,7 +129,7 @@ public class MapperUtil {
             clientSet.add(client);
         }
 
-        return GetAppDetailsResponse.builder()
+        return AppV2Response.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
@@ -148,11 +139,11 @@ public class MapperUtil {
                 .build();
     }
 
-    public static List<GetAppResponse> mapAppEntityListToGetAppResponseList(List<AppEntity> entityList) {
-        List<GetAppResponse> appResponseList = new ArrayList<>();
+    public static List<AppResponse> mapAppEntityListToAppListResponse(List<AppEntity> entityList) {
+        List<AppResponse> appResponseList = new ArrayList<>();
 
         for (AppEntity entity : entityList) {
-            GetAppResponse appResponse = GetAppResponse.builder()
+            AppResponse appResponse = AppResponse.builder()
                     .id(entity.getId())
                     .name(entity.getName())
                     .description(entity.getDescription())
@@ -163,15 +154,6 @@ public class MapperUtil {
         }
 
         return appResponseList;
-    }
-
-    public static UpdateAppResponse mapAppEntityToUpdateAppResponse(AppEntity entity) {
-        return UpdateAppResponse.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .description(entity.getDescription())
-                .createdAt(entity.getCreatedAt())
-                .build();
     }
 
     public static UserEntity mapUserModelToEntity(CreateUserRequest request) {
