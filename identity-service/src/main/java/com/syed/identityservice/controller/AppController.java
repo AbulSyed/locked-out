@@ -4,8 +4,7 @@ import com.syed.identityservice.aspect.AuditRequest;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
+import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.response.AppResponse;
 import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.service.AppService;
@@ -33,7 +32,7 @@ public class AppController {
     @PostMapping("/create-app")
     public ResponseEntity<AppResponse> createApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @Valid @RequestBody CreateAppRequest request) {
+            @Valid @RequestBody AppRequest request) {
         return new ResponseEntity<>(appService.createApp(request), HttpStatus.CREATED);
     }
 
@@ -92,9 +91,9 @@ public class AppController {
     public ResponseEntity<AppResponse> updateApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long appId,
-            @Valid @RequestBody UpdateAppRequest updateAppRequest
+            @Valid @RequestBody AppRequest request
     ) {
-        return new ResponseEntity<>(appService.updateApp(appId, updateAppRequest), HttpStatus.OK);
+        return new ResponseEntity<>(appService.updateApp(appId, request), HttpStatus.OK);
     }
 
     @AuditRequest(

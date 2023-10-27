@@ -2,8 +2,7 @@ package com.syed.identityservice.service.impl;
 
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
+import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.response.AppResponse;
 import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.exception.ErrorConstant;
@@ -23,7 +22,7 @@ public class AppServiceImpl implements AppService {
     private final AppRepository appRepository;
 
     @Override
-    public AppResponse createApp(CreateAppRequest request) {
+    public AppResponse createApp(AppRequest request) {
         if (appRepository.existsByName(request.getName())) {
             throw new FieldAlreadyExistsException(ErrorConstant.FIELD_ALREADY_USED.formatMessage("Name"));
         }
@@ -59,7 +58,7 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public AppResponse updateApp(Long appId, UpdateAppRequest request) {
+    public AppResponse updateApp(Long appId, AppRequest request) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
                 () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
         );

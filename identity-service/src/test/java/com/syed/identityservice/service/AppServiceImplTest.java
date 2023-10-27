@@ -4,8 +4,7 @@ import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AppRepository;
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
+import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.response.AppResponse;
 import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
@@ -37,21 +36,21 @@ public class AppServiceImplTest {
     @InjectMocks
     private AppServiceImpl appService;
 
-    private CreateAppRequest createAppRequest;
+    private AppRequest createAppRequest;
     private AppEntity appEntity;
     private AppEntity appV2Entity;
     private UserEntity userEntity;
     private ClientEntity clientEntity;
     private LocalDateTime createdAt;
     private List<AppEntity> appEntityList;
-    private UpdateAppRequest updateAppRequest;
+    private AppRequest updateAppRequest;
     private AppEntity updatedAppEntity;
 
     @BeforeEach
     void setUp() {
         createdAt = LocalDateTime.now();
 
-        createAppRequest = CreateAppRequest.builder()
+        createAppRequest = AppRequest.builder()
                 .name("app")
                 .description("desc")
                 .build();
@@ -101,7 +100,7 @@ public class AppServiceImplTest {
                 )
         );
 
-        updateAppRequest = UpdateAppRequest.builder()
+        updateAppRequest = AppRequest.builder()
                 .name("new name")
                 .description("new desc")
                 .build();

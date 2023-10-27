@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
-public class UpdateAppRequest {
+@Setter
+public class AppRequest {
 
     @NotEmpty(message = "Name can't be empty")
     @Size(max = 15, message = "Maximum length of app name is 15")

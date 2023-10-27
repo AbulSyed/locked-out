@@ -8,7 +8,7 @@ import com.syed.identityservice.domain.model.AuthorityModel;
 import com.syed.identityservice.domain.model.ClientModel;
 import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
+import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.request.CreateClientRequest;
 import com.syed.identityservice.domain.model.request.CreateUserRequest;
 import com.syed.identityservice.domain.model.response.*;
@@ -36,7 +36,7 @@ public class MapperUtil {
                 .build();
     }
 
-    public static AppEntity mapAppModelToEntity(CreateAppRequest request) {
+    public static AppEntity mapAppModelToEntity(AppRequest request) {
         return AppEntity.builder()
                 .name(request.getName())
                 .description(request.getDescription())

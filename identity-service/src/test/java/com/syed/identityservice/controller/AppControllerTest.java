@@ -1,7 +1,6 @@
 package com.syed.identityservice.controller;
 
-import com.syed.identityservice.domain.model.request.CreateAppRequest;
-import com.syed.identityservice.domain.model.request.UpdateAppRequest;
+import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.AppService;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +29,7 @@ public class AppControllerTest {
     private AppController appController;
 
     private String correlationId;
-    private CreateAppRequest createAppRequest;
+    private AppRequest createAppRequest;
     private AppResponse createAppResponse;
     private ResponseEntity<AppResponse> createAppExpectedResponse;
     private AppResponse getAppResponse;
@@ -39,7 +38,7 @@ public class AppControllerTest {
     private ResponseEntity<AppV2Response> getAppV2ExpectedResponse;
     private List<AppResponse> getAppListResponse;
     private ResponseEntity<List<AppResponse>> getAppListExpectedResponse;
-    private UpdateAppRequest updateAppRequest;
+    private AppRequest updateAppRequest;
     private AppResponse updateAppResponse;
     private ResponseEntity<AppResponse> updateAppExpectedResponse;
 
@@ -47,7 +46,7 @@ public class AppControllerTest {
     void setUp() {
         correlationId = "1";
 
-        createAppRequest = CreateAppRequest.builder()
+        createAppRequest = AppRequest.builder()
                 .name("app")
                 .description("test")
                 .build();
@@ -85,7 +84,7 @@ public class AppControllerTest {
         );
         getAppListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppListResponse);
 
-        updateAppRequest = UpdateAppRequest.builder()
+        updateAppRequest = AppRequest.builder()
                 .name("new name")
                 .description("new desc")
                 .build();
@@ -100,7 +99,7 @@ public class AppControllerTest {
 
     @Test
     void createApp() {
-        when(appService.createApp(any(CreateAppRequest.class))).thenReturn(createAppResponse);
+        when(appService.createApp(any(AppRequest.class))).thenReturn(createAppResponse);
 
         ResponseEntity<AppResponse> res = appController.createApp(correlationId, createAppRequest);
 
@@ -144,7 +143,7 @@ public class AppControllerTest {
 
     @Test
     void updateApp() {
-        when(appService.updateApp(any(Long.class), any(UpdateAppRequest.class))).thenReturn(updateAppResponse);
+        when(appService.updateApp(any(Long.class), any(AppRequest.class))).thenReturn(updateAppResponse);
 
         ResponseEntity<AppResponse> res = appController.updateApp(correlationId, 1L, updateAppRequest);
 
