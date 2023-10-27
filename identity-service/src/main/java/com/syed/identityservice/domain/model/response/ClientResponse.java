@@ -12,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
-public class UpdateClientResponse {
+public class ClientResponse {
 
     private Long id;
     private String clientId;
