@@ -1,10 +1,12 @@
 package com.syed.identityservice.controller;
 
 import com.syed.identityservice.aspect.AuditRequest;
+import com.syed.identityservice.domain.enums.AddRoleToEnum;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.CreateRoleRequest;
+import com.syed.identityservice.domain.model.response.AddRoleResponse;
 import com.syed.identityservice.domain.model.response.CreateRoleResponse;
 import com.syed.identityservice.service.RoleService;
 import jakarta.validation.Valid;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
@@ -34,5 +37,21 @@ public class RoleController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @Valid @RequestBody CreateRoleRequest request) {
         return new ResponseEntity<>(roleService.createRole(request), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.ROLE,
+            requestType = RequestTypeEnum.CREATE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "add role to user/client request initiated"
+    )
+    @PostMapping("/add-role")
+    public ResponseEntity<AddRoleResponse> addRole(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam AddRoleToEnum addRoleTo,
+            @RequestParam Long id,
+            @RequestParam Long roleId) {
+        return new ResponseEntity<>(roleService.addRole(addRoleTo, id, roleId), HttpStatus.CREATED);
     }
 }
