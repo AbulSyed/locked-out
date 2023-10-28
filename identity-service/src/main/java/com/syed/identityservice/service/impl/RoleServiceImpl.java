@@ -19,6 +19,8 @@ import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -79,6 +81,13 @@ public class RoleServiceImpl implements RoleService {
         // no need for else clause as DefaultHandlerExceptionResolver exception
         // will be thrown by controller before we enter service layer
         return null;
+    }
+
+    @Override
+    public List<String> getRoleList() {
+        List<RoleEntity> roleEntityList = roleRepository.findAll();
+
+        return MapperUtil.mapRoleEntityListToStringList(roleEntityList);
     }
 
     @Override

@@ -13,6 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,6 +33,8 @@ public class RoleControllerTest {
     private RoleRequest createRoleRequest;
     private RoleResponse createRoleResponse;
     private ResponseEntity<RoleResponse> createRoleExpectedResponse;
+    private List<String> getRoleListResponse;
+    private ResponseEntity<List<String>> getRoleListExpectedResponse;
     private AddRoleResponse addRoleResponse;
     private ResponseEntity<AddRoleResponse> addRoleExpectedResponse;
 
@@ -46,6 +50,9 @@ public class RoleControllerTest {
                 .name("ADMIN")
                 .build();
         createRoleExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createRoleResponse);
+
+        getRoleListResponse = List.of("ADMIN");
+        getRoleListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getRoleListResponse);
 
         addRoleResponse = AddRoleResponse.builder()
                 .message("Role ADMIN added to user Test")
@@ -73,6 +80,17 @@ public class RoleControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), addRoleExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), addRoleExpectedResponse.getBody());
+    }
+
+    @Test
+    void getRoleList() {
+        when(roleService.getRoleList()).thenReturn(getRoleListResponse);
+
+        ResponseEntity<List<String>> res = roleController.getRoleList(correlationId);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), getRoleListExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getRoleListExpectedResponse.getBody());
     }
 
     @Test

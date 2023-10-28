@@ -10,21 +10,25 @@ import com.syed.identityservice.domain.model.response.AddRoleResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.service.impl.RoleServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -42,6 +46,7 @@ public class RoleServiceImplTest {
     private RoleEntity roleEntity;
     private RoleRequest createRoleRequest;
     private UserEntity userEntity;
+    private List<RoleEntity> getRoleEntityList;
     private UserEntity userEntity2;
     private Set<RoleEntity> roleEntitySet;
 
@@ -66,6 +71,13 @@ public class RoleServiceImplTest {
                 .authorities(new HashSet<>())
                 .createdAt(LocalDateTime.now())
                 .build();
+
+        getRoleEntityList = List.of(
+                RoleEntity.builder()
+                        .id(1L)
+                        .name("ADMIN")
+                        .build()
+        );
 
         roleEntitySet = new HashSet<>();
         roleEntitySet.add(roleEntity);
@@ -112,6 +124,16 @@ public class RoleServiceImplTest {
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("message", "Role ADMIN added to user joe");
+    }
+
+    @Test
+    void getRoleList() {
+        when(roleRepository.findAll()).thenReturn(getRoleEntityList);
+
+        List<String> res = roleService.getRoleList();
+
+        assertThat(res).isNotNull()
+                .hasSize(1);
     }
 
     @Test

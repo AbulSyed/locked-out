@@ -13,11 +13,9 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -53,6 +51,20 @@ public class RoleController {
             @RequestParam Long id,
             @RequestParam Long roleId) {
         return new ResponseEntity<>(roleService.addRole(addRoleTo, id, roleId), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.ROLE,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get list of roles"
+    )
+    @GetMapping("/get-role-list")
+    public ResponseEntity<List<String>> getRoleList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    ) {
+        return new ResponseEntity<>(roleService.getRoleList(), HttpStatus.OK);
     }
 
     @AuditRequest(

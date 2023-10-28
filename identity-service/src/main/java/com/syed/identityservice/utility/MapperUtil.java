@@ -288,10 +288,12 @@ public class MapperUtil {
                 .build();
     }
 
-    public static RoleModel mapRoleEntityToModel(RoleEntity entity) {
-        return RoleModel.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .build();
+    public static List<String> mapRoleEntityListToStringList(List<RoleEntity> entityList) {
+        List<String> roles = new ArrayList<>();
+
+        for (RoleEntity roleEntity : entityList) {
+            roles.add(roleEntity.getName());
+        }
+        return roles;
     }
 }
