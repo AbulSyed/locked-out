@@ -1,5 +1,6 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.domain.enums.AddRoleToEnum;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.RoleService;
@@ -30,19 +31,26 @@ public class RoleControllerTest {
     private RoleRequest createRoleRequest;
     private RoleResponse createRoleResponse;
     private ResponseEntity<RoleResponse> createRoleExpectedResponse;
+    private AddRoleResponse addRoleResponse;
+    private ResponseEntity<AddRoleResponse> addRoleExpectedResponse;
 
     @BeforeEach
     void setUp() {
         correlationId = "1";
 
         createRoleRequest = RoleRequest.builder()
-                .name("admin")
+                .name("ADMIN")
                 .build();
         createRoleResponse = RoleResponse.builder()
                 .id(1L)
-                .name("admin")
+                .name("ADMIN")
                 .build();
         createRoleExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createRoleResponse);
+
+        addRoleResponse = AddRoleResponse.builder()
+                .message("Role ADMIN added to user Test")
+                .build();
+        addRoleExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(addRoleResponse);
     }
 
     @Test
@@ -54,5 +62,16 @@ public class RoleControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), createRoleExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), createRoleExpectedResponse.getBody());
+    }
+
+    @Test
+    void addRole_ToUser() {
+        when(roleService.addRole(any(AddRoleToEnum.class), any(Long.class), any(Long.class))).thenReturn(addRoleResponse);
+
+        ResponseEntity<AddRoleResponse> res = roleController.addRole(correlationId, AddRoleToEnum.USER, 1L, 1L);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), addRoleExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), addRoleExpectedResponse.getBody());
     }
 }
