@@ -6,7 +6,7 @@ import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.data.repository.RoleRepository;
 import com.syed.identityservice.data.repository.UserRepository;
-import com.syed.identityservice.domain.enums.AddRoleToEnum;
+import com.syed.identityservice.domain.enums.RoleToEnum;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.AddRoleResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
@@ -39,12 +39,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public AddRoleResponse addRole(AddRoleToEnum addRoleTo, Long id, Long roleId) {
+    public AddRoleResponse addRole(RoleToEnum addRoleTo, Long id, Long roleId) {
         RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + id)));
 
         if (addRoleTo.toString().equals("USER")) {
-            System.out.println("we need to a role to a user with id " + id);
+            System.out.println("we need to add a role to a user with id " + id);
 
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
@@ -60,7 +60,7 @@ public class RoleServiceImpl implements RoleService {
                     .message("Role " + roleEntity.getName() + " added to user " + userEntity.getUsername())
                     .build();
         } else if (addRoleTo.toString().equals("CLIENT")) {
-            System.out.println("we need to a role to a client with id " + id);
+            System.out.println("we need to add a role to a client with id " + id);
 
             ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
@@ -79,5 +79,37 @@ public class RoleServiceImpl implements RoleService {
         // no need for else clause as DefaultHandlerExceptionResolver exception
         // will be thrown by controller before we enter service layer
         return null;
+    }
+
+    @Override
+    public void deleteRoleFrom(RoleToEnum deleteRoleFrom, Long id, Long roleId) {
+        RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + id)));
+
+        if (deleteRoleFrom.toString().equals("USER")) {
+            System.out.println("we need to delete a role from a user with id " + id);
+
+            UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id + " not found with user")));
+
+            if (userEntity.getRoles().contains(roleEntity)) {
+                userEntity.getRoles().remove(roleEntity);
+                userRepository.save(userEntity);
+            } else {
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with " + id));
+            }
+        } else if (deleteRoleFrom.toString().equals("CLIENT")) {
+            System.out.println("we need to delete a role from a client with id " + id);
+
+            ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
+
+            if (clientEntity.getRoles().contains(roleEntity)) {
+                clientEntity.getRoles().remove(roleEntity);
+                clientRepository.save(clientEntity);
+            } else {
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with " + id + " not found with client"));
+            }
+        }
     }
 }

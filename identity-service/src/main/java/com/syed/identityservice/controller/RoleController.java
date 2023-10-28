@@ -1,7 +1,7 @@
 package com.syed.identityservice.controller;
 
 import com.syed.identityservice.aspect.AuditRequest;
-import com.syed.identityservice.domain.enums.AddRoleToEnum;
+import com.syed.identityservice.domain.enums.RoleToEnum;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
@@ -49,9 +49,25 @@ public class RoleController {
     @PostMapping("/add-role")
     public ResponseEntity<AddRoleResponse> addRole(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @RequestParam AddRoleToEnum addRoleTo,
+            @RequestParam RoleToEnum addRoleTo,
             @RequestParam Long id,
             @RequestParam Long roleId) {
         return new ResponseEntity<>(roleService.addRole(addRoleTo, id, roleId), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.ROLE,
+            requestType = RequestTypeEnum.DELETE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "delete role from user/client request initiated"
+    )
+    @PostMapping("/delete-role-from")
+    public void deleteRole(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam RoleToEnum deleteRoleFrom,
+            @RequestParam Long id,
+            @RequestParam Long roleId) {
+        roleService.deleteRoleFrom(deleteRoleFrom, id, roleId);
     }
 }

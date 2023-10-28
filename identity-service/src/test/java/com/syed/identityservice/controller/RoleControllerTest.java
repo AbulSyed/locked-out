@@ -1,6 +1,6 @@
 package com.syed.identityservice.controller;
 
-import com.syed.identityservice.domain.enums.AddRoleToEnum;
+import com.syed.identityservice.domain.enums.RoleToEnum;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.RoleService;
@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RoleControllerTest {
@@ -66,12 +66,19 @@ public class RoleControllerTest {
 
     @Test
     void addRole_ToUser() {
-        when(roleService.addRole(any(AddRoleToEnum.class), any(Long.class), any(Long.class))).thenReturn(addRoleResponse);
+        when(roleService.addRole(any(RoleToEnum.class), any(Long.class), any(Long.class))).thenReturn(addRoleResponse);
 
-        ResponseEntity<AddRoleResponse> res = roleController.addRole(correlationId, AddRoleToEnum.USER, 1L, 1L);
+        ResponseEntity<AddRoleResponse> res = roleController.addRole(correlationId, RoleToEnum.USER, 1L, 1L);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), addRoleExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), addRoleExpectedResponse.getBody());
+    }
+
+    @Test
+    void deleteRole_FromUser() {
+        roleController.deleteRole(correlationId, RoleToEnum.USER, 1L, 1L);
+
+        verify(roleService, times(1)).deleteRoleFrom(RoleToEnum.USER, 1L, 1L);
     }
 }
