@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Setter
 @Getter
-public class CreateRoleResponse {
+public class RoleResponse {
 
     private Long id;
     private String name;

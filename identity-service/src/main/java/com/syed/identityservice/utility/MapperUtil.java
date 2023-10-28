@@ -11,7 +11,7 @@ import com.syed.identityservice.domain.model.UserModel;
 import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.request.ClientRequest;
 import com.syed.identityservice.domain.model.request.UserRequest;
-import com.syed.identityservice.domain.model.request.CreateRoleRequest;
+import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
@@ -275,14 +275,21 @@ public class MapperUtil {
         return clientResponseList;
     }
 
-    public static RoleEntity mapRoleModelToEntity(CreateRoleRequest request) {
+    public static RoleEntity mapRoleModelToEntity(RoleRequest request) {
         return RoleEntity.builder()
                 .name(request.getName())
                 .build();
     }
 
-    public static CreateRoleResponse mapRoleEntityToModel(RoleEntity entity) {
-        return CreateRoleResponse.builder()
+    public static RoleResponse mapRoleEntityToResponse(RoleEntity entity) {
+        return RoleResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build();
+    }
+
+    public static RoleModel mapRoleEntityToModel(RoleEntity entity) {
+        return RoleModel.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .build();

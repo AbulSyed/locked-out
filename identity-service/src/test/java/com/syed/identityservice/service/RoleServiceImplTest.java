@@ -2,10 +2,8 @@ package com.syed.identityservice.service;
 
 import com.syed.identityservice.data.entity.RoleEntity;
 import com.syed.identityservice.data.repository.RoleRepository;
-import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
-import com.syed.identityservice.domain.enums.AuthMethodEnum;
-import com.syed.identityservice.domain.model.request.CreateRoleRequest;
-import com.syed.identityservice.domain.model.response.CreateRoleResponse;
+import com.syed.identityservice.domain.model.request.RoleRequest;
+import com.syed.identityservice.domain.model.response.RoleResponse;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.service.impl.RoleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -33,7 +29,7 @@ public class RoleServiceImplTest {
     private RoleServiceImpl roleService;
 
     private RoleEntity roleEntity;
-    private CreateRoleRequest createRoleRequest;
+    private RoleRequest createRoleRequest;
 
     @BeforeEach
     void setUp() {
@@ -41,7 +37,7 @@ public class RoleServiceImplTest {
                 .id(1L)
                 .name("admin")
                 .build();
-        createRoleRequest = CreateRoleRequest.builder()
+        createRoleRequest = RoleRequest.builder()
                 .name("admin")
                 .build();
     }
@@ -51,7 +47,7 @@ public class RoleServiceImplTest {
         when(roleRepository.existsByName(any(String.class))).thenReturn(false);
         when(roleRepository.save(any(RoleEntity.class))).thenReturn(roleEntity);
 
-        CreateRoleResponse res = roleService.createRole(createRoleRequest);
+        RoleResponse res = roleService.createRole(createRoleRequest);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("name", "admin");

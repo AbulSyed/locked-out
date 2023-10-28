@@ -1,6 +1,6 @@
 package com.syed.identityservice.controller;
 
-import com.syed.identityservice.domain.model.request.CreateRoleRequest;
+import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.RoleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,18 +27,18 @@ public class RoleControllerTest {
     private RoleController roleController;
 
     private String correlationId;
-    private CreateRoleRequest createRoleRequest;
-    private CreateRoleResponse createRoleResponse;
-    private ResponseEntity<CreateRoleResponse> createRoleExpectedResponse;
+    private RoleRequest createRoleRequest;
+    private RoleResponse createRoleResponse;
+    private ResponseEntity<RoleResponse> createRoleExpectedResponse;
 
     @BeforeEach
     void setUp() {
         correlationId = "1";
 
-        createRoleRequest = CreateRoleRequest.builder()
+        createRoleRequest = RoleRequest.builder()
                 .name("admin")
                 .build();
-        createRoleResponse = CreateRoleResponse.builder()
+        createRoleResponse = RoleResponse.builder()
                 .id(1L)
                 .name("admin")
                 .build();
@@ -47,9 +47,9 @@ public class RoleControllerTest {
 
     @Test
     void createRole() {
-        when(roleService.createRole(any(CreateRoleRequest.class))).thenReturn(createRoleResponse);
+        when(roleService.createRole(any(RoleRequest.class))).thenReturn(createRoleResponse);
 
-        ResponseEntity<CreateRoleResponse> res = roleController.createRole(correlationId, createRoleRequest);
+        ResponseEntity<RoleResponse> res = roleController.createRole(correlationId, createRoleRequest);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), createRoleExpectedResponse.getStatusCode());

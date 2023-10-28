@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateRoleRequest {
+public class RoleRequest {
 
     @NotEmpty(message = "Name can't be empty")
     @Size(max = 15, message = "Maximum length of app name is 15")

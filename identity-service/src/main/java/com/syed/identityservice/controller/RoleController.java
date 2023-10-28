@@ -5,9 +5,9 @@ import com.syed.identityservice.domain.enums.AddRoleToEnum;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
-import com.syed.identityservice.domain.model.request.CreateRoleRequest;
+import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.AddRoleResponse;
-import com.syed.identityservice.domain.model.response.CreateRoleResponse;
+import com.syed.identityservice.domain.model.response.RoleResponse;
 import com.syed.identityservice.service.RoleService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -33,9 +33,9 @@ public class RoleController {
             log = "create role request initiated"
     )
     @PostMapping("/create-role")
-    public ResponseEntity<CreateRoleResponse> createRole(
+    public ResponseEntity<RoleResponse> createRole(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @Valid @RequestBody CreateRoleRequest request) {
+            @Valid @RequestBody RoleRequest request) {
         return new ResponseEntity<>(roleService.createRole(request), HttpStatus.CREATED);
     }
 
