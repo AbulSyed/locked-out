@@ -90,13 +90,13 @@ public class RoleServiceImpl implements RoleService {
             System.out.println("we need to delete a role from a user with id " + id);
 
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id + " not found with user")));
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
 
             if (userEntity.getRoles().contains(roleEntity)) {
                 userEntity.getRoles().remove(roleEntity);
                 userRepository.save(userEntity);
             } else {
-                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with " + id));
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with " + id + " not found with user"));
             }
         } else if (deleteRoleFrom.toString().equals("CLIENT")) {
             System.out.println("we need to delete a role from a client with id " + id);
