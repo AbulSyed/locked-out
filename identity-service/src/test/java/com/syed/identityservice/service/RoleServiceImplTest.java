@@ -10,14 +10,12 @@ import com.syed.identityservice.domain.model.response.AddRoleResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.service.impl.RoleServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -28,7 +26,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -49,6 +46,7 @@ public class RoleServiceImplTest {
     private List<RoleEntity> getRoleEntityList;
     private UserEntity userEntity2;
     private Set<RoleEntity> roleEntitySet;
+    private RoleEntity roleEntity2;
 
     @BeforeEach
     void setUp() {
@@ -92,6 +90,13 @@ public class RoleServiceImplTest {
                 .roles(roleEntitySet)
                 .authorities(new HashSet<>())
                 .createdAt(LocalDateTime.now())
+                .build();
+
+        roleEntity2 = RoleEntity.builder()
+                .id(1L)
+                .name("ADMIN")
+                .users(new HashSet<>())
+                .clients(new HashSet<>())
                 .build();
     }
 
@@ -137,7 +142,7 @@ public class RoleServiceImplTest {
     }
 
     @Test
-    void deleteRole_FromUser() {
+    void deleteRoleFrom_User() {
         // before removing role
         assertEquals(1, userEntity2.getRoles().size());
 
@@ -149,5 +154,14 @@ public class RoleServiceImplTest {
         assertThat(userEntity2).isNotNull();
         // after removing role
         assertEquals(0, userEntity2.getRoles().size());
+    }
+
+    @Test
+    void deleteRole() {
+        when(roleRepository.findById(1L)).thenReturn(Optional.of(roleEntity2));
+
+        roleService.deleteRole(1L);
+
+        verify(roleRepository).delete(roleEntity2);
     }
 }

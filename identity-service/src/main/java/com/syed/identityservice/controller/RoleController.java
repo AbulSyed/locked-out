@@ -74,12 +74,26 @@ public class RoleController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "delete role from user/client request initiated"
     )
-    @PostMapping("/delete-role-from")
-    public void deleteRole(
+    @DeleteMapping("/delete-role-from")
+    public void deleteRoleFrom(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam RoleToEnum deleteRoleFrom,
             @RequestParam Long id,
             @RequestParam Long roleId) {
         roleService.deleteRoleFrom(deleteRoleFrom, id, roleId);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.ROLE,
+            requestType = RequestTypeEnum.DELETE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "delete role request initiated"
+    )
+    @DeleteMapping("/delete-role/{roleId}")
+    public void deleteRole(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @PathVariable Long roleId) {
+        roleService.deleteRole(roleId);
     }
 }

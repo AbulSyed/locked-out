@@ -13,4 +13,5 @@ public interface RoleService {
     AddRoleResponse addRole(RoleToEnum addRoleTo, Long id, Long roleId);
     List<String> getRoleList();
     void deleteRoleFrom(RoleToEnum deleteRoleFrom, Long id, Long roleId);
+    void deleteRole(Long roleId);
 }

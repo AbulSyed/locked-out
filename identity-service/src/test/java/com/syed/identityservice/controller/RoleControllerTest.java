@@ -94,9 +94,16 @@ public class RoleControllerTest {
     }
 
     @Test
-    void deleteRole_FromUser() {
-        roleController.deleteRole(correlationId, RoleToEnum.USER, 1L, 1L);
+    void deleteRoleFrom_User() {
+        roleController.deleteRoleFrom(correlationId, RoleToEnum.USER, 1L, 1L);
 
         verify(roleService, times(1)).deleteRoleFrom(RoleToEnum.USER, 1L, 1L);
+    }
+
+    @Test
+    void deleteRole() {
+        roleController.deleteRole(correlationId, 1L);
+
+        verify(roleService, times(1)).deleteRole(1L);
     }
 }

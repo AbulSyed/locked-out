@@ -12,6 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "role")
+@ToString
 public class RoleEntity {
 
     @Id
@@ -22,9 +23,13 @@ public class RoleEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER
+//            , cascade = CascadeType.ALL - roleRepository.delete(role) caused deletion of UserEntity
+    )
     private Set<UserEntity> users;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER
+//            , cascade = CascadeType.ALL - roleRepository.delete(role) caused deletion of ClientEntity
+    )
     private Set<ClientEntity> clients;
 }

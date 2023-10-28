@@ -43,7 +43,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public AddRoleResponse addRole(RoleToEnum addRoleTo, Long id, Long roleId) {
         RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + id)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + roleId)));
 
         if (addRoleTo.toString().equals("USER")) {
             System.out.println("we need to add a role to a user with id " + id);
@@ -93,7 +93,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRoleFrom(RoleToEnum deleteRoleFrom, Long id, Long roleId) {
         RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + id)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + roleId)));
 
         if (deleteRoleFrom.toString().equals("USER")) {
             System.out.println("we need to delete a role from a user with id " + id);
@@ -120,5 +120,27 @@ public class RoleServiceImpl implements RoleService {
                 throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with " + id + " not found with client"));
             }
         }
+    }
+
+    @Override
+    public void deleteRole(Long roleId) {
+        RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + roleId)));
+
+        // remove the associations from users
+        for (UserEntity user : roleEntity.getUsers()) {
+            user.getRoles().remove(roleEntity);
+        }
+        // clear the users associated with the role
+        roleEntity.getUsers().clear();
+
+        // remove the associations from clients
+        for (ClientEntity client : roleEntity.getClients()) {
+            client.getRoles().remove(roleEntity);
+        }
+        // clear the clients associated with the role
+        roleEntity.getClients().clear();
+
+        roleRepository.delete(roleEntity);
     }
 }
