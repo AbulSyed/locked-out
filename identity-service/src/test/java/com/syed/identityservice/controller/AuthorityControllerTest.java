@@ -2,8 +2,8 @@ package com.syed.identityservice.controller;
 
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
-import com.syed.identityservice.domain.model.response.AddAuthorityResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
+import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.service.AuthorityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,8 +32,8 @@ public class AuthorityControllerTest {
     private AuthorityRequest createAuthorityRequest;
     private AuthorityResponse createAuthorityResponse;
     private ResponseEntity<AuthorityResponse> createAuthorityExpectedResponse;
-    private AddAuthorityResponse addAuthorityResponse;
-    private ResponseEntity<AddAuthorityResponse> addAuthorityExpectedResponse;
+    private MessageResponse addAuthorityResponse;
+    private ResponseEntity<MessageResponse> addAuthorityExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -48,7 +48,7 @@ public class AuthorityControllerTest {
                 .build();
         createAuthorityExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createAuthorityResponse);
 
-        addAuthorityResponse = AddAuthorityResponse.builder()
+        addAuthorityResponse = MessageResponse.builder()
                 .message("Authority read added to user Test")
                 .build();
         addAuthorityExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(addAuthorityResponse);
@@ -69,7 +69,7 @@ public class AuthorityControllerTest {
     void addAuthority_ToUser() {
         when(authorityService.addAuthority(any(AuthorityToEnum.class), any(Long.class), any(Long.class))).thenReturn(addAuthorityResponse);
 
-        ResponseEntity<AddAuthorityResponse> res = authorityController.addAuthority(correlationId, AuthorityToEnum.USER, 1L, 1L);
+        ResponseEntity<MessageResponse> res = authorityController.addAuthority(correlationId, AuthorityToEnum.USER, 1L, 1L);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), addAuthorityExpectedResponse.getStatusCode());

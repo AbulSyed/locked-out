@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Setter
 @Getter
-public class AddRoleResponse {
+public class MessageResponse {
 
     private String message;
 }

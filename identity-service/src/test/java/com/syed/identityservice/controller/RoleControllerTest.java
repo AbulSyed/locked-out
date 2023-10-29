@@ -35,8 +35,8 @@ public class RoleControllerTest {
     private ResponseEntity<RoleResponse> createRoleExpectedResponse;
     private List<String> getRoleListResponse;
     private ResponseEntity<List<String>> getRoleListExpectedResponse;
-    private AddRoleResponse addRoleResponse;
-    private ResponseEntity<AddRoleResponse> addRoleExpectedResponse;
+    private MessageResponse addRoleResponse;
+    private ResponseEntity<MessageResponse> addRoleExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -54,7 +54,7 @@ public class RoleControllerTest {
         getRoleListResponse = List.of("ADMIN");
         getRoleListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getRoleListResponse);
 
-        addRoleResponse = AddRoleResponse.builder()
+        addRoleResponse = MessageResponse.builder()
                 .message("Role ADMIN added to user Test")
                 .build();
         addRoleExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(addRoleResponse);
@@ -75,7 +75,7 @@ public class RoleControllerTest {
     void addRole_ToUser() {
         when(roleService.addRole(any(RoleToEnum.class), any(Long.class), any(Long.class))).thenReturn(addRoleResponse);
 
-        ResponseEntity<AddRoleResponse> res = roleController.addRole(correlationId, RoleToEnum.USER, 1L, 1L);
+        ResponseEntity<MessageResponse> res = roleController.addRole(correlationId, RoleToEnum.USER, 1L, 1L);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), addRoleExpectedResponse.getStatusCode());

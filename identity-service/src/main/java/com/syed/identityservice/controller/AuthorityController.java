@@ -3,8 +3,8 @@ package com.syed.identityservice.controller;
 import com.syed.identityservice.aspect.AuditRequest;
 import com.syed.identityservice.domain.enums.*;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
-import com.syed.identityservice.domain.model.response.AddAuthorityResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
+import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.service.AuthorityService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -40,7 +40,7 @@ public class AuthorityController {
             log = "add authority to user/client request initiated"
     )
     @PostMapping("/add-authority")
-    public ResponseEntity<AddAuthorityResponse> addAuthority(
+    public ResponseEntity<MessageResponse> addAuthority(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam AuthorityToEnum addAuthorityTo,
             @RequestParam Long id,

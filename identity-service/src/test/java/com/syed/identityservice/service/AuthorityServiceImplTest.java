@@ -6,7 +6,7 @@ import com.syed.identityservice.data.repository.AuthorityRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
-import com.syed.identityservice.domain.model.response.AddAuthorityResponse;
+import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.service.impl.AuthorityServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,7 +78,7 @@ public class AuthorityServiceImplTest {
         when(authorityRepository.findById(any(Long.class))).thenReturn(Optional.of(authorityEntity));
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
-        AddAuthorityResponse res = authorityService.addAuthority(AuthorityToEnum.USER, 1L, 1L);
+        MessageResponse res = authorityService.addAuthority(AuthorityToEnum.USER, 1L, 1L);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("message", "Authority read added to user joe");

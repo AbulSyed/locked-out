@@ -8,8 +8,8 @@ import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
-import com.syed.identityservice.domain.model.response.AddAuthorityResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
+import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.AuthorityAlreadyPresentException;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
@@ -39,7 +39,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public AddAuthorityResponse addAuthority(AuthorityToEnum addAuthorityTo, Long id, Long authorityId) {
+    public MessageResponse addAuthority(AuthorityToEnum addAuthorityTo, Long id, Long authorityId) {
         AuthorityEntity authorityEntity = authorityRepository.findById(authorityId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with id " + authorityId)));
 
@@ -56,7 +56,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                 userRepository.save(userEntity);
             }
 
-            return AddAuthorityResponse.builder()
+            return MessageResponse.builder()
                     .message("Authority " + authorityEntity.getName() + " added to user " + userEntity.getUsername())
                     .build();
         } else if (addAuthorityTo.toString().equals("CLIENT")) {
@@ -72,7 +72,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                 clientRepository.save(clientEntity);
             }
 
-            return AddAuthorityResponse.builder()
+            return MessageResponse.builder()
                     .message("Authority " + authorityEntity.getName() + " added to client " + clientEntity.getClientId())
                     .build();
         }
