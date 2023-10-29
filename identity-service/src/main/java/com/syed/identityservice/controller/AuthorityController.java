@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 public class AuthorityController {
@@ -46,5 +48,19 @@ public class AuthorityController {
             @RequestParam Long id,
             @RequestParam Long authorityId) {
         return new ResponseEntity<>(authorityService.addAuthority(addAuthorityTo, id, authorityId), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.AUTHORITY,
+            requestType = RequestTypeEnum.READ,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "get list of authorities"
+    )
+    @GetMapping("/get-authority-list")
+    public ResponseEntity<List<String>> getAuthorityList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    ) {
+        return new ResponseEntity<>(authorityService.getAuthorityList(), HttpStatus.OK);
     }
 }

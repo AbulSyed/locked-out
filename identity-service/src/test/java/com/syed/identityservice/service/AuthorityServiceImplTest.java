@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +39,7 @@ public class AuthorityServiceImplTest {
     private AuthorityEntity authorityEntity;
     private AuthorityRequest createAuthorityRequest;
     private UserEntity userEntity;
+    private List<AuthorityEntity> getAuthorityEntityList;
 
     @BeforeEach
     void setUp() {
@@ -60,6 +62,10 @@ public class AuthorityServiceImplTest {
                 .authorities(new HashSet<>())
                 .createdAt(LocalDateTime.now())
                 .build();
+
+        getAuthorityEntityList = List.of(
+                authorityEntity
+        );
     }
 
     @Test
@@ -82,5 +88,15 @@ public class AuthorityServiceImplTest {
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("message", "Authority read added to user joe");
+    }
+
+    @Test
+    void getAuthorityList() {
+        when(authorityRepository.findAll()).thenReturn(getAuthorityEntityList);
+
+        List<String> res = authorityService.getAuthorityList();
+
+        assertThat(res).isNotNull()
+                .hasSize(1);
     }
 }

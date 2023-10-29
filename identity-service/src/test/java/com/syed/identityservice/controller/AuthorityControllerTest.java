@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +36,8 @@ public class AuthorityControllerTest {
     private ResponseEntity<AuthorityResponse> createAuthorityExpectedResponse;
     private MessageResponse addAuthorityResponse;
     private ResponseEntity<MessageResponse> addAuthorityExpectedResponse;
+    private List<String> getAuthorityListResponse;
+    private ResponseEntity<List<String>> getAuthorityListExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -52,6 +56,9 @@ public class AuthorityControllerTest {
                 .message("Authority read added to user Test")
                 .build();
         addAuthorityExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(addAuthorityResponse);
+
+        getAuthorityListResponse = List.of("read");
+        getAuthorityListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAuthorityListResponse);
     }
 
     @Test
@@ -74,5 +81,16 @@ public class AuthorityControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), addAuthorityExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), addAuthorityExpectedResponse.getBody());
+    }
+
+    @Test
+    void getAuthorityList() {
+        when(authorityService.getAuthorityList()).thenReturn(getAuthorityListResponse);
+
+        ResponseEntity<List<String>> res = authorityController.getAuthorityList(correlationId);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), getAuthorityListExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), getAuthorityListExpectedResponse.getBody());
     }
 }

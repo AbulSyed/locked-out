@@ -5,8 +5,11 @@ import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 
+import java.util.List;
+
 public interface AuthorityService {
 
     AuthorityResponse createAuthority(AuthorityRequest request);
     MessageResponse addAuthority(AuthorityToEnum addAuthorityTo, Long id, Long authorityId);
+    List<String> getAuthorityList();
 }

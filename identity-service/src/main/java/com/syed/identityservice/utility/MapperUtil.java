@@ -306,4 +306,13 @@ public class MapperUtil {
                 .name(entity.getName())
                 .build();
     }
+
+    public static List<String> mapAuthorityEntityListToStringList(List<AuthorityEntity> entityList) {
+        List<String> authorities = new ArrayList<>();
+
+        for (AuthorityEntity authorityEntity : entityList) {
+            authorities.add(authorityEntity.getName());
+        }
+        return authorities;
+    }
 }
