@@ -1,6 +1,8 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.domain.enums.AuthorityToEnum;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
+import com.syed.identityservice.domain.model.response.AddAuthorityResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.service.AuthorityService;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +32,8 @@ public class AuthorityControllerTest {
     private AuthorityRequest createAuthorityRequest;
     private AuthorityResponse createAuthorityResponse;
     private ResponseEntity<AuthorityResponse> createAuthorityExpectedResponse;
+    private AddAuthorityResponse addAuthorityResponse;
+    private ResponseEntity<AddAuthorityResponse> addAuthorityExpectedResponse;
 
     @BeforeEach
     void setUp() {
@@ -43,6 +47,11 @@ public class AuthorityControllerTest {
                 .name("read")
                 .build();
         createAuthorityExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createAuthorityResponse);
+
+        addAuthorityResponse = AddAuthorityResponse.builder()
+                .message("Authority read added to user Test")
+                .build();
+        addAuthorityExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(addAuthorityResponse);
     }
 
     @Test
@@ -54,5 +63,16 @@ public class AuthorityControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), createAuthorityExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), createAuthorityExpectedResponse.getBody());
+    }
+
+    @Test
+    void addAuthority_ToUser() {
+        when(authorityService.addAuthority(any(AuthorityToEnum.class), any(Long.class), any(Long.class))).thenReturn(addAuthorityResponse);
+
+        ResponseEntity<AddAuthorityResponse> res = authorityController.addAuthority(correlationId, AuthorityToEnum.USER, 1L, 1L);
+
+        assertNotNull(res);
+        assertEquals(res.getStatusCode(), addAuthorityExpectedResponse.getStatusCode());
+        assertEquals(res.getBody(), addAuthorityExpectedResponse.getBody());
     }
 }

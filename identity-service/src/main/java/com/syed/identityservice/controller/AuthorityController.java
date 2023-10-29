@@ -1,20 +1,16 @@
 package com.syed.identityservice.controller;
 
 import com.syed.identityservice.aspect.AuditRequest;
-import com.syed.identityservice.domain.enums.ProcessEnum;
-import com.syed.identityservice.domain.enums.RequestStatusEnum;
-import com.syed.identityservice.domain.enums.RequestTypeEnum;
+import com.syed.identityservice.domain.enums.*;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
+import com.syed.identityservice.domain.model.response.AddAuthorityResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.service.AuthorityService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
@@ -34,5 +30,21 @@ public class AuthorityController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @Valid @RequestBody AuthorityRequest request) {
         return new ResponseEntity<>(authorityService.createAuthority(request), HttpStatus.CREATED);
+    }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.AUTHORITY,
+            requestType = RequestTypeEnum.CREATE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "add authority to user/client request initiated"
+    )
+    @PostMapping("/add-authority")
+    public ResponseEntity<AddAuthorityResponse> addAuthority(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam AuthorityToEnum addAuthorityTo,
+            @RequestParam Long id,
+            @RequestParam Long authorityId) {
+        return new ResponseEntity<>(authorityService.addAuthority(addAuthorityTo, id, authorityId), HttpStatus.CREATED);
     }
 }
