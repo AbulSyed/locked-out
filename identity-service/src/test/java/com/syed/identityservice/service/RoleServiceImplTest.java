@@ -6,7 +6,7 @@ import com.syed.identityservice.data.repository.RoleRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.RoleToEnum;
 import com.syed.identityservice.domain.model.request.RoleRequest;
-import com.syed.identityservice.domain.model.response.AddRoleResponse;
+import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.service.impl.RoleServiceImpl;
@@ -125,7 +125,7 @@ public class RoleServiceImplTest {
         when(roleRepository.findById(any(Long.class))).thenReturn(Optional.of(roleEntity));
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
-        AddRoleResponse res = roleService.addRole(RoleToEnum.USER, 1L, 1L);
+        MessageResponse res = roleService.addRole(RoleToEnum.USER, 1L, 1L);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("message", "Role ADMIN added to user joe");

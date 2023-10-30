@@ -8,7 +8,7 @@ import com.syed.identityservice.data.repository.RoleRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.RoleToEnum;
 import com.syed.identityservice.domain.model.request.RoleRequest;
-import com.syed.identityservice.domain.model.response.AddRoleResponse;
+import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
@@ -41,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public AddRoleResponse addRole(RoleToEnum addRoleTo, Long id, Long roleId) {
+    public MessageResponse addRole(RoleToEnum addRoleTo, Long id, Long roleId) {
         RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + roleId)));
 
@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
                 userRepository.save(userEntity);
             }
 
-            return AddRoleResponse.builder()
+            return MessageResponse.builder()
                     .message("Role " + roleEntity.getName() + " added to user " + userEntity.getUsername())
                     .build();
         } else if (addRoleTo.toString().equals("CLIENT")) {
@@ -74,7 +74,7 @@ public class RoleServiceImpl implements RoleService {
                 clientRepository.save(clientEntity);
             }
 
-            return AddRoleResponse.builder()
+            return MessageResponse.builder()
                     .message("Role " + roleEntity.getName() + " added to client " + clientEntity.getClientId())
                     .build();
         }

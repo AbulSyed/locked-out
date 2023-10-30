@@ -8,10 +8,7 @@ import com.syed.identityservice.domain.model.AuthorityModel;
 import com.syed.identityservice.domain.model.ClientModel;
 import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.UserModel;
-import com.syed.identityservice.domain.model.request.AppRequest;
-import com.syed.identityservice.domain.model.request.ClientRequest;
-import com.syed.identityservice.domain.model.request.UserRequest;
-import com.syed.identityservice.domain.model.request.RoleRequest;
+import com.syed.identityservice.domain.model.request.*;
 import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
@@ -295,5 +292,27 @@ public class MapperUtil {
             roles.add(roleEntity.getName());
         }
         return roles;
+    }
+
+    public static AuthorityEntity mapAuthorityModelToEntity(AuthorityRequest request) {
+        return AuthorityEntity.builder()
+                .name(request.getName())
+                .build();
+    }
+
+    public static AuthorityResponse mapAuthorityEntityToResponse(AuthorityEntity entity) {
+        return AuthorityResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build();
+    }
+
+    public static List<String> mapAuthorityEntityListToStringList(List<AuthorityEntity> entityList) {
+        List<String> authorities = new ArrayList<>();
+
+        for (AuthorityEntity authorityEntity : entityList) {
+            authorities.add(authorityEntity.getName());
+        }
+        return authorities;
     }
 }
