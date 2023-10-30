@@ -20,8 +20,10 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +42,8 @@ public class AuthorityServiceImplTest {
     private AuthorityRequest createAuthorityRequest;
     private UserEntity userEntity;
     private List<AuthorityEntity> getAuthorityEntityList;
+    private Set<AuthorityEntity> authorityEntitySet;
+    private UserEntity userEntity2;
 
     @BeforeEach
     void setUp() {
@@ -66,6 +70,21 @@ public class AuthorityServiceImplTest {
         getAuthorityEntityList = List.of(
                 authorityEntity
         );
+
+        authorityEntitySet = new HashSet<>();
+        authorityEntitySet.add(authorityEntity);
+
+        userEntity2 = UserEntity.builder()
+                .id(1L)
+                .username("joe")
+                .password("123")
+                .email("joe@mail.com")
+                .phoneNumber("079")
+                .userApp(null)
+                .roles(null)
+                .authorities(authorityEntitySet)
+                .createdAt(LocalDateTime.now())
+                .build();
     }
 
     @Test
@@ -98,5 +117,20 @@ public class AuthorityServiceImplTest {
 
         assertThat(res).isNotNull()
                 .hasSize(1);
+    }
+
+    @Test
+    void deleteAuthorityFrom_User() {
+        // before removing authority
+        assertEquals(1, userEntity2.getAuthorities().size());
+
+        when(authorityRepository.findById(any(Long.class))).thenReturn(Optional.of(authorityEntity));
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity2));
+
+        authorityService.deleteAuthorityFrom(AuthorityToEnum.USER, 1L, 1L);
+
+        assertThat(userEntity2).isNotNull();
+        // after removing authority
+        assertEquals(0, userEntity2.getAuthorities().size());
     }
 }

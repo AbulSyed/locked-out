@@ -89,4 +89,36 @@ public class AuthorityServiceImpl implements AuthorityService {
 
         return MapperUtil.mapAuthorityEntityListToStringList(authorityEntityList);
     }
+
+    @Override
+    public void deleteAuthorityFrom(AuthorityToEnum deleteAuthorityFrom, Long id, Long authorityId) {
+        AuthorityEntity authorityEntity = authorityRepository.findById(authorityId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with id " + authorityId)));
+
+        if (deleteAuthorityFrom.toString().equals("USER")) {
+            System.out.println("we need to delete a authority from a user with id " + id);
+
+            UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
+
+            if (userEntity.getAuthorities().contains(authorityEntity)) {
+                userEntity.getAuthorities().remove(authorityEntity);
+                userRepository.save(userEntity);
+            } else {
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with " + id + " not found with user"));
+            }
+        } else if (deleteAuthorityFrom.toString().equals("CLIENT")) {
+            System.out.println("we need to delete a authority from a client with id " + id);
+
+            ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
+
+            if (clientEntity.getAuthorities().contains(authorityEntity)) {
+                clientEntity.getAuthorities().remove(authorityEntity);
+                clientRepository.save(clientEntity);
+            } else {
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with " + id + " not found with client"));
+            }
+        }
+    }
 }

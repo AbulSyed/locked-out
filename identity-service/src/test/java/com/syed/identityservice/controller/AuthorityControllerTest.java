@@ -19,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthorityControllerTest {
@@ -92,5 +92,12 @@ public class AuthorityControllerTest {
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAuthorityListExpectedResponse.getStatusCode());
         assertEquals(res.getBody(), getAuthorityListExpectedResponse.getBody());
+    }
+
+    @Test
+    void deleteAuthorityFrom_User() {
+        authorityController.deleteAuthorityFrom(correlationId, AuthorityToEnum.USER, 1L, 1L);
+
+        verify(authorityService, times(1)).deleteAuthorityFrom(AuthorityToEnum.USER, 1L, 1L);
     }
 }

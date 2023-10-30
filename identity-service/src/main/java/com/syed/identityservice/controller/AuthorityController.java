@@ -63,4 +63,20 @@ public class AuthorityController {
     ) {
         return new ResponseEntity<>(authorityService.getAuthorityList(), HttpStatus.OK);
     }
+
+    @AuditRequest(
+            correlationId = "#correlationId",
+            process = ProcessEnum.AUTHORITY,
+            requestType = RequestTypeEnum.DELETE,
+            requestStatus = RequestStatusEnum.PENDING,
+            log = "delete authority from user/client request initiated"
+    )
+    @DeleteMapping("/delete-authority-from")
+    public void deleteAuthorityFrom(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam AuthorityToEnum deleteAuthorityFrom,
+            @RequestParam Long id,
+            @RequestParam Long authorityId) {
+        authorityService.deleteAuthorityFrom(deleteAuthorityFrom, id, authorityId);
+    }
 }
