@@ -2,6 +2,7 @@ package com.syed.identityservice.service.impl;
 
 import com.syed.identityservice.data.entity.AuthorityEntity;
 import com.syed.identityservice.data.entity.ClientEntity;
+import com.syed.identityservice.data.entity.RoleEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AuthorityRepository;
 import com.syed.identityservice.data.repository.ClientRepository;
@@ -120,5 +121,27 @@ public class AuthorityServiceImpl implements AuthorityService {
                 throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with " + id + " not found with client"));
             }
         }
+    }
+
+    @Override
+    public void deleteAuthority(Long authorityId) {
+        AuthorityEntity authorityEntity = authorityRepository.findById(authorityId).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with id " + authorityId)));
+
+        // remove the associations from users
+        for (UserEntity user : authorityEntity.getUsers()) {
+            user.getAuthorities().remove(authorityEntity);
+        }
+        // clear the users associated with the authority
+        authorityEntity.getUsers().clear();
+
+        // remove the associations from clients
+        for (ClientEntity client : authorityEntity.getClients()) {
+            client.getAuthorities().remove(authorityEntity);
+        }
+        // clear the clients associated with the authority
+        authorityEntity.getClients().clear();
+
+        authorityRepository.delete(authorityEntity);
     }
 }

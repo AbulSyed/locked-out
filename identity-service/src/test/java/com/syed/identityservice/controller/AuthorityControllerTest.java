@@ -100,4 +100,11 @@ public class AuthorityControllerTest {
 
         verify(authorityService, times(1)).deleteAuthorityFrom(AuthorityToEnum.USER, 1L, 1L);
     }
+
+    @Test
+    void deleteAuthority() {
+        authorityController.deleteAuthority(correlationId, 1L);
+
+        verify(authorityService, times(1)).deleteAuthority(1L);
+    }
 }

@@ -25,6 +25,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +45,7 @@ public class AuthorityServiceImplTest {
     private List<AuthorityEntity> getAuthorityEntityList;
     private Set<AuthorityEntity> authorityEntitySet;
     private UserEntity userEntity2;
+    private AuthorityEntity authorityEntity2;
 
     @BeforeEach
     void setUp() {
@@ -84,6 +86,13 @@ public class AuthorityServiceImplTest {
                 .roles(null)
                 .authorities(authorityEntitySet)
                 .createdAt(LocalDateTime.now())
+                .build();
+
+        authorityEntity2 = AuthorityEntity.builder()
+                .id(1L)
+                .name("read")
+                .users(new HashSet<>())
+                .clients(new HashSet<>())
                 .build();
     }
 
@@ -132,5 +141,14 @@ public class AuthorityServiceImplTest {
         assertThat(userEntity2).isNotNull();
         // after removing authority
         assertEquals(0, userEntity2.getAuthorities().size());
+    }
+
+    @Test
+    void deleteAuthority() {
+        when(authorityRepository.findById(1L)).thenReturn(Optional.of(authorityEntity2));
+
+        authorityService.deleteAuthority(1L);
+
+        verify(authorityRepository).delete(authorityEntity2);
     }
 }
