@@ -1,5 +1,6 @@
 package com.syed.identityservice.exception;
 
+import com.syed.identityservice.exception.custom.AuthorityAlreadyPresentException;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.exception.custom.RoleAlreadyPresentException;
@@ -53,6 +54,11 @@ public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleRoleAlreadyPresentException(RoleAlreadyPresentException ex) {
+        return errorDetailsResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST, ex);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleAuthorityAlreadyPresentException(AuthorityAlreadyPresentException ex) {
         return errorDetailsResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST, ex);
     }
 
