@@ -12,16 +12,9 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
-import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
@@ -29,7 +22,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.time.Duration;
 import java.util.UUID;
 
 @Configuration
@@ -80,32 +72,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
-    }
-
-    @Bean
-    public RegisteredClientRepository registeredClientRepository() {
-        RegisteredClient client = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("client")
-                .clientSecret("$2a$10$oiK9yFY196FToCsRenLlLO3aj9W/kWc4Xx5AzGiFTtWb48tDkMHA.")
-                .redirectUri("http://127.0.0.1:3000/authorized")
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope(OidcScopes.OPENID)
-                .scope(OidcScopes.EMAIL)
-                .clientSettings(
-                        ClientSettings.builder()
-                                .requireProofKey(true)
-                                .requireAuthorizationConsent(true)
-                                .build()
-                )
-                .tokenSettings(
-                        TokenSettings.builder()
-                                .accessTokenTimeToLive(Duration.ofHours(1))
-                                .refreshTokenTimeToLive(Duration.ofDays(7))
-                                .build()
-                )
-                .build();
-
-        return new InMemoryRegisteredClientRepository(client);
     }
 
     @Bean
