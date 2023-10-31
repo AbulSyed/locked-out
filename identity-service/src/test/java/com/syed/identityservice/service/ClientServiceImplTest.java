@@ -161,7 +161,7 @@ public class ClientServiceImplTest {
     }
 
     @Test
-    void getClientListByAppId() {
+    void getClientListByApp() {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class))).thenReturn(clientEntityList);
 

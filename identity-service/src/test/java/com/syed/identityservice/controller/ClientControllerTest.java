@@ -141,8 +141,8 @@ public class ClientControllerTest {
     }
 
     @Test
-    void getClientListByAppId() {
-        when(clientService.getClientListByApp(any(Long.class), null)).thenReturn(getClientListResponse);
+    void getClientListByApp() {
+        when(clientService.getClientListByApp(any(Long.class), eq(null))).thenReturn(getClientListResponse);
 
         ResponseEntity<List<ClientResponse>> res = clientController.getClientListByApp(correlationId, 1L, null);
 
