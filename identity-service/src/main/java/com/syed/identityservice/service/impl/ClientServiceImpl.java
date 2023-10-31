@@ -54,9 +54,18 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientResponse> getClientListByAppId(Long appId) {
-        AppEntity app = appRepository.findById(appId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId)));
+    public List<ClientResponse> getClientListByApp(Long appId, String appName) {
+        AppEntity app = null;
+
+        if (appId != null) {
+            app = appRepository.findById(appId).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId)));
+        } else if (appName != null) {
+            app = appRepository.findByName(appName);
+            if (app == null) {
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with name " + appName));
+            }
+        }
 
         List<ClientEntity> clients = clientRepository.getClientEntitiesByUserApp(app);
 

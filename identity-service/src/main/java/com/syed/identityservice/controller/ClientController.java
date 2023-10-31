@@ -72,12 +72,13 @@ public class ClientController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "get client list by app id request initiated"
     )
-    @GetMapping("/get-client-list/{appId}")
-    public ResponseEntity<List<ClientResponse>> getClientListByAppId(
+    @GetMapping("/get-client-list-by-app")
+    public ResponseEntity<List<ClientResponse>> getClientListByApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @PathVariable Long appId
+            @RequestParam(value = "appId", required = false) Long appId,
+            @RequestParam(value = "appName", required = false) String appName
     ) {
-        return new ResponseEntity<>(clientService.getClientListByAppId(appId), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientListByApp(appId, appName), HttpStatus.OK);
     }
 
     @AuditRequest(
