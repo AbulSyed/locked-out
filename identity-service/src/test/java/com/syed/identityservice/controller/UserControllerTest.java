@@ -132,10 +132,10 @@ public class UserControllerTest {
     }
 
     @Test
-    void getUserListByAppId() {
-        when(userService.getUserListByAppId(any(Long.class))).thenReturn(getUserListResponse);
+    void getUserListByApp() {
+        when(userService.getUserListByApp(any(Long.class), eq(null))).thenReturn(getUserListResponse);
 
-        ResponseEntity<List<UserV2Response>> res = userController.getUserListByAppId(correlationId, 1L);
+        ResponseEntity<List<UserV2Response>> res = userController.getUserListByApp(correlationId, 1L, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());

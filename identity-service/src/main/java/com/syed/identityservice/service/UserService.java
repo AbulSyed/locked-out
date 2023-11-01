@@ -11,7 +11,7 @@ public interface UserService {
     UserResponse createUser(Long appId, UserRequest request);
     UserV2Response getUser(Long userId);
     List<UserV2Response> getUserList();
-    List<UserV2Response> getUserListByAppId(Long appId);
+    List<UserV2Response> getUserListByApp(Long appId, String appName);
     UserResponse updateUser(Long userId, UserRequest request);
     void deleteUser(Long userId);
 }
