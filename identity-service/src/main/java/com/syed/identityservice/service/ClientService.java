@@ -10,7 +10,7 @@ public interface ClientService {
     ClientResponse createClient(Long appId, ClientRequest request);
     ClientResponse getClient(Long clientId);
     List<ClientResponse> getClientList();
-    List<ClientResponse> getClientListByAppId(Long appId);
+    List<ClientResponse> getClientListByApp(Long appId, String appName);
     ClientResponse updateClient(Long clientId, ClientRequest request);
     void deleteClient(Long clientId);
 }

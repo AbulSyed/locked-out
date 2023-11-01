@@ -127,11 +127,11 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void getUserListByAppId() {
+    void getUserListByApp() {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(userRepository.getUserEntitiesByUserApp(any(AppEntity.class))).thenReturn(List.of(userEntity));
 
-        List<UserV2Response> res = userService.getUserListByAppId(1L);
+        List<UserV2Response> res = userService.getUserListByApp(1L, null);
 
         assertThat(res).isNotNull()
                 .hasSize(1);
