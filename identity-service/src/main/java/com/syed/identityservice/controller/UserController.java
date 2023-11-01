@@ -71,14 +71,15 @@ public class UserController {
             process = ProcessEnum.USER,
             requestType = RequestTypeEnum.READ,
             requestStatus = RequestStatusEnum.PENDING,
-            log = "get user list by app id request initiated"
+            log = "get user list by app request initiated"
     )
-    @GetMapping("/get-user-list/{appId}")
-    public ResponseEntity<List<UserV2Response>> getUserListByAppId(
+    @GetMapping("/get-user-list-by-app")
+    public ResponseEntity<List<UserV2Response>> getUserListByApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @PathVariable Long appId
+            @RequestParam(value = "appId", required = false) Long appId,
+            @RequestParam(value = "appName", required = false) String appName
     ) {
-        return new ResponseEntity<>(userService.getUserListByAppId(appId), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserListByApp(appId, appName), HttpStatus.OK);
     }
 
     @AuditRequest(

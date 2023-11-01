@@ -141,10 +141,10 @@ public class ClientControllerTest {
     }
 
     @Test
-    void getClientListByAppId() {
-        when(clientService.getClientListByAppId(any(Long.class))).thenReturn(getClientListResponse);
+    void getClientListByApp() {
+        when(clientService.getClientListByApp(any(Long.class), eq(null))).thenReturn(getClientListResponse);
 
-        ResponseEntity<List<ClientResponse>> res = clientController.getClientListByAppId(correlationId, 1L);
+        ResponseEntity<List<ClientResponse>> res = clientController.getClientListByApp(correlationId, 1L, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientListExpectedResponse.getStatusCode());

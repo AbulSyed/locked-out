@@ -161,11 +161,11 @@ public class ClientServiceImplTest {
     }
 
     @Test
-    void getClientListByAppId() {
+    void getClientListByApp() {
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class))).thenReturn(clientEntityList);
 
-        List<ClientResponse> res = clientService.getClientListByAppId(1L);
+        List<ClientResponse> res = clientService.getClientListByApp(1L, null);
 
         assertThat(res).isNotNull()
                 .hasSize(1);
