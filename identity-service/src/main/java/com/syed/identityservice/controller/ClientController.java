@@ -70,7 +70,7 @@ public class ClientController {
             process = ProcessEnum.CLIENT,
             requestType = RequestTypeEnum.READ,
             requestStatus = RequestStatusEnum.PENDING,
-            log = "get client list by app id request initiated"
+            log = "get client list by app request initiated"
     )
     @GetMapping("/get-client-list-by-app")
     public ResponseEntity<List<ClientResponse>> getClientListByApp(
