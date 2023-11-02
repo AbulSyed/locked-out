@@ -5,6 +5,9 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.syed.authservice.clients.IdentityServiceClient;
+import com.syed.authservice.filter.VerifyAppClientFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -17,6 +20,7 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.session.DisableEncodeUrlFilter;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -26,6 +30,9 @@ import java.util.UUID;
 
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    private IdentityServiceClient identityServiceClient;
 
     @Bean
     @Order(1)
@@ -47,6 +54,8 @@ public class SecurityConfig {
         // also exposes /.well-known/openid-configuration endpoint
         http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
                 .oidc(Customizer.withDefaults());
+
+        http.addFilterBefore(new VerifyAppClientFilter(identityServiceClient), DisableEncodeUrlFilter.class);
 
         // redirect unauthenticated user to /login
         http.exceptionHandling(exceptions -> {
