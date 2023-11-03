@@ -1,5 +1,7 @@
 package com.syed.authservice.service;
 
+import com.syed.authservice.domain.model.enums.AuthGrantTypeEnum;
+import com.syed.authservice.filter.ClientContextHolder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -9,6 +11,8 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 // In the new Spring Authorization Server, the ClientDetailsService interface has been replaced by the RegisteredClientRepository interface.
 // The RegisteredClientRepository interface provides a similar functionality of retrieving client details by client ID as the ClientDetailsService interface.
@@ -27,11 +31,18 @@ public class ClientDetailsServiceImpl implements RegisteredClientRepository {
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
+//        Set<String> scopesSet = ClientContextHolder.getClientResponse().getScopes().stream()
+//                .map(scope -> scope.getName()).collect(Collectors.toSet());
+        Set<AuthorizationGrantType> grantTypesList = ClientContextHolder.getClientResponse().getAuthGrantType().stream()
+                .map(AuthGrantTypeEnum::getValue)
+                .map(AuthorizationGrantType::new)
+                .collect(Collectors.toSet());
+
         return RegisteredClient.withId(clientId)
-                .clientId("client")
-                .clientSecret("secret")
-                .redirectUri("http://127.0.0.1:3000/authorized")
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .clientId(ClientContextHolder.getClientResponse().getClientId())
+                .clientSecret(ClientContextHolder.getClientResponse().getClientSecret())
+                .redirectUri(ClientContextHolder.getClientResponse().getRedirectUri())
+                .authorizationGrantTypes(grantTypes -> grantTypes.addAll(grantTypesList))
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.EMAIL)
                 .clientSettings(

@@ -2,6 +2,7 @@ package com.syed.authservice.filter;
 
 import com.syed.authservice.clients.IdentityServiceClient;
 import com.syed.authservice.domain.model.response.ClientResponse;
+import feign.FeignException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 @Component
 public class VerifyAppClientFilter extends OncePerRequestFilter {
@@ -27,31 +26,43 @@ public class VerifyAppClientFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        ResponseEntity<ClientResponse> res = null;
 
         // 1. only enter if user is attempting to get authorization_code as we don't want this logic always being executed
-        if (request.getParameter("response_type") != null && request.getParameter("response_type").equals("code")) {
-            System.out.println("start main VerifyAppFilter logic");
+        if (request.getParameter("response_type") != null && request.getParameter("response_type").equals("code")
+            || request.getParameter("grant_type") != null && request.getParameter("grant_type").equals("authorization_code")) {
             // 2. app null check
             if (request.getParameter("appname") == null) {
-                response.getWriter().println("appname is null");
+                response.getWriter().println("appname is null, you must provide it in the request params");
                 return;
             }
-            // 3. fetch list of clients that belong to app passed
-            System.out.println("App is " + request.getParameter("appname"));
-            System.out.println("Client is " + request.getParameter("client_id"));
-            ResponseEntity<List<ClientResponse>> res = identityServiceClient.getClientListByApp("auth-service", null, request.getParameter("appname"));
+            String appName = request.getParameter("appname");
+            String clientId = request.getParameter("client_id");
 
-            // 4. verify if client associated with app
-            if (Objects.requireNonNull(res.getBody()).stream().anyMatch(el -> el.getClientId().equals(request.getParameter("client_id")))) {
-                System.out.println("verification successful");
-            } else {
+            try {
+                // 3. fetch client that belong to app passed
+                res = identityServiceClient.getClient("auth-service", appName, clientId);
+            } catch (FeignException.FeignClientException ex) {
                 response.getWriter().println("App " + request.getParameter("appname") + " not associated with client " + request.getParameter("client_id"));
                 return;
             }
         }
 
-        filterChain.doFilter(request, response);
+        // 4. make clientResponse available to ClientDetailsServiceImpl
+        if (res != null) {
+            ClientResponse clientResponse = ClientResponse.builder()
+                    .id(res.getBody().getId())
+                    .clientId(res.getBody().getClientId())
+                    .clientSecret(res.getBody().getClientSecret())
+                    .authMethod(res.getBody().getAuthMethod())
+                    .authGrantType(res.getBody().getAuthGrantType())
+                    .redirectUri(res.getBody().getRedirectUri())
+                    .createdAt(res.getBody().getCreatedAt())
+                    .build();
 
-        System.out.println("after VerifyAppFilter");
+            ClientContextHolder.setClientResponse(clientResponse);
+        }
+
+        filterChain.doFilter(request, response);
     }
 }
