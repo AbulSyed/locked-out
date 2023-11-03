@@ -5,7 +5,8 @@ public enum ErrorConstant {
     FIELD_ALREADY_USED("%s field is already in use, please try another name"),
     RESOURCE_NOT_FOUND("%s not found"),
     ROLE_ALREADY_PRESENT("Role already present for %s"),
-    AUTHORITY_ALREADY_PRESENT("Authority already present for %s");
+    AUTHORITY_ALREADY_PRESENT("Authority already present for %s"),
+    INVALID_REQUEST("Missing parameters");
 
     private final String value;
 

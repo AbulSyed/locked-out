@@ -40,9 +40,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserV2Response getUser(Long userId) {
-        UserEntity user = userRepository.findById(userId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId)));
+    public UserV2Response getUser(Long userId, String appName, String username) {
+        UserEntity user = null;
+
+        if (userId != null) {
+            user = userRepository.findById(userId).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId)));
+        } else if (appName != null && username != null) {
+            AppEntity app = appRepository.findByName(appName);
+
+            if (app == null) {
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with name " + appName));
+            } else {
+                user = userRepository.getUserEntityByUserAppAndUsername(app, username);
+
+                if (user == null) {
+                    throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User " + username + " with app " + appName));
+                }
+            }
+        }
 
         return MapperUtil.mapUserEntityToUserV2Response(user);
     }

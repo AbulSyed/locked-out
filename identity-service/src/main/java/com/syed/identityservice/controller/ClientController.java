@@ -6,6 +6,8 @@ import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.ClientRequest;
 import com.syed.identityservice.domain.model.response.ClientResponse;
+import com.syed.identityservice.exception.ErrorConstant;
+import com.syed.identityservice.exception.custom.InvalidRequestException;
 import com.syed.identityservice.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -78,6 +80,10 @@ public class ClientController {
             @RequestParam(value = "appId", required = false) Long appId,
             @RequestParam(value = "appName", required = false) String appName
     ) {
+        if (appId == null & appName == null) {
+            throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
+        }
+
         return new ResponseEntity<>(clientService.getClientListByApp(appId, appName), HttpStatus.OK);
     }
 
