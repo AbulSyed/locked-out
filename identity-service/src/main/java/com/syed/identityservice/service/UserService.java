@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserService {
 
     UserResponse createUser(Long appId, UserRequest request);
-    UserV2Response getUser(Long userId);
+    UserV2Response getUser(Long userId, String appName, String username);
     List<UserV2Response> getUserList();
     List<UserV2Response> getUserListByApp(Long appId, String appName);
     UserResponse updateUser(Long userId, UserRequest request);

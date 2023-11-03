@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -107,7 +108,7 @@ public class UserServiceImplTest {
     void getUser() {
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
-        UserV2Response res = userService.getUser(1L);
+        UserV2Response res = userService.getUser(1L, null, null);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("username", "joe")

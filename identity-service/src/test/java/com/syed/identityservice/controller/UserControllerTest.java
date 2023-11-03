@@ -111,9 +111,9 @@ public class UserControllerTest {
 
     @Test
     void getUser() {
-        when(userService.getUser(any(Long.class))).thenReturn(getUserResponse);
+        when(userService.getUser(any(Long.class), eq(null), eq(null))).thenReturn(getUserResponse);
 
-        ResponseEntity<UserV2Response> res = userController.getUser(correlationId, 1L);
+        ResponseEntity<UserV2Response> res = userController.getUser(correlationId, 1L, null, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserExpectedResponse.getStatusCode());
