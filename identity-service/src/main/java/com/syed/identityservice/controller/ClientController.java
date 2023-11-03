@@ -45,12 +45,20 @@ public class ClientController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "get client request initiated"
     )
-    @GetMapping("/get-client/{clientId}")
+    @GetMapping("/get-client")
     public ResponseEntity<ClientResponse> getClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @PathVariable Long clientId
+            @RequestParam(value = "id", required = false) Long id,
+            @RequestParam(value = "appName", required = false) String appName,
+            @RequestParam(value = "clientId", required = false) String clientId
     ) {
-        return new ResponseEntity<>(clientService.getClient(clientId), HttpStatus.OK);
+        if ((id == null && appName == null && clientId == null)
+                || (id == null && appName != null && clientId == null)
+                || (id == null && appName == null && clientId != null)) {
+            throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
+        }
+
+        return new ResponseEntity<>(clientService.getClient(id, appName, clientId), HttpStatus.OK);
     }
 
     @AuditRequest(

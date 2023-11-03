@@ -132,7 +132,7 @@ public class ClientServiceImplTest {
     void getClient() {
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.of(clientEntity));
 
-        ClientResponse res = clientService.getClient(1L);
+        ClientResponse res = clientService.getClient(1L, null, null);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("clientId", "1")
