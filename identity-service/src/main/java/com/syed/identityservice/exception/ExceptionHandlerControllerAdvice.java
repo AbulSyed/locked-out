@@ -1,9 +1,6 @@
 package com.syed.identityservice.exception;
 
-import com.syed.identityservice.exception.custom.AuthorityAlreadyPresentException;
-import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
-import com.syed.identityservice.exception.custom.ResourceNotFoundException;
-import com.syed.identityservice.exception.custom.RoleAlreadyPresentException;
+import com.syed.identityservice.exception.custom.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -59,6 +56,11 @@ public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler
     public ResponseEntity<Object> handleAuthorityAlreadyPresentException(AuthorityAlreadyPresentException ex) {
+        return errorDetailsResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST, ex);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleInvalidRequestException(InvalidRequestException ex) {
         return errorDetailsResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST, ex);
     }
 

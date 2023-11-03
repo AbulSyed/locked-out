@@ -7,6 +7,8 @@ import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.UserRequest;
 import com.syed.identityservice.domain.model.response.UserResponse;
 import com.syed.identityservice.domain.model.response.UserV2Response;
+import com.syed.identityservice.exception.ErrorConstant;
+import com.syed.identityservice.exception.custom.InvalidRequestException;
 import com.syed.identityservice.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,12 +46,20 @@ public class UserController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "get user request initiated"
     )
-    @GetMapping("/get-user/{userId}")
+    @GetMapping("/get-user")
     public ResponseEntity<UserV2Response> getUser(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @PathVariable Long userId
+            @RequestParam(value = "userId", required = false) Long userId,
+            @RequestParam(value = "appName", required = false) String appName,
+            @RequestParam(value = "username", required = false) String username
     ) {
-        return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
+        if ((userId == null && appName == null && username == null)
+            || (userId == null && appName != null && username == null)
+            || (userId == null && appName == null && username != null)) {
+            throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
+        }
+
+        return new ResponseEntity<>(userService.getUser(userId, appName, username), HttpStatus.OK);
     }
 
     @AuditRequest(
