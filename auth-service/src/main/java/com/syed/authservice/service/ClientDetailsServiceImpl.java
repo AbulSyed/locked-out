@@ -1,9 +1,9 @@
 package com.syed.authservice.service;
 
 import com.syed.authservice.domain.model.enums.AuthGrantTypeEnum;
+import com.syed.authservice.domain.model.enums.ScopeEnum;
 import com.syed.authservice.filter.ClientContextHolder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
@@ -31,8 +31,9 @@ public class ClientDetailsServiceImpl implements RegisteredClientRepository {
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
-//        Set<String> scopesSet = ClientContextHolder.getClientResponse().getScopes().stream()
-//                .map(scope -> scope.getName()).collect(Collectors.toSet());
+        Set<String> scopeSet = ClientContextHolder.getClientResponse().getScopes().stream()
+                .map(ScopeEnum::getValue)
+                .collect(Collectors.toSet());
         Set<AuthorizationGrantType> grantTypesList = ClientContextHolder.getClientResponse().getAuthGrantType().stream()
                 .map(AuthGrantTypeEnum::getValue)
                 .map(AuthorizationGrantType::new)
@@ -43,8 +44,7 @@ public class ClientDetailsServiceImpl implements RegisteredClientRepository {
                 .clientSecret(ClientContextHolder.getClientResponse().getClientSecret())
                 .redirectUri(ClientContextHolder.getClientResponse().getRedirectUri())
                 .authorizationGrantTypes(grantTypes -> grantTypes.addAll(grantTypesList))
-                .scope(OidcScopes.OPENID)
-                .scope(OidcScopes.EMAIL)
+                .scopes(scopes -> scopes.addAll(scopeSet))
                 .clientSettings(
                         ClientSettings.builder()
                                 .requireProofKey(false)
