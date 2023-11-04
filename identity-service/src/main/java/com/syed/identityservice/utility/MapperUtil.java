@@ -12,10 +12,7 @@ import com.syed.identityservice.domain.model.request.*;
 import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MapperUtil {
 
@@ -233,6 +230,9 @@ public class MapperUtil {
         return ClientEntity.builder()
                 .clientId(request.getClientId())
                 .secret(request.getClientSecret())
+                .roles(Collections.emptySet())
+                .authorities(Collections.emptySet())
+                .scope(Collections.emptySet())
                 .authMethod(request.getAuthMethod())
                 .authGrantType(request.getAuthGrantType())
                 .redirectUri(request.getRedirectUri())
@@ -241,15 +241,40 @@ public class MapperUtil {
     }
 
     public static ClientResponse mapClientEntityToClientResponse(ClientEntity entity) {
-        return ClientResponse.builder()
+        ClientResponse client = ClientResponse.builder()
                 .id(entity.getId())
                 .clientId(entity.getClientId())
                 .clientSecret(entity.getSecret())
+                .scopes(entity.getScope())
                 .authMethod(entity.getAuthMethod())
                 .authGrantType(entity.getAuthGrantType())
                 .redirectUri(entity.getRedirectUri())
                 .createdAt(entity.getCreatedAt())
                 .build();
+
+        Set<RoleModel> roles = new HashSet<>();
+        for (RoleEntity roleEntity : entity.getRoles()) {
+            RoleModel roleModel = RoleModel.builder()
+                    .id(roleEntity.getId())
+                    .name(roleEntity.getName())
+                    .build();
+
+            roles.add(roleModel);
+        }
+        client.setRoles(roles);
+
+        Set<AuthorityModel> authorities = new HashSet<>();
+        for (AuthorityEntity authorityEntity : entity.getAuthorities()) {
+            AuthorityModel authorityModel = AuthorityModel.builder()
+                    .id(authorityEntity.getId())
+                    .name(authorityEntity.getName())
+                    .build();
+
+            authorities.add(authorityModel);
+        }
+        client.setAuthorities(authorities);
+
+        return client;
     }
 
     public static List<ClientResponse> mapClientEntityListToGetClientListResponse(List<ClientEntity> entityList) {
@@ -260,11 +285,34 @@ public class MapperUtil {
                     .id(entity.getId())
                     .clientId(entity.getClientId())
                     .clientSecret(entity.getSecret())
+                    .scopes(entity.getScope())
                     .authMethod(entity.getAuthMethod())
                     .authGrantType(entity.getAuthGrantType())
                     .redirectUri(entity.getRedirectUri())
                     .createdAt(entity.getCreatedAt())
                     .build();
+
+            Set<RoleModel> roles = new HashSet<>();
+            for (RoleEntity roleEntity : entity.getRoles()) {
+                RoleModel roleModel = RoleModel.builder()
+                        .id(roleEntity.getId())
+                        .name(roleEntity.getName())
+                        .build();
+
+                roles.add(roleModel);
+            }
+            clientResponse.setRoles(roles);
+
+            Set<AuthorityModel> authorities = new HashSet<>();
+            for (AuthorityEntity authorityEntity : entity.getAuthorities()) {
+                AuthorityModel authorityModel = AuthorityModel.builder()
+                        .id(authorityEntity.getId())
+                        .name(authorityEntity.getName())
+                        .build();
+
+                authorities.add(authorityModel);
+            }
+            clientResponse.setAuthorities(authorities);
 
             clientResponseList.add(clientResponse);
         }

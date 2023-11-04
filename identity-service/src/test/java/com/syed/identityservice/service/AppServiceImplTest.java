@@ -134,7 +134,7 @@ public class AppServiceImplTest {
 
         Throwable throwable = assertThrows(FieldAlreadyExistsException.class, () -> appService.createApp(createAppRequest));
 
-        assertEquals("Name field is already in use, please try another name", throwable.getMessage());
+        assertEquals("Name field is already in use, please try another value", throwable.getMessage());
     }
 
     @Test
