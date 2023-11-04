@@ -44,7 +44,7 @@ public class ClientServiceImpl implements ClientService {
 
         if (id != null) {
             client = clientRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("client with id " + id)));
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
         } else if (appName != null && clientId != null) {
             AppEntity app = appRepository.findByName(appName);
 

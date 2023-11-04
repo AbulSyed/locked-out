@@ -145,7 +145,7 @@ public class ClientServiceImplTest {
     void getClient_ThrowsResourceNotFoundException() {
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
-        Throwable throwable = assertThrows(ResourceNotFoundException.class, () -> clientService.getClient(1L));
+        Throwable throwable = assertThrows(ResourceNotFoundException.class, () -> clientService.getClient(1L, null, null));
 
         assertEquals("Client with id 1 not found", throwable.getMessage());
     }
