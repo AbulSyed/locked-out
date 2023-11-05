@@ -54,8 +54,7 @@ public class UserController {
             @RequestParam(value = "username", required = false) String username
     ) {
         if ((userId == null && appName == null && username == null)
-            || (userId == null && appName != null && username == null)
-            || (userId == null && appName == null && username != null)) {
+            || (userId == null && appName != null && username == null)) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
