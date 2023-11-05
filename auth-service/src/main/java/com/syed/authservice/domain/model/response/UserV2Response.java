@@ -1,5 +1,7 @@
-package com.syed.authservice.domain.model;
+package com.syed.authservice.domain.model.response;
 
+import com.syed.authservice.domain.model.AuthorityModel;
+import com.syed.authservice.domain.model.RoleModel;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,7 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Setter
 @Getter
-public class UserModel {
+public class UserV2Response {
 
     private Long id;
     private String username;
