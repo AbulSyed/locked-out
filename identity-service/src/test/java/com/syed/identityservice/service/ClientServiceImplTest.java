@@ -132,7 +132,7 @@ public class ClientServiceImplTest {
     void getClient() {
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.of(clientEntity));
 
-        ClientResponse res = clientService.getClient(1L);
+        ClientResponse res = clientService.getClient(1L, null, null);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("clientId", "1")
@@ -145,7 +145,7 @@ public class ClientServiceImplTest {
     void getClient_ThrowsResourceNotFoundException() {
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
-        Throwable throwable = assertThrows(ResourceNotFoundException.class, () -> clientService.getClient(1L));
+        Throwable throwable = assertThrows(ResourceNotFoundException.class, () -> clientService.getClient(1L, null, null));
 
         assertEquals("Client with id 1 not found", throwable.getMessage());
     }

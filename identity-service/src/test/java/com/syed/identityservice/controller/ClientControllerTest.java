@@ -120,9 +120,9 @@ public class ClientControllerTest {
 
     @Test
     void getClient() {
-        when(clientService.getClient(any(Long.class))).thenReturn(getClientResponse);
+        when(clientService.getClient(any(Long.class), eq(null), eq(null))).thenReturn(getClientResponse);
 
-        ResponseEntity<ClientResponse> res = clientController.getClient(correlationId, 1L);
+        ResponseEntity<ClientResponse> res = clientController.getClient(correlationId, 1L, null, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientExpectedResponse.getStatusCode());

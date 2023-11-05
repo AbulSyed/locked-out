@@ -1,5 +1,5 @@
 {
-  "connectionString": "InstrumentationKey=a2b305e0-a7ef-4148-8c41-80d2e7b0890d;IngestionEndpoint=https://ukwest-0.in.applicationinsights.azure.com/;LiveEndpoint=https://ukwest.livediagnostics.monitor.azure.com/",
+  "connectionString": "",
   "role": {
     "name": "auth-service"
   },

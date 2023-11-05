@@ -117,7 +117,7 @@ public class RoleServiceImplTest {
 
         Throwable throwable = assertThrows(FieldAlreadyExistsException.class, () -> roleService.createRole(createRoleRequest));
 
-        assertEquals("Name field is already in use, please try another name", throwable.getMessage());
+        assertEquals("Name field is already in use, please try another value", throwable.getMessage());
     }
 
     @Test

@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService {
         if (userId != null) {
             user = userRepository.findById(userId).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId)));
+        } else if (appName == null && username != null) {
+            user = userRepository.findByUsername(username);
+
+            if (user == null) {
+                throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Username " + username));
+            }
         } else if (appName != null && username != null) {
             AppEntity app = appRepository.findByName(appName);
 
