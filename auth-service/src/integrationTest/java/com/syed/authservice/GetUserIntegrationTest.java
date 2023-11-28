@@ -15,7 +15,7 @@ public class GetUserIntegrationTest extends BaseTest {
     private IdentityServiceClient identityServiceClient;
 
     @Test
-    void getClient() {
+    void getUser() {
         ResponseEntity<UserV2Response> res = identityServiceClient.getUser("auth-service", null, null, "abul");
 
         assertEquals(HttpStatus.OK, res.getStatusCode());
