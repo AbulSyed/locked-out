@@ -33,6 +33,7 @@ dependencies {
 	testImplementation 'io.cucumber:cucumber-java:6.10.4'
 	testImplementation 'io.cucumber:cucumber-spring:6.10.4'
 	testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
+	testImplementation "org.wiremock:wiremock:3.3.1"
 }
 
 configurations {
@@ -40,6 +41,8 @@ configurations {
 		extendsFrom annotationProcessor
 	}
 
+	integrationTestImplementation.extendsFrom(testImplementation)
+	integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 	functionalTestImplementation.extendsFrom(testImplementation)
 	functionalTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 	cucumberRuntime.extendsFrom(testImplementation)
@@ -50,6 +53,17 @@ test {
 }
 
 sourceSets {
+	integrationTest {
+		java.srcDir 'src/integrationTest/java'
+		resources.srcDir 'src/integrationTest/resources'
+		compileClasspath += sourceSets.main.output + sourceSets.test.output
+		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+
+		// to remove error Entry mappings/*.json is a duplicate but no duplicate handling strategy has been set
+		// duplicate file added to ./build/..
+		resources.exclude '**/mappings/**'
+	}
+
 	functionalTest {
 		java.srcDir 'src/functionalTest/java'
 		resources.srcDir 'src/functionalTest/resources'
@@ -60,6 +74,15 @@ sourceSets {
 		// duplicate file added to ./build/..
 		resources.exclude '**/features/**'
 	}
+}
+
+task integrationTest(type: Test) {
+	useJUnitPlatform()
+
+	description = "Run integration tests"
+	group = "verification"
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 task functionalTest(type: Test) {

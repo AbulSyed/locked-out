@@ -1,0 +1,50 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/get-client",
+    "headers": {
+      "x-correlation-id": {
+        "equalTo": "auth-service"
+      }
+    },
+    "queryParameters": {
+      "appName": {
+        "equalTo": "test"
+      },
+      "clientId": {
+        "equalTo": "client"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "id": 5,
+      "clientId": "client",
+      "clientSecret": "secret",
+      "roles": [
+        {
+          "id": 13,
+          "name": "ADMIN"
+        }
+      ],
+      "authorities": [],
+      "scopes": [
+        "PHONE",
+        "OPENID",
+        "EMAIL"
+      ],
+      "authMethod": [
+        "CLIENT_SECRET_BASIC"
+      ],
+      "authGrantType": [
+        "AUTHORIZATION_CODE"
+      ],
+      "redirectUri": "http://127.0.0.1:3000/authorized",
+      "createdAt": "2023-10-28T21:46:01.268642"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
