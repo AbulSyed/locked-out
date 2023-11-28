@@ -14,7 +14,7 @@ public class GetUserIntegrationTest extends BaseTest {
     @Autowired
     private IdentityServiceClient identityServiceClient;
 
-//    @Test
+    @Test
     void getUser() {
         ResponseEntity<UserV2Response> res = identityServiceClient.getUser("auth-service", null, null, "abul");
 
