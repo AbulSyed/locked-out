@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/get-user",
+    "headers": {
+      "x-correlation-id": {
+        "equalTo": "auth-service"
+      }
+    },
+    "queryParameters": {
+      "username": {
+        "equalTo": "abul"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "id": 5,
+      "username": "abul",
+      "password": "abul",
+      "email": "a@m.com",
+      "phoneNumber": "123435579",
+      "roles": [],
+      "authorities": [],
+      "createdAt": "2023-10-28T20:24:15.893289"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
