@@ -10,9 +10,6 @@ import org.springframework.http.ResponseEntity;
 
 public class GetClientIntegrationTest extends BaseTest {
 
-    @Autowired
-    private IdentityServiceClient identityServiceClient;
-
     @Test
     void getClient() {
         ResponseEntity<ClientResponse> res = identityServiceClient.getClient("auth-service", "test", "client");

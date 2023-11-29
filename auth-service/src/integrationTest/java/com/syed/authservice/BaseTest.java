@@ -12,6 +12,9 @@ public abstract class BaseTest {
 
     private static WireMockServer wireMockServer;
 
+@Autowired
+private IdentityServiceClient identityServiceClient;
+
     @BeforeAll
     static void setup() {
         // Manually initialize & configure WireMock it to use the correct resource path

@@ -11,9 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GetUserIntegrationTest extends BaseTest {
 
-    @Autowired
-    private IdentityServiceClient identityServiceClient;
-
     @Test
     void getUser() {
         ResponseEntity<UserV2Response> res = identityServiceClient.getUser("auth-service", null, null, "abul");
