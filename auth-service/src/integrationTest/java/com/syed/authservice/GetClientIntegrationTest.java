@@ -1,6 +1,5 @@
 package com.syed.authservice;
 
-import com.syed.authservice.clients.IdentityServiceClient;
 import com.syed.authservice.domain.model.response.ClientResponse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;

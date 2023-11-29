@@ -15,7 +15,7 @@ public abstract class BaseTest {
     private static WireMockServer wireMockServer;
 
     @Autowired
-    private IdentityServiceClient identityServiceClient;
+    public IdentityServiceClient identityServiceClient;
 
     @BeforeAll
     static void setup() {
