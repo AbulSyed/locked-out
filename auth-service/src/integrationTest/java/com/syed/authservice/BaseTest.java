@@ -1,7 +1,5 @@
 package com.syed.authservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import com.syed.authservice.clients.IdentityServiceClient;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -13,9 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 public abstract class BaseTest {
 
     private static WireMockServer wireMockServer;
-
-    @Autowired
-    public IdentityServiceClient identityServiceClient;
 
     @BeforeAll
     static void setup() {
