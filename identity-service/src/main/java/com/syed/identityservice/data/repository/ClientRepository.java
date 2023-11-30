@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     boolean existsByClientId(String clientId);
-    ClientEntity getByClientId(String clientId);
     ClientEntity getClientEntityByUserAppAndClientId(AppEntity userApp, String clientId);
     List<ClientEntity> getClientEntitiesByUserApp(AppEntity userApp);
 }
