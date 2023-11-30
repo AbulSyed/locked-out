@@ -1,4 +1,4 @@
-# chmod +x ./create-clients.sh
+# chmod +x ./setup-clients.sh
 
 set -eu
 
