@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ScopeServiceImplTest {
+class ScopeServiceImplTest {
     
     @Mock
     private ClientRepository clientRepository;

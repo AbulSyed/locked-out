@@ -25,11 +25,11 @@ public class ExceptionHandlerControllerAdvice {
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         StringBuilder errorMessage = new StringBuilder();
 
-        ex.getBindingResult().getAllErrors().forEach(error -> {
+        ex.getBindingResult().getAllErrors().forEach(error ->
             errorMessage.append(((FieldError) error).getField())
                     .append(": ")
-                    .append(error.getDefaultMessage());
-        });
+                    .append(error.getDefaultMessage())
+        );
 
         return errorDetailsResponseEntity(errorMessage.toString(), HttpStatus.BAD_REQUEST, ex);
     }

@@ -23,6 +23,8 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final AppRepository appRepository;
 
+    private static final String CLIENT_WITH_ID = "Client with id ";
+
     @Override
     public ClientResponse createClient(Long appId, ClientRequest request) {
         if (clientRepository.existsByClientId(request.getClientId())) {
@@ -44,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
 
         if (id != null) {
             client = clientRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(CLIENT_WITH_ID + id)));
         } else if (appName != null && clientId != null) {
             AppEntity app = appRepository.findByName(appName);
 
@@ -91,7 +93,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientResponse updateClient(Long clientId, ClientRequest request) {
         ClientEntity clientEntity = clientRepository.findById(clientId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + clientId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(CLIENT_WITH_ID + clientId))
         );
 
         if (!request.getClientId().equals(clientEntity.getClientId()) && clientRepository.existsByClientId(request.getClientId())) {
@@ -112,7 +114,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void deleteClient(Long clientId) {
         ClientEntity clientEntity = clientRepository.findById(clientId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + clientId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(CLIENT_WITH_ID + clientId))
         );
 
         clientRepository.delete(clientEntity);

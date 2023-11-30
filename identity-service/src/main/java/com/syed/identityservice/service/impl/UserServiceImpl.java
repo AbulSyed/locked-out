@@ -24,6 +24,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AppRepository appRepository;
 
+    private static final String USER_WITH_ID = "User with id ";
+
     @Override
     public UserResponse createUser(Long appId, UserRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
         if (userId != null) {
             user = userRepository.findById(userId).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId)));
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(USER_WITH_ID + userId)));
         } else if (appName == null && username != null) {
             user = userRepository.findByUsername(username);
 
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse updateUser(Long userId, UserRequest request) {
         UserEntity userEntity = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(USER_WITH_ID + userId))
         );
 
         if (!request.getUsername().equals(userEntity.getUsername()) && userRepository.existsByUsername(request.getUsername())) {
@@ -118,7 +120,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         UserEntity userEntity = userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + userId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(USER_WITH_ID + userId))
         );
 
         userRepository.delete(userEntity);

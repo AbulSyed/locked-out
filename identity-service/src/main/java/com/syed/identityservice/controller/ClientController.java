@@ -52,9 +52,8 @@ public class ClientController {
             @RequestParam(value = "appName", required = false) String appName,
             @RequestParam(value = "clientId", required = false) String clientId
     ) {
-        if ((id == null && appName == null && clientId == null)
-                || (id == null && appName != null && clientId == null)
-                || (id == null && appName == null && clientId != null)) {
+        if ((id == null && appName != null && clientId == null)
+                || (id == null && appName == null)) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
@@ -88,7 +87,7 @@ public class ClientController {
             @RequestParam(value = "appId", required = false) Long appId,
             @RequestParam(value = "appName", required = false) String appName
     ) {
-        if (appId == null & appName == null) {
+        if (appId == null && appName == null) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
