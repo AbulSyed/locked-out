@@ -22,10 +22,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Entering UserDetailsServiceImpl:loadUserByUsername");
+
         ResponseEntity<UserV2Response> res = null;
 
         try {
             res = identityServiceClient.getUser("auth-service", null, null, username);
+            log.info("fetched user: {} in UserDetailsServiceImpl", res.getBody().getUsername());
         } catch (FeignException.FeignClientException ex) {
             log.error(ex.getMessage());
         }

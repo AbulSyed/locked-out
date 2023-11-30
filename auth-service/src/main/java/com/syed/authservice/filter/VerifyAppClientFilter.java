@@ -7,12 +7,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class VerifyAppClientFilter extends OncePerRequestFilter {
 
@@ -26,6 +28,8 @@ public class VerifyAppClientFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        log.info("Entering VerifyAppClientFilter:doFilterInternal");
+
         ResponseEntity<ClientResponse> res = null;
 
         // 1. only enter if user is attempting to get authorization_code as we don't want this logic always being executed
@@ -42,6 +46,7 @@ public class VerifyAppClientFilter extends OncePerRequestFilter {
             try {
                 // 3. fetch client that belong to app passed
                 res = identityServiceClient.getClient("auth-service", appName, clientId);
+                log.info("fetched clientId: {} in VerifyAppClientFilter", res.getBody().getClientId());
             } catch (FeignException.FeignClientException ex) {
                 response.getWriter().println("App " + request.getParameter("appname") + " not associated with client " + request.getParameter("client_id"));
                 return;
@@ -62,6 +67,8 @@ public class VerifyAppClientFilter extends OncePerRequestFilter {
                     .redirectUri(res.getBody().getRedirectUri())
                     .createdAt(res.getBody().getCreatedAt())
                     .build();
+
+            log.info("setting client to context in VerifyAppClientFilter");
 
             ClientContextHolder.setClientResponse(clientResponse);
         }

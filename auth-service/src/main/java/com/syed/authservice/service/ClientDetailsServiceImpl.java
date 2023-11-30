@@ -3,6 +3,7 @@ package com.syed.authservice.service;
 import com.syed.authservice.domain.model.enums.AuthGrantTypeEnum;
 import com.syed.authservice.domain.model.enums.ScopeEnum;
 import com.syed.authservice.filter.ClientContextHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 
 // In the new Spring Authorization Server, the ClientDetailsService interface has been replaced by the RegisteredClientRepository interface.
 // The RegisteredClientRepository interface provides a similar functionality of retrieving client details by client ID as the ClientDetailsService interface.
+@Slf4j
 @Service
 public class ClientDetailsServiceImpl implements RegisteredClientRepository {
 
@@ -31,6 +33,8 @@ public class ClientDetailsServiceImpl implements RegisteredClientRepository {
 
     @Override
     public RegisteredClient findByClientId(String clientId) {
+        log.info("Entering ClientDetailsServiceImpl:findByClientId");
+
         Set<String> scopeSet = ClientContextHolder.getClientResponse().getScopes().stream()
                 .map(ScopeEnum::getValue)
                 .collect(Collectors.toSet());

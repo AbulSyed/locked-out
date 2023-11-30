@@ -6,18 +6,29 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.syed.authservice.clients.IdentityServiceClient;
+import com.syed.authservice.domain.model.AuthorityModel;
+import com.syed.authservice.domain.model.RoleModel;
+import com.syed.authservice.domain.model.enums.ScopeEnum;
+import com.syed.authservice.domain.model.response.ClientResponse;
+import com.syed.authservice.domain.model.response.UserV2Response;
+import com.syed.authservice.filter.ClientContextHolder;
 import com.syed.authservice.filter.VerifyAppClientFilter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.session.DisableEncodeUrlFilter;
@@ -27,7 +38,11 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
+import java.util.List;
+import java.util.Set;
+import java.util.Collection;
 
+@Slf4j
 @Configuration
 public class SecurityConfig {
 
@@ -116,5 +131,45 @@ public class SecurityConfig {
         }
 
         return keyPair;
+    }
+
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> oAuth2TokenCustomizer(IdentityServiceClient identityServiceClient) {
+        return context -> {
+            log.info("Entering SecurityConfig:oAuth2TokenCustomizer");
+
+            List<String> grantTypes = List.of("authorization_code", "refresh_token");
+
+            // add authorities/roles to JWT obtained using either authorization_code & refresh_token
+            if (grantTypes.contains(context.getAuthorizationGrantType().getValue())) {
+                log.info("adding claims to JWT obtained by authorization_code or refresh_token");
+
+                Collection<? extends GrantedAuthority> authorities = context.getPrincipal().getAuthorities();
+                context.getClaims().claim("authorities", authorities.stream().map(GrantedAuthority::getAuthority).toList());
+
+                ResponseEntity<UserV2Response> res = identityServiceClient.getUser("auth-service", null, null, context.getPrincipal().getName());
+
+                if (res != null) {
+                    Set<RoleModel> roles = res.getBody().getRoles();
+                    context.getClaims().claim("roles", roles.stream().map(RoleModel::getName).toList());
+                }
+            } else if (context.getAuthorizationGrantType().getValue().equalsIgnoreCase("client_credentials")) {
+                log.info("adding claims to JWT obtained by client_credentials");
+
+                ClientResponse res = ClientContextHolder.getClientResponse();
+
+                if (res != null) {
+                    // have to manually add scope, authorities & roles to tokens gained using client_credentials
+                    Set<ScopeEnum> scopes = res.getScopes();
+                    context.getClaims().claim("scope", scopes.stream().map(ScopeEnum::getValue).toList());
+
+                    Set<AuthorityModel> authorities = res.getAuthorities();
+                    context.getClaims().claim("authorities", authorities.stream().map(AuthorityModel::getName).toList());
+
+                    Set<RoleModel> roles = res.getRoles();
+                    context.getClaims().claim("roles", roles.stream().map(RoleModel::getName).toList());
+                }
+            }
+        };
     }
 }
