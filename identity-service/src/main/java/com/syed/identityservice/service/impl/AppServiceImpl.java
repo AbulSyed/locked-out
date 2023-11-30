@@ -21,6 +21,8 @@ public class AppServiceImpl implements AppService {
 
     private final AppRepository appRepository;
 
+    private static final String APP_WITH_ID = "App with id ";
+
     @Override
     public AppResponse createApp(AppRequest request) {
         if (appRepository.existsByName(request.getName())) {
@@ -35,7 +37,7 @@ public class AppServiceImpl implements AppService {
     @Override
     public AppResponse getApp(Long appId) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(APP_WITH_ID + appId))
         );
 
         return MapperUtil.mapAppEntityToAppResponse(appEntity);
@@ -44,7 +46,7 @@ public class AppServiceImpl implements AppService {
     @Override
     public AppV2Response getAppV2(Long appId) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(APP_WITH_ID + appId))
         );
 
         return MapperUtil.mapAppEntityToAppV2Response(appEntity);
@@ -60,7 +62,7 @@ public class AppServiceImpl implements AppService {
     @Override
     public AppResponse updateApp(Long appId, AppRequest request) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(APP_WITH_ID + appId))
         );
 
         if (!request.getName().equals(appEntity.getName()) && appRepository.existsByName(request.getName())) {
@@ -78,7 +80,7 @@ public class AppServiceImpl implements AppService {
     @Override
     public void deleteApp(Long appId) {
         AppEntity appEntity = appRepository.findById(appId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("App with id " + appId))
+                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(APP_WITH_ID + appId))
         );
 
         appRepository.delete(appEntity);

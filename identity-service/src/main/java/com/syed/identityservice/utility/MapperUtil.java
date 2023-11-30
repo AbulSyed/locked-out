@@ -16,6 +16,10 @@ import java.util.*;
 
 public class MapperUtil {
 
+    private MapperUtil() {
+
+    }
+
     public static AuditRequestEntity createAuditRequestEntity(String correlationId,
                                                                 ProcessEnum process,
                                                                 RequestTypeEnum requestType,

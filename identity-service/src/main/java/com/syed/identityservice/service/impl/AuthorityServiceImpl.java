@@ -2,7 +2,6 @@ package com.syed.identityservice.service.impl;
 
 import com.syed.identityservice.data.entity.AuthorityEntity;
 import com.syed.identityservice.data.entity.ClientEntity;
-import com.syed.identityservice.data.entity.RoleEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AuthorityRepository;
 import com.syed.identityservice.data.repository.ClientRepository;
@@ -18,10 +17,12 @@ import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.AuthorityService;
 import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
@@ -29,6 +30,8 @@ public class AuthorityServiceImpl implements AuthorityService {
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
+
+    private static final String AUTHORITY_WITH_ID = "Authority with id ";
 
     @Override
     public AuthorityResponse createAuthority(AuthorityRequest request) {
@@ -44,10 +47,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public MessageResponse addAuthority(AuthorityToEnum addAuthorityTo, Long id, Long authorityId) {
         AuthorityEntity authorityEntity = authorityRepository.findById(authorityId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with id " + authorityId)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(AUTHORITY_WITH_ID + authorityId)));
 
         if (addAuthorityTo.toString().equals("USER")) {
-            System.out.println("we need to add a authority to a user with id " + id);
+            log.info("we need to add a authority to a user with id {}", id);
 
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
@@ -63,7 +66,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                     .message("Authority " + authorityEntity.getName() + " added to user " + userEntity.getUsername())
                     .build();
         } else if (addAuthorityTo.toString().equals("CLIENT")) {
-            System.out.println("we need to add a authority to a client with id " + id);
+            log.info("we need to add a authority to a client with id {}", id);
 
             ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
@@ -94,10 +97,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public void deleteAuthorityFrom(AuthorityToEnum deleteAuthorityFrom, Long id, Long authorityId) {
         AuthorityEntity authorityEntity = authorityRepository.findById(authorityId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with id " + authorityId)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(AUTHORITY_WITH_ID + authorityId)));
 
         if (deleteAuthorityFrom.toString().equals("USER")) {
-            System.out.println("we need to delete a authority from a user with id " + id);
+            log.info("we need to delete a authority from a user with id {}", id);
 
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
@@ -109,7 +112,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                 throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with " + id + " not found with user"));
             }
         } else if (deleteAuthorityFrom.toString().equals("CLIENT")) {
-            System.out.println("we need to delete a authority from a client with id " + id);
+            log.info("we need to delete a authority from a client with id {}", id);
 
             ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
@@ -126,7 +129,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public void deleteAuthority(Long authorityId) {
         AuthorityEntity authorityEntity = authorityRepository.findById(authorityId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Authority with id " + authorityId)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(AUTHORITY_WITH_ID + authorityId)));
 
         // remove the associations from users
         for (UserEntity user : authorityEntity.getUsers()) {

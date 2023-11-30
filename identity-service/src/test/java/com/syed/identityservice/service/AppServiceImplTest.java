@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AppServiceImplTest {
+class AppServiceImplTest {
 
     @Mock
     private AppRepository appRepository;

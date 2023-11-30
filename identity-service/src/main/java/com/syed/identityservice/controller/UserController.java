@@ -88,7 +88,7 @@ public class UserController {
             @RequestParam(value = "appId", required = false) Long appId,
             @RequestParam(value = "appName", required = false) String appName
     ) {
-        if (appId == null & appName == null) {
+        if (appId == null && appName == null) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 

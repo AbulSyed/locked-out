@@ -17,10 +17,12 @@ import com.syed.identityservice.exception.custom.RoleAlreadyPresentException;
 import com.syed.identityservice.service.RoleService;
 import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -28,6 +30,8 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
+
+    private static final String ROLE_WITH_ID = "Role with id ";
 
     @Override
     public RoleResponse createRole(RoleRequest request) {
@@ -43,10 +47,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public MessageResponse addRole(RoleToEnum addRoleTo, Long id, Long roleId) {
         RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + roleId)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(ROLE_WITH_ID + roleId)));
 
         if (addRoleTo.toString().equals("USER")) {
-            System.out.println("we need to add a role to a user with id " + id);
+            log.info("we need to add a role to a user with id {}", id);
 
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
@@ -62,7 +66,7 @@ public class RoleServiceImpl implements RoleService {
                     .message("Role " + roleEntity.getName() + " added to user " + userEntity.getUsername())
                     .build();
         } else if (addRoleTo.toString().equals("CLIENT")) {
-            System.out.println("we need to add a role to a client with id " + id);
+            log.info("we need to add a role to a client with id {}", id);
 
             ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
@@ -93,10 +97,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRoleFrom(RoleToEnum deleteRoleFrom, Long id, Long roleId) {
         RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + roleId)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(ROLE_WITH_ID + roleId)));
 
         if (deleteRoleFrom.toString().equals("USER")) {
-            System.out.println("we need to delete a role from a user with id " + id);
+            log.info("we need to delete a role from a user with id {}", id);
 
             UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
@@ -108,7 +112,7 @@ public class RoleServiceImpl implements RoleService {
                 throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with " + id + " not found with user"));
             }
         } else if (deleteRoleFrom.toString().equals("CLIENT")) {
-            System.out.println("we need to delete a role from a client with id " + id);
+            log.info("we need to delete a role from a client with id {}", id);
 
             ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
@@ -125,7 +129,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRole(Long roleId) {
         RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Role with id " + roleId)));
+                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(ROLE_WITH_ID + roleId)));
 
         // remove the associations from users
         for (UserEntity user : roleEntity.getUsers()) {
