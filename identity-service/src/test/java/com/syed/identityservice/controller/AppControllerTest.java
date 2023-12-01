@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-class AppTest extends BaseTest<Object> {
+class AppControllerTest extends BaseTest<Object> {
 
     @Mock
     private AppService appService;

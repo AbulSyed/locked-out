@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RoleTest extends BaseTest<Object> {
+class RoleControllerTest extends BaseTest<Object> {
 
     @Mock
     private RoleService roleService;

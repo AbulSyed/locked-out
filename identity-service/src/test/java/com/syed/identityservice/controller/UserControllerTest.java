@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserTest extends BaseTest<Object> {
+class UserControllerTest extends BaseTest<Object> {
 
     @Mock
     private UserService userService;

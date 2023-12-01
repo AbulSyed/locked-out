@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ScopeTest extends BaseTest<Object> {
+class ScopeControllerTest extends BaseTest<Object> {
 
     @Mock
     private ScopeService scopeService;

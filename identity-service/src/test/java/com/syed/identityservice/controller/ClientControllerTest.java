@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ClientTest extends BaseTest<Object> {
+class ClientControllerTest extends BaseTest<Object> {
 
     @Mock
     private ClientService clientService;
