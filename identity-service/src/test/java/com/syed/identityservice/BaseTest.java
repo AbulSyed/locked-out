@@ -180,6 +180,23 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected ClientEntity createClientEntity(Long id, String clientId, String secret, Set<RoleEntity> roles, Set<AuthorityEntity> authorities,
+                                              Set<ScopeEnum> scopes, Set<AuthMethodEnum> authMethods, Set<AuthGrantTypeEnum> authGrantTypes,
+                                              String redirectUri, LocalDateTime createdAt) {
+        return ClientEntity.builder()
+                .id(id)
+                .clientId(clientId)
+                .secret(secret)
+                .roles(roles)
+                .authorities(authorities)
+                .scope(scopes)
+                .authMethod(authMethods)
+                .authGrantType(authGrantTypes)
+                .redirectUri(redirectUri)
+                .createdAt(createdAt)
+                .build();
+    }
+
     protected RoleRequest createRoleRequest(String name) {
         return RoleRequest.builder()
                 .name(name)
