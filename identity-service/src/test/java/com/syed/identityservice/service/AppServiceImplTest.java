@@ -1,5 +1,6 @@
 package com.syed.identityservice.service;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.entity.UserEntity;
@@ -27,7 +28,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
-class AppServiceImplTest extends ServiceImplBaseTest {
+class AppServiceImplTest extends BaseTest<Object> {
 
     @Mock
     private AppRepository appRepository;

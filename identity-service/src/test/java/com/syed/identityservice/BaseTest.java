@@ -1,5 +1,6 @@
 package com.syed.identityservice;
 
+import com.syed.identityservice.data.entity.*;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.enums.ScopeEnum;
@@ -14,6 +15,10 @@ import java.util.Set;
 public class BaseTest<T> {
 
     protected String correlationId = "1";
+
+    protected ResponseEntity<T> createExpectedResponse(HttpStatus status, T body) {
+        return ResponseEntity.status(status).body(body);
+    }
 
     protected AppRequest createAppRequest(String name, String description) {
         return AppRequest.builder()
@@ -31,15 +36,32 @@ public class BaseTest<T> {
                 .build();
     }
 
-    protected ResponseEntity<T> createExpectedResponse(HttpStatus status, T body) {
-        return ResponseEntity.status(status).body(body);
-    }
-
     protected AppV2Response createAppV2Response(Long id, String name, String description, LocalDateTime createdAt) {
         return AppV2Response.builder()
                 .id(id)
                 .name(name)
                 .description(description)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    protected AppEntity createAppEntity(Long id, String name, String description, LocalDateTime createdAt) {
+        return AppEntity.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    protected AppEntity createAppEntity(Long id, String name, String description, Set<UserEntity> users, Set<ClientEntity> clients,
+                                        LocalDateTime createdAt) {
+        return AppEntity.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .users(users)
+                .clients(clients)
                 .createdAt(createdAt)
                 .build();
     }
@@ -71,6 +93,20 @@ public class BaseTest<T> {
                 .password(password)
                 .email(email)
                 .phoneNumber(phoneNumber)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    protected UserEntity createUserEntity(Long id, String username, String password, String email, String phoneNumber,
+                                          Set<RoleEntity> roles, Set<AuthorityEntity> authorities, LocalDateTime createdAt) {
+        return UserEntity.builder()
+                .id(id)
+                .username(username)
+                .password(password)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .roles(roles)
+                .authorities(authorities)
                 .createdAt(createdAt)
                 .build();
     }
@@ -112,6 +148,18 @@ public class BaseTest<T> {
                 .authMethod(authMethods)
                 .authGrantType(authGrantTypes)
                 .redirectUri(redirectUri)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    protected ClientEntity createClientEntity(Long id, String clientId, String secret, Set<RoleEntity> roles, Set<AuthorityEntity> authorities,
+                                              LocalDateTime createdAt) {
+        return ClientEntity.builder()
+                .id(id)
+                .clientId(clientId)
+                .secret(secret)
+                .roles(roles)
+                .authorities(authorities)
                 .createdAt(createdAt)
                 .build();
     }
