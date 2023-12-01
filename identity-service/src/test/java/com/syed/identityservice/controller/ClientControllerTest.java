@@ -1,11 +1,11 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.ClientRequest;
 import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.service.ClientService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ClientControllerTest {
+class ClientControllerTest extends BaseTest<Object> {
 
     @Mock
     private ClientService clientService;
@@ -32,83 +32,12 @@ class ClientControllerTest {
     @InjectMocks
     private ClientController clientController;
 
-    private String correlationId;
-    private ClientRequest createClientRequest;
-    private ClientResponse createClientResponse;
-    private ResponseEntity<ClientResponse> createClientExpectedResponse;
-    private ClientResponse getClientResponse;
-    private ResponseEntity<ClientResponse> getClientExpectedResponse;
-    private List<ClientResponse> getClientListResponse;
-    private ResponseEntity<List<ClientResponse>> getClientListExpectedResponse;
-    private ClientResponse updateClientResponse;
-    private ClientRequest updateClientRequest;
-    private ResponseEntity<ClientResponse> updateClientExpectedResponse;
-
-    @BeforeEach
-    void setUp() {
-        correlationId = "1";
-
-        createClientRequest = ClientRequest.builder()
-                .clientId("1")
-                .clientSecret("secret")
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .build();
-        createClientResponse = ClientResponse.builder()
-                .id(1L)
-                .clientId("1")
-                .clientSecret("secret")
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .createdAt(LocalDateTime.now())
-                .build();
-        createClientExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createClientResponse);
-
-        getClientResponse = ClientResponse.builder()
-                .id(1L)
-                .clientId("1")
-                .clientSecret("secret")
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .createdAt(LocalDateTime.now())
-                .build();
-        getClientExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getClientResponse);
-
-        getClientListResponse = List.of(
-                ClientResponse.builder()
-                        .id(1L)
-                        .clientId("1")
-                        .clientSecret("secret")
-                        .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                        .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                        .redirectUri("http://localhost:3000")
-                        .createdAt(LocalDateTime.now())
-                        .build()
-        );
-        getClientListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getClientListResponse);
-
-        updateClientResponse = ClientResponse.builder()
-                .clientId("new client id")
-                .clientSecret("secret")
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .build();
-        updateClientRequest = ClientRequest.builder()
-                .clientId("new client id")
-                .clientSecret("secret")
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .build();
-        updateClientExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(updateClientResponse);
-    }
-
     @Test
     void createClient() {
+        ClientRequest createClientRequest = createClientRequest("client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000");
+        ClientResponse createClientResponse = createClientResponse(1L, "client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000", LocalDateTime.now());
+        ResponseEntity<Object> createClientExpectedResponse = createExpectedResponse(HttpStatus.CREATED, createClientResponse);
+
         when(clientService.createClient(any(Long.class), any(ClientRequest.class))).thenReturn(createClientResponse);
 
         ResponseEntity<ClientResponse> res = clientController.createClient(correlationId, 1L, createClientRequest);
@@ -120,6 +49,9 @@ class ClientControllerTest {
 
     @Test
     void getClient() {
+        ClientResponse getClientResponse = createClientResponse(1L, "client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000", LocalDateTime.now());
+        ResponseEntity<Object> getClientExpectedResponse = createExpectedResponse(HttpStatus.OK, getClientResponse);
+
         when(clientService.getClient(any(Long.class), eq(null), eq(null))).thenReturn(getClientResponse);
 
         ResponseEntity<ClientResponse> res = clientController.getClient(correlationId, 1L, null, null);
@@ -131,6 +63,11 @@ class ClientControllerTest {
 
     @Test
     void getClientList() {
+        List<ClientResponse> getClientListResponse = List.of(
+                createClientResponse(1L, "client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000", LocalDateTime.now())
+        );
+        ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, getClientListResponse);
+
         when(clientService.getClientList()).thenReturn(getClientListResponse);
 
         ResponseEntity<List<ClientResponse>> res = clientController.getClientList(correlationId);
@@ -142,6 +79,11 @@ class ClientControllerTest {
 
     @Test
     void getClientListByApp() {
+        List<ClientResponse> getClientListResponse = List.of(
+                createClientResponse(1L, "client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000", LocalDateTime.now())
+        );
+        ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, getClientListResponse);
+
         when(clientService.getClientListByApp(any(Long.class), eq(null))).thenReturn(getClientListResponse);
 
         ResponseEntity<List<ClientResponse>> res = clientController.getClientListByApp(correlationId, 1L, null);
@@ -153,6 +95,10 @@ class ClientControllerTest {
 
     @Test
     void updateClient() {
+        ClientRequest updateClientRequest = createClientRequest("new client id", "new secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000");
+        ClientResponse updateClientResponse = createClientResponse(1L, "new client id", "new secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000", LocalDateTime.now());
+        ResponseEntity<Object> updateClientExpectedResponse = createExpectedResponse(HttpStatus.OK, updateClientResponse);
+
         when(clientService.updateClient(any(Long.class), any(ClientRequest.class))).thenReturn(updateClientResponse);
 
         ResponseEntity<ClientResponse> res = clientController.updateClient(correlationId, 1L, updateClientRequest);

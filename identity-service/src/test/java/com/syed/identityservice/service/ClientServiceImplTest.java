@@ -1,5 +1,6 @@
 package com.syed.identityservice.service;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.repository.AppRepository;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ClientServiceImplTest {
+class ClientServiceImplTest extends BaseTest<Object> {
 
     @Mock
     private ClientRepository clientRepository;
@@ -41,80 +42,14 @@ class ClientServiceImplTest {
     @InjectMocks
     private ClientServiceImpl clientService;
 
-    private AppEntity appEntity;
-    private ClientEntity clientEntity;
-    private ClientRequest createClientRequest;
-    private List<ClientEntity> clientEntityList;
-    private ClientEntity updatedClientEntity;
-    private ClientRequest updateClientRequest;
-
-    @BeforeEach
-    void setUp() {
-        appEntity = AppEntity.builder()
-                .id(1L)
-                .name("app")
-                .description("desc")
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        clientEntity = ClientEntity.builder()
-                .id(1L)
-                .clientId("1")
-                .secret("secret")
-                .roles(Collections.emptySet())
-                .authorities(Collections.emptySet())
-                .scope(Collections.emptySet())
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .createdAt(LocalDateTime.now())
-                .build();
-        createClientRequest = ClientRequest.builder()
-                .clientId("1")
-                .clientSecret("secret")
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .build();
-
-        clientEntityList = List.of(
-                ClientEntity.builder()
-                        .id(1L)
-                        .clientId("1")
-                        .secret("secret")
-                        .roles(Collections.emptySet())
-                        .authorities(Collections.emptySet())
-                        .scope(Collections.emptySet())
-                        .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                        .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                        .redirectUri("http://localhost:3000")
-                        .createdAt(LocalDateTime.now())
-                        .build()
-        );
-
-        updatedClientEntity = ClientEntity.builder()
-                .id(1L)
-                .clientId("1")
-                .secret("secret")
-//                .roles(Collections.emptySet())
-//                .authorities(Collections.emptySet())
-//                .scope(Collections.emptySet())
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .createdAt(LocalDateTime.now())
-                .build();
-        updateClientRequest = ClientRequest.builder()
-                .clientId("new client id")
-                .clientSecret("secret")
-                .authMethod(Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC))
-                .authGrantType(Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE))
-                .redirectUri("http://localhost:3000")
-                .build();
-    }
-
     @Test
     void createClient() {
+        AppEntity appEntity = createAppEntity(1L,"app","desc",LocalDateTime.now());
+        ClientEntity clientEntity = createClientEntity(1L,"1","secret", Collections.emptySet(), Collections.emptySet(),
+                Collections.emptySet(), Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE),
+                "http://localhost:3000", LocalDateTime.now());
+        ClientRequest createClientRequest = createClientRequest("1", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000");
+
         when(clientRepository.existsByClientId(any(String.class))).thenReturn(false);
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(clientEntity);
@@ -130,6 +65,10 @@ class ClientServiceImplTest {
 
     @Test
     void getClient() {
+        ClientEntity clientEntity = createClientEntity(1L,"1","secret", Collections.emptySet(), Collections.emptySet(),
+                Collections.emptySet(), Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE),
+                "http://localhost:3000", LocalDateTime.now());
+
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.of(clientEntity));
 
         ClientResponse res = clientService.getClient(1L, null, null);
@@ -152,6 +91,11 @@ class ClientServiceImplTest {
 
     @Test
     void getClientList() {
+        ClientEntity clientEntity = createClientEntity(1L,"1","secret", Collections.emptySet(), Collections.emptySet(),
+                Collections.emptySet(), Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE),
+                "http://localhost:3000", LocalDateTime.now());
+        List<ClientEntity> clientEntityList = List.of(clientEntity);
+
         when(clientRepository.findAll()).thenReturn(clientEntityList);
 
         List<ClientResponse> res = clientService.getClientList();
@@ -162,6 +106,12 @@ class ClientServiceImplTest {
 
     @Test
     void getClientListByApp() {
+        AppEntity appEntity = createAppEntity(1L,"app","desc",LocalDateTime.now());
+        ClientEntity clientEntity = createClientEntity(1L,"1","secret", Collections.emptySet(), Collections.emptySet(),
+                Collections.emptySet(), Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE),
+                "http://localhost:3000", LocalDateTime.now());
+        List<ClientEntity> clientEntityList = List.of(clientEntity);
+
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
         when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class))).thenReturn(clientEntityList);
 
@@ -173,6 +123,14 @@ class ClientServiceImplTest {
 
     @Test
     void updateClient() {
+        ClientEntity clientEntity = createClientEntity(1L,"1","secret", Collections.emptySet(), Collections.emptySet(),
+                Collections.emptySet(), Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE),
+                "http://localhost:3000", LocalDateTime.now());
+        ClientRequest updateClientRequest = createClientRequest("new client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC),
+                Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000");
+        ClientEntity updatedClientEntity = createClientEntity(1L, "new client id", "secret", Collections.emptySet(),
+                Collections.emptySet(), LocalDateTime.now());
+
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(clientEntity));
         when(clientRepository.existsByClientId("new client id")).thenReturn(false);
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(updatedClientEntity);
@@ -186,6 +144,10 @@ class ClientServiceImplTest {
 
     @Test
     void deleteClient() {
+        ClientEntity clientEntity = createClientEntity(1L,"1","secret", Collections.emptySet(), Collections.emptySet(),
+                Collections.emptySet(), Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE),
+                "http://localhost:3000", LocalDateTime.now());
+
         when(clientRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(clientEntity));
 
         clientService.deleteClient(1L);

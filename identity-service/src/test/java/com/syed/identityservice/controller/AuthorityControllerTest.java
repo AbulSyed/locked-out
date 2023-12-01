@@ -1,11 +1,11 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.service.AuthorityService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AuthorityControllerTest {
+class AuthorityControllerTest extends BaseTest<Object> {
 
     @Mock
     private AuthorityService authorityService;
@@ -30,39 +30,12 @@ class AuthorityControllerTest {
     @InjectMocks
     private AuthorityController authorityController;
 
-    private String correlationId;
-    private AuthorityRequest createAuthorityRequest;
-    private AuthorityResponse createAuthorityResponse;
-    private ResponseEntity<AuthorityResponse> createAuthorityExpectedResponse;
-    private MessageResponse addAuthorityResponse;
-    private ResponseEntity<MessageResponse> addAuthorityExpectedResponse;
-    private List<String> getAuthorityListResponse;
-    private ResponseEntity<List<String>> getAuthorityListExpectedResponse;
-
-    @BeforeEach
-    void setUp() {
-        correlationId = "1";
-
-        createAuthorityRequest = AuthorityRequest.builder()
-                .name("read")
-                .build();
-        createAuthorityResponse = AuthorityResponse.builder()
-                .id(1L)
-                .name("read")
-                .build();
-        createAuthorityExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createAuthorityResponse);
-
-        addAuthorityResponse = MessageResponse.builder()
-                .message("Authority read added to user Test")
-                .build();
-        addAuthorityExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(addAuthorityResponse);
-
-        getAuthorityListResponse = List.of("read");
-        getAuthorityListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAuthorityListResponse);
-    }
-
     @Test
     void createAuthority() {
+        AuthorityRequest createAuthorityRequest = createAuthorityRequest("read");
+        AuthorityResponse createAuthorityResponse = createAuthorityResponse(1L, "read");
+        ResponseEntity<Object> createAuthorityExpectedResponse = createExpectedResponse(HttpStatus.CREATED, createAuthorityResponse);
+
         when(authorityService.createAuthority(any(AuthorityRequest.class))).thenReturn(createAuthorityResponse);
 
         ResponseEntity<AuthorityResponse> res = authorityController.createAuthority(correlationId, createAuthorityRequest);
@@ -74,6 +47,9 @@ class AuthorityControllerTest {
 
     @Test
     void addAuthority_ToUser() {
+        MessageResponse addAuthorityResponse = createMessageResponse("Authority read added to user Test");
+        ResponseEntity<Object> addAuthorityExpectedResponse = createExpectedResponse(HttpStatus.CREATED, addAuthorityResponse);
+
         when(authorityService.addAuthority(any(AuthorityToEnum.class), any(Long.class), any(Long.class))).thenReturn(addAuthorityResponse);
 
         ResponseEntity<MessageResponse> res = authorityController.addAuthority(correlationId, AuthorityToEnum.USER, 1L, 1L);
@@ -85,6 +61,9 @@ class AuthorityControllerTest {
 
     @Test
     void getAuthorityList() {
+        List<String> getAuthorityListResponse = List.of("read");
+        ResponseEntity<Object> getAuthorityListExpectedResponse = createExpectedResponse(HttpStatus.OK, getAuthorityListResponse);
+
         when(authorityService.getAuthorityList()).thenReturn(getAuthorityListResponse);
 
         ResponseEntity<List<String>> res = authorityController.getAuthorityList(correlationId);
