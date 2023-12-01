@@ -140,6 +140,15 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected AuthorityEntity createAuthorityEntity(Long id, String name, Set<UserEntity> users, Set<ClientEntity> clients) {
+        return AuthorityEntity.builder()
+                .id(id)
+                .name(name)
+                .users(users)
+                .clients(clients)
+                .build();
+    }
+
     protected MessageResponse createMessageResponse(String message) {
         return MessageResponse.builder()
                 .message(message)

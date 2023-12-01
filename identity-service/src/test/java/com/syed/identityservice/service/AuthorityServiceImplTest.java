@@ -1,5 +1,6 @@
 package com.syed.identityservice.service;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.data.entity.AuthorityEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AuthorityRepository;
@@ -9,7 +10,6 @@ import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.service.impl.AuthorityServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,10 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -29,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AuthorityServiceImplTest {
+class AuthorityServiceImplTest extends BaseTest<Object> {
 
     @Mock
     private AuthorityRepository authorityRepository;
@@ -39,65 +36,11 @@ class AuthorityServiceImplTest {
     @InjectMocks
     private AuthorityServiceImpl authorityService;
 
-    private AuthorityEntity authorityEntity;
-    private AuthorityRequest createAuthorityRequest;
-    private UserEntity userEntity;
-    private List<AuthorityEntity> getAuthorityEntityList;
-    private Set<AuthorityEntity> authorityEntitySet;
-    private UserEntity userEntity2;
-    private AuthorityEntity authorityEntity2;
-
-    @BeforeEach
-    void setUp() {
-        authorityEntity = AuthorityEntity.builder()
-                .id(1L)
-                .name("read")
-                .build();
-        createAuthorityRequest = AuthorityRequest.builder()
-                .name("read")
-                .build();
-
-        userEntity = UserEntity.builder()
-                .id(1L)
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .userApp(null)
-                .roles(new HashSet<>())
-                .authorities(new HashSet<>())
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        getAuthorityEntityList = List.of(
-                authorityEntity
-        );
-
-        authorityEntitySet = new HashSet<>();
-        authorityEntitySet.add(authorityEntity);
-
-        userEntity2 = UserEntity.builder()
-                .id(1L)
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .userApp(null)
-                .roles(null)
-                .authorities(authorityEntitySet)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        authorityEntity2 = AuthorityEntity.builder()
-                .id(1L)
-                .name("read")
-                .users(new HashSet<>())
-                .clients(new HashSet<>())
-                .build();
-    }
-
     @Test
     void createAuthority() {
+        AuthorityEntity authorityEntity = createAuthorityEntity(1L, "read", Collections.emptySet(), Collections.emptySet());
+        AuthorityRequest createAuthorityRequest = createAuthorityRequest("read");
+
         when(authorityRepository.existsByName(any(String.class))).thenReturn(false);
         when(authorityRepository.save(any(AuthorityEntity.class))).thenReturn(authorityEntity);
 
@@ -109,17 +52,24 @@ class AuthorityServiceImplTest {
 
     @Test
     void addAuthority_ToUser() {
+        AuthorityEntity authorityEntity = createAuthorityEntity(1L, "write", Collections.emptySet(), Collections.emptySet());
+        UserEntity userEntity = createUserEntity(1L, "harry", "123", "joe@mail.com", "079",
+                new HashSet<>(), new HashSet<>(), LocalDateTime.now());
+
         when(authorityRepository.findById(any(Long.class))).thenReturn(Optional.of(authorityEntity));
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
         MessageResponse res = authorityService.addAuthority(AuthorityToEnum.USER, 1L, 1L);
 
         assertThat(res).isNotNull()
-                .hasFieldOrPropertyWithValue("message", "Authority read added to user joe");
+                .hasFieldOrPropertyWithValue("message", "Authority write added to user harry");
     }
 
     @Test
     void getAuthorityList() {
+        AuthorityEntity authorityEntity = createAuthorityEntity(1L, "read", Collections.emptySet(), Collections.emptySet());
+        List<AuthorityEntity> getAuthorityEntityList = List.of(authorityEntity);
+
         when(authorityRepository.findAll()).thenReturn(getAuthorityEntityList);
 
         List<String> res = authorityService.getAuthorityList();
@@ -130,25 +80,33 @@ class AuthorityServiceImplTest {
 
     @Test
     void deleteAuthorityFrom_User() {
+        AuthorityEntity authorityEntity = createAuthorityEntity(1L, "read", Collections.emptySet(), Collections.emptySet());
+        Set<AuthorityEntity> authorityEntitySet = new HashSet<>();
+        authorityEntitySet.add(authorityEntity);
+        UserEntity userEntity = createUserEntity(1L, "joe", "123", "joe@mail.com", "079",
+            null, null, authorityEntitySet, LocalDateTime.now());
+
         // before removing authority
-        assertEquals(1, userEntity2.getAuthorities().size());
+        assertEquals(1, userEntity.getAuthorities().size());
 
         when(authorityRepository.findById(any(Long.class))).thenReturn(Optional.of(authorityEntity));
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity2));
+        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
         authorityService.deleteAuthorityFrom(AuthorityToEnum.USER, 1L, 1L);
 
-        assertThat(userEntity2).isNotNull();
+        assertThat(userEntity).isNotNull();
         // after removing authority
-        assertEquals(0, userEntity2.getAuthorities().size());
+        assertEquals(0, userEntity.getAuthorities().size());
     }
 
     @Test
     void deleteAuthority() {
-        when(authorityRepository.findById(1L)).thenReturn(Optional.of(authorityEntity2));
+        AuthorityEntity authorityEntity = createAuthorityEntity(1L, "read", Collections.emptySet(), Collections.emptySet());
+
+        when(authorityRepository.findById(1L)).thenReturn(Optional.of(authorityEntity));
 
         authorityService.deleteAuthority(1L);
 
-        verify(authorityRepository).delete(authorityEntity2);
+        verify(authorityRepository).delete(authorityEntity);
     }
 }
