@@ -12,7 +12,6 @@ import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.AppServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +27,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
-class AppServiceImplTest {
+class AppServiceImplTest extends ServiceImplBaseTest {
 
     @Mock
     private AppRepository appRepository;
@@ -36,85 +35,12 @@ class AppServiceImplTest {
     @InjectMocks
     private AppServiceImpl appService;
 
-    private AppRequest createAppRequest;
-    private AppEntity appEntity;
-    private AppEntity appV2Entity;
-    private UserEntity userEntity;
-    private ClientEntity clientEntity;
-    private LocalDateTime createdAt;
-    private List<AppEntity> appEntityList;
-    private AppRequest updateAppRequest;
-    private AppEntity updatedAppEntity;
-
-    @BeforeEach
-    void setUp() {
-        createdAt = LocalDateTime.now();
-
-        createAppRequest = AppRequest.builder()
-                .name("app")
-                .description("desc")
-                .build();
-
-        appEntity = AppEntity.builder()
-                .id(1L)
-                .name("app")
-                .description("desc")
-                .createdAt(createdAt)
-                .build();
-
-        userEntity = UserEntity.builder()
-                .id(1L)
-                .username("test")
-                .password("test")
-                .email("a@m.com")
-                .phoneNumber("123")
-                .roles(Collections.emptySet())
-                .authorities(Collections.emptySet())
-                .createdAt(createdAt)
-                .build();
-        clientEntity = ClientEntity.builder()
-                .id(1L)
-                .clientId("abc")
-                .secret("secret")
-                .roles(Collections.emptySet())
-                .authorities(Collections.emptySet())
-                .build();
-
-        appV2Entity = AppEntity.builder()
-                .id(1L)
-                .name("app")
-                .description("desc")
-                .users(Set.of(userEntity))
-                .clients(Set.of(clientEntity))
-                .createdAt(createdAt)
-                .build();
-
-        appEntityList = List.of(
-                new AppEntity(
-                        1L,
-                        "app",
-                        "test",
-                        new HashSet<>(),
-                        new HashSet<>(),
-                        LocalDateTime.now()
-                )
-        );
-
-        updateAppRequest = AppRequest.builder()
-                .name("new name")
-                .description("new desc")
-                .build();
-
-        updatedAppEntity = AppEntity.builder()
-                .id(1L)
-                .name("new name")
-                .description("new desc")
-                .createdAt(createdAt)
-                .build();
-    }
-
     @Test
     void createApp_Success() {
+        LocalDateTime createdAt = LocalDateTime.now();
+        AppRequest createAppRequest = createAppRequest("app", "desc");
+        AppEntity appEntity = createAppEntity(1L, "app", "desc", createdAt);
+
         when(appRepository.existsByName("app")).thenReturn(false);
         when(appRepository.save(any(AppEntity.class))).thenReturn(appEntity);
 
@@ -130,6 +56,8 @@ class AppServiceImplTest {
 
     @Test
     void createApp_ThrowsFieldAlreadyExistsException() {
+        AppRequest createAppRequest = createAppRequest("app", "desc");
+
         when(appRepository.existsByName("app")).thenReturn(true);
 
         Throwable throwable = assertThrows(FieldAlreadyExistsException.class, () -> appService.createApp(createAppRequest));
@@ -139,6 +67,9 @@ class AppServiceImplTest {
 
     @Test
     void getApp_Success() {
+        LocalDateTime createdAt = LocalDateTime.now();
+        AppEntity appEntity = createAppEntity(1L, "app", "desc", createdAt);
+
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appEntity));
 
         AppResponse res = appService.getApp(1L);
@@ -162,6 +93,11 @@ class AppServiceImplTest {
 
     @Test
     void getAppV2_Success() {
+        LocalDateTime createdAt = LocalDateTime.now();
+        UserEntity userEntity = createUserEntity(1L, "test", "test", "a@m.com", "123", Collections.emptySet(), Collections.emptySet(), createdAt);
+        ClientEntity clientEntity = createClientEntity(1L, "abc", "secret", Collections.emptySet(), Collections.emptySet(), createdAt);
+        AppEntity appV2Entity = createAppEntity(1L, "app", "desc", Set.of(userEntity), Set.of(clientEntity), createdAt);
+
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appV2Entity));
 
         AppV2Response res = appService.getAppV2(1L);
@@ -176,6 +112,10 @@ class AppServiceImplTest {
 
     @Test
     void getAppList_Success() {
+        List<AppEntity> appEntityList = List.of(
+                createAppEntity(1L,"app","test", new HashSet<>(), new HashSet<>(), LocalDateTime.now())
+        );
+
         when(appRepository.findAll()).thenReturn(appEntityList);
 
         List<AppResponse> res = appService.getAppList();
@@ -187,8 +127,13 @@ class AppServiceImplTest {
 
     @Test
     void updateApp() {
+        LocalDateTime createdAt = LocalDateTime.now();
+        AppEntity appEntity = createAppEntity(1L, "app", "desc", createdAt);
+        AppRequest updateAppRequest = createAppRequest("updated name", "updated desc");
+        AppEntity updatedAppEntity = createAppEntity(1L, "updated name", "updated desc", createdAt);
+
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appEntity));
-        when(appRepository.existsByName("new name")).thenReturn(false);
+        when(appRepository.existsByName("updated name")).thenReturn(false);
         when(appRepository.save(any(AppEntity.class))).thenReturn(updatedAppEntity);
 
         AppResponse res = appService.updateApp(1L, updateAppRequest);
@@ -196,13 +141,16 @@ class AppServiceImplTest {
         assertThat(res)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("id", 1L)
-                .hasFieldOrPropertyWithValue("name", "new name")
-                .hasFieldOrPropertyWithValue("description", "new desc")
+                .hasFieldOrPropertyWithValue("name", "updated name")
+                .hasFieldOrPropertyWithValue("description", "updated desc")
                 .hasFieldOrPropertyWithValue("createdAt", createdAt);
     }
 
     @Test
     void deleteApp() {
+        LocalDateTime createdAt = LocalDateTime.now();
+        AppEntity appEntity = createAppEntity(1L, "app", "desc", createdAt);
+
         when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appEntity));
 
         appService.deleteApp(1L);
