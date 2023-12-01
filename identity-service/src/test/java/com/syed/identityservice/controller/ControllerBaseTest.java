@@ -44,6 +44,37 @@ public class ControllerBaseTest<T> {
                 .build();
     }
 
+    protected UserRequest createUserRequest(String username, String password, String email, String phoneNumber) {
+        return UserRequest.builder()
+                .username(username)
+                .password(password)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .build();
+    }
+
+    protected UserResponse createUserResponse(Long id, String username, String password, String email, String phoneNumber, LocalDateTime createdAt) {
+        return UserResponse.builder()
+                .id(id)
+                .username(username)
+                .password(password)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    protected UserV2Response createUserV2Response(Long id, String username, String password, String email, String phoneNumber, LocalDateTime createdAt) {
+        return UserV2Response.builder()
+                .id(id)
+                .username(username)
+                .password(password)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .createdAt(createdAt)
+                .build();
+    }
+
     protected AuthorityRequest createAuthorityRequest(String name) {
         return AuthorityRequest.builder()
                 .name(name)

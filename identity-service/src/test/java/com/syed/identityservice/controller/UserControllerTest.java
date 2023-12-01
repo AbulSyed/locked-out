@@ -4,7 +4,6 @@ import com.syed.identityservice.domain.model.request.UserRequest;
 import com.syed.identityservice.domain.model.response.UserResponse;
 import com.syed.identityservice.domain.model.response.UserV2Response;
 import com.syed.identityservice.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+class UserControllerTest extends ControllerBaseTest<Object> {
 
     @Mock
     private UserService userService;
@@ -30,76 +29,12 @@ class UserControllerTest {
     @InjectMocks
     private UserController userController;
 
-    private String correlationId;
-    private UserRequest createUserRequest;
-    private UserResponse createUserResponse;
-    private ResponseEntity<UserResponse> createUserExpectedResponse;
-    private UserV2Response getUserResponse;
-    private ResponseEntity<UserV2Response> getUserExpectedResponse;
-    private List<UserV2Response> getUserListResponse;
-    private ResponseEntity<List<UserV2Response>> getUserListExpectedResponse;
-    private UserRequest updateUserRequest;
-    private UserResponse updateUserResponse;
-    private ResponseEntity<UserResponse> updateUserExpectedResponse;
-
-    @BeforeEach
-    void setUp() {
-        correlationId = "1";
-
-        createUserRequest = UserRequest.builder()
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .build();
-        createUserResponse = UserResponse.builder()
-                .id(1L)
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .createdAt(LocalDateTime.now())
-                .build();
-        createUserExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createUserResponse);
-
-        getUserResponse = UserV2Response.builder()
-                .id(1L)
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .createdAt(LocalDateTime.now())
-                .build();
-        getUserExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getUserResponse);
-
-        getUserListResponse = List.of(UserV2Response.builder()
-                .id(1L)
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .createdAt(LocalDateTime.now())
-                .build());
-        getUserListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getUserListResponse);
-
-        updateUserRequest = UserRequest.builder()
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .build();
-        updateUserResponse = UserResponse.builder()
-                .id(1L)
-                .username("joe")
-                .password("123")
-                .email("joe@mail.com")
-                .phoneNumber("079")
-                .build();
-        updateUserExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(updateUserResponse);
-    }
-
     @Test
     void createUser() {
+        UserRequest createUserRequest = createUserRequest("joe", "123", "joe@mail.com", "079");
+        UserResponse createUserResponse = createUserResponse(1L, "joe", "123", "joe@mail.com", "079", LocalDateTime.now());
+        ResponseEntity<Object> createUserExpectedResponse = createExpectedResponse(HttpStatus.CREATED, createUserResponse);
+
         when(userService.createUser(any(Long.class), any(UserRequest.class))).thenReturn(createUserResponse);
 
         ResponseEntity<UserResponse> res = userController.createUser(correlationId, 1L, createUserRequest);
@@ -111,6 +46,9 @@ class UserControllerTest {
 
     @Test
     void getUser() {
+        UserV2Response getUserResponse = createUserV2Response(1L, "joe", "123", "joe@mail.com", "079", LocalDateTime.now());
+        ResponseEntity<Object> getUserExpectedResponse = createExpectedResponse(HttpStatus.OK, getUserResponse);
+
         when(userService.getUser(any(Long.class), eq(null), eq(null))).thenReturn(getUserResponse);
 
         ResponseEntity<UserV2Response> res = userController.getUser(correlationId, 1L, null, null);
@@ -122,6 +60,11 @@ class UserControllerTest {
 
     @Test
     void getUserList() {
+        List<UserV2Response> getUserListResponse = List.of(
+                createUserV2Response(1L, "joe", "123", "joe@mail.com", "079", LocalDateTime.now())
+        );
+        ResponseEntity<Object> getUserListExpectedResponse = createExpectedResponse(HttpStatus.OK, getUserListResponse);
+
         when(userService.getUserList()).thenReturn(getUserListResponse);
 
         ResponseEntity<List<UserV2Response>> res = userController.getUserList(correlationId);
@@ -133,6 +76,11 @@ class UserControllerTest {
 
     @Test
     void getUserListByApp() {
+        List<UserV2Response> getUserListResponse = List.of(
+                createUserV2Response(1L, "joe", "123", "joe@mail.com", "079", LocalDateTime.now())
+        );
+        ResponseEntity<Object> getUserListExpectedResponse = createExpectedResponse(HttpStatus.OK, getUserListResponse);
+
         when(userService.getUserListByApp(any(Long.class), eq(null))).thenReturn(getUserListResponse);
 
         ResponseEntity<List<UserV2Response>> res = userController.getUserListByApp(correlationId, 1L, null);
@@ -144,6 +92,10 @@ class UserControllerTest {
 
     @Test
     void updateUser() {
+        UserRequest updateUserRequest = createUserRequest("joe2", "pw", "joe2@mail.com", "079");
+        UserResponse updateUserResponse = createUserResponse(1L, "joe2", "pw", "joe2@mail.com", "079", LocalDateTime.now());
+        ResponseEntity<Object> updateUserExpectedResponse = createExpectedResponse(HttpStatus.OK, updateUserResponse);
+
         when(userService.updateUser(any(Long.class), any(UserRequest.class))).thenReturn(updateUserResponse);
 
         ResponseEntity<UserResponse> res = userController.updateUser(correlationId, 1L, updateUserRequest);
