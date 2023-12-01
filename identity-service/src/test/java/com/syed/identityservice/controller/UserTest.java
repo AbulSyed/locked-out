@@ -1,5 +1,6 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.model.request.UserRequest;
 import com.syed.identityservice.domain.model.response.UserResponse;
 import com.syed.identityservice.domain.model.response.UserV2Response;
@@ -21,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest extends ControllerBaseTest<Object> {
+class UserTest extends BaseTest<Object> {
 
     @Mock
     private UserService userService;

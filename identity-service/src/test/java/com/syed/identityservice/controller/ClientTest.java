@@ -1,5 +1,6 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.ClientRequest;
@@ -23,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ClientControllerTest extends ControllerBaseTest<Object> {
+class ClientTest extends BaseTest<Object> {
 
     @Mock
     private ClientService clientService;

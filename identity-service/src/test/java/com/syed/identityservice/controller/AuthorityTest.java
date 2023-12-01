@@ -1,5 +1,6 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
@@ -21,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AuthorityControllerTest extends ControllerBaseTest<Object> {
+class AuthorityTest extends BaseTest<Object> {
 
     @Mock
     private AuthorityService authorityService;

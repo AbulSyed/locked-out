@@ -1,4 +1,4 @@
-package com.syed.identityservice.controller;
+package com.syed.identityservice;
 
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-public class ControllerBaseTest<T> {
+public class BaseTest<T> {
 
     protected String correlationId = "1";
 

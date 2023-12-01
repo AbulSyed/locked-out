@@ -1,5 +1,6 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.model.request.AppRequest;
 import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.AppService;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-class AppControllerTest extends ControllerBaseTest<Object> {
+class AppTest extends BaseTest<Object> {
 
     @Mock
     private AppService appService;

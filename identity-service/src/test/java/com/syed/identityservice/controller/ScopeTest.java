@@ -1,5 +1,6 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.ScopeEnum;
 import com.syed.identityservice.domain.model.request.ScopeRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ScopeControllerTest extends ControllerBaseTest<Object> {
+class ScopeTest extends BaseTest<Object> {
 
     @Mock
     private ScopeService scopeService;
