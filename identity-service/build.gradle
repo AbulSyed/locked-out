@@ -77,6 +77,10 @@ sourceSets {
 		resources.srcDir 'src/integrationTest/resources'
 		compileClasspath += sourceSets.main.output + sourceSets.test.output
 		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+
+		// remove below error
+		// Entry create-app.sql is a duplicate but no duplicate handling strategy has been set
+		resources.exclude '**/*.sql'
 	}
 
 	functionalTest {
@@ -97,7 +101,9 @@ task integrationTest(type: Test) {
 	description = "Run integration tests"
 	group = "verification"
 	testClassesDirs = sourceSets.integrationTest.output.classesDirs
-	classpath = sourceSets.integrationTest.runtimeClasspath
+	classpath = sourceSets.integrationTest.runtimeClasspath + files('src/integrationTest/resources')
+	//  +files(..) - ensures `src/integrationTest/resources directory` is
+	//  part of classpath during the execution of the integration tests
 }
 
 task functionalTest(type: Test) {
