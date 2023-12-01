@@ -219,6 +219,15 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected RoleEntity createRoleEntity(Long id, String name, Set<UserEntity> users, Set<ClientEntity> clients) {
+        return RoleEntity.builder()
+                .id(id)
+                .name(name)
+                .users(users)
+                .clients(clients)
+                .build();
+    }
+
     protected ScopeRequest createScopeRequest(Set<ScopeEnum> scopes) {
         return ScopeRequest.builder()
                 .scopes(scopes)

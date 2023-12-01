@@ -53,7 +53,7 @@ class AuthorityServiceImplTest extends BaseTest<Object> {
     @Test
     void addAuthority_ToUser() {
         AuthorityEntity authorityEntity = createAuthorityEntity(1L, "write", Collections.emptySet(), Collections.emptySet());
-        UserEntity userEntity = createUserEntity(1L, "harry", "123", "joe@mail.com", "079",
+        UserEntity userEntity = createUserEntity(1L, "harry", "123", "harry@mail.com", "079",
                 new HashSet<>(), new HashSet<>(), LocalDateTime.now());
 
         when(authorityRepository.findById(any(Long.class))).thenReturn(Optional.of(authorityEntity));
