@@ -111,6 +111,22 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected UserEntity createUserEntity(Long id, String username, String password, String email, String phoneNumber,
+                                          AppEntity app, Set<RoleEntity> roles, Set<AuthorityEntity> authorities,
+                                          LocalDateTime createdAt) {
+        return UserEntity.builder()
+                .id(id)
+                .username(username)
+                .password(password)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .userApp(app)
+                .roles(roles)
+                .authorities(authorities)
+                .createdAt(createdAt)
+                .build();
+    }
+
     protected AuthorityRequest createAuthorityRequest(String name) {
         return AuthorityRequest.builder()
                 .name(name)
