@@ -4,7 +4,6 @@ import com.syed.identityservice.domain.enums.ScopeEnum;
 import com.syed.identityservice.domain.model.request.ScopeRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.service.ScopeService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ScopeControllerTest {
+class ScopeControllerTest extends ControllerBaseTest<Object> {
 
     @Mock
     private ScopeService scopeService;
@@ -29,27 +28,12 @@ class ScopeControllerTest {
     @InjectMocks
     private ScopeController scopeController;
 
-    private String correlationId;
-    private ScopeRequest alterClientScopesRequest;
-    private MessageResponse alterClientScopesResponse;
-    private ResponseEntity<MessageResponse> alterClientScopesExpectedResponse;
-
-    @BeforeEach
-    void setUp() {
-        correlationId = "1";
-
-        alterClientScopesRequest = ScopeRequest
-                .builder()
-                .scopes(Set.of(ScopeEnum.OPENID))
-                .build();
-        alterClientScopesResponse = MessageResponse.builder()
-                .message("Client 1 updated with scopes [openid]")
-                .build();
-        alterClientScopesExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(alterClientScopesResponse);
-    }
-
     @Test
     void alterClientScopesTest() {
+        ScopeRequest alterClientScopesRequest = createScopeRequest(Set.of(ScopeEnum.OPENID));
+        MessageResponse alterClientScopesResponse = createMessageResponse("Client 1 updated with scopes [openid]");
+        ResponseEntity<Object> alterClientScopesExpectedResponse = createExpectedResponse(HttpStatus.OK, alterClientScopesResponse);
+
         when(scopeService.alterClientScopes(any(Long.class), any(ScopeRequest.class))).thenReturn(alterClientScopesResponse);
 
         ResponseEntity<MessageResponse> res = scopeController.alterClientScopes(correlationId, 1L, alterClientScopesRequest);

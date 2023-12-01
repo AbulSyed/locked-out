@@ -1,15 +1,15 @@
 package com.syed.identityservice.controller;
 
-import com.syed.identityservice.domain.model.request.AppRequest;
-import com.syed.identityservice.domain.model.request.AuthorityRequest;
-import com.syed.identityservice.domain.model.response.AppResponse;
-import com.syed.identityservice.domain.model.response.AppV2Response;
-import com.syed.identityservice.domain.model.response.AuthorityResponse;
-import com.syed.identityservice.domain.model.response.MessageResponse;
+import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
+import com.syed.identityservice.domain.enums.AuthMethodEnum;
+import com.syed.identityservice.domain.enums.ScopeEnum;
+import com.syed.identityservice.domain.model.request.*;
+import com.syed.identityservice.domain.model.response.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class ControllerBaseTest<T> {
 
@@ -60,6 +60,47 @@ public class ControllerBaseTest<T> {
     protected MessageResponse createMessageResponse(String message) {
         return MessageResponse.builder()
                 .message(message)
+                .build();
+    }
+
+    protected ClientRequest createClientRequest(String clientId, String secret, Set<AuthMethodEnum> authMethods, Set<AuthGrantTypeEnum> authGrantTypes, String redirectUri) {
+        return ClientRequest.builder()
+                .clientId(clientId)
+                .clientSecret(secret)
+                .authMethod(authMethods)
+                .authGrantType(authGrantTypes)
+                .redirectUri(redirectUri)
+                .build();
+    }
+
+    protected ClientResponse createClientResponse(Long id, String clientId, String secret, Set<AuthMethodEnum> authMethods, Set<AuthGrantTypeEnum> authGrantTypes, String redirectUri, LocalDateTime createdAt) {
+        return ClientResponse.builder()
+                .id(id)
+                .clientId(clientId)
+                .clientSecret(secret)
+                .authMethod(authMethods)
+                .authGrantType(authGrantTypes)
+                .redirectUri(redirectUri)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    protected RoleRequest createRoleRequest(String name) {
+        return RoleRequest.builder()
+                .name(name)
+                .build();
+    }
+
+    protected RoleResponse createRoleResponse(Long id, String name) {
+        return RoleResponse.builder()
+                .id(id)
+                .name(name)
+                .build();
+    }
+
+    protected ScopeRequest createScopeRequest(Set<ScopeEnum> scopes) {
+        return ScopeRequest.builder()
+                .scopes(scopes)
                 .build();
     }
 }
