@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-class AppControllerTest {
+class AppControllerTest extends ControllerBaseTest<Object> {
 
     @Mock
     private AppService appService;
@@ -28,77 +27,12 @@ class AppControllerTest {
     @InjectMocks
     private AppController appController;
 
-    private String correlationId;
-    private AppRequest createAppRequest;
-    private AppResponse createAppResponse;
-    private ResponseEntity<AppResponse> createAppExpectedResponse;
-    private AppResponse getAppResponse;
-    private ResponseEntity<AppResponse> getAppExpectedResponse;
-    private AppV2Response getAppV2Response;
-    private ResponseEntity<AppV2Response> getAppV2ExpectedResponse;
-    private List<AppResponse> getAppListResponse;
-    private ResponseEntity<List<AppResponse>> getAppListExpectedResponse;
-    private AppRequest updateAppRequest;
-    private AppResponse updateAppResponse;
-    private ResponseEntity<AppResponse> updateAppExpectedResponse;
-
-    @BeforeEach
-    void setUp() {
-        correlationId = "1";
-
-        createAppRequest = AppRequest.builder()
-                .name("app")
-                .description("test")
-                .build();
-        createAppResponse = AppResponse.builder()
-                .id(1L)
-                .name("app")
-                .description("test")
-                .createdAt(LocalDateTime.now())
-                .build();
-        createAppExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createAppResponse);
-
-        getAppResponse = AppResponse.builder()
-                .id(1L)
-                .name("app")
-                .description("test")
-                .createdAt(LocalDateTime.now())
-                .build();
-        getAppExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppResponse);
-
-        getAppV2Response = AppV2Response.builder()
-                .id(1L)
-                .name("app")
-                .description("test")
-                .createdAt(LocalDateTime.now())
-                .build();
-        getAppV2ExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppV2Response);
-
-        getAppListResponse = List.of(
-                new AppResponse(
-                        1L,
-                        "app",
-                        "test",
-                        LocalDateTime.now()
-                )
-        );
-        getAppListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getAppListResponse);
-
-        updateAppRequest = AppRequest.builder()
-                .name("new name")
-                .description("new desc")
-                .build();
-        updateAppResponse = AppResponse.builder()
-                .id(1L)
-                .name("new name")
-                .description("new desc")
-                .createdAt(LocalDateTime.now())
-                .build();
-        updateAppExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(updateAppResponse);
-    }
-
     @Test
     void createApp() {
+        AppRequest createAppRequest = createAppRequest("app", "test");
+        AppResponse createAppResponse = createAppResponse(1L, "app", "test", LocalDateTime.now());
+        ResponseEntity<Object> createAppExpectedResponse = createExpectedResponse(HttpStatus.CREATED, createAppResponse);
+
         when(appService.createApp(any(AppRequest.class))).thenReturn(createAppResponse);
 
         ResponseEntity<AppResponse> res = appController.createApp(correlationId, createAppRequest);
@@ -110,6 +44,9 @@ class AppControllerTest {
 
     @Test
     void getApp() {
+        AppResponse getAppResponse = createAppResponse(1L, "app", "test", LocalDateTime.now());
+        ResponseEntity<Object> getAppExpectedResponse = createExpectedResponse(HttpStatus.OK, getAppResponse);
+
         when(appService.getApp(any(Long.class))).thenReturn(getAppResponse);
 
         ResponseEntity<AppResponse> res = appController.getApp(correlationId, 1L);
@@ -121,6 +58,9 @@ class AppControllerTest {
 
     @Test
     void getAppV2() {
+        AppV2Response getAppV2Response = createAppV2Response(1L, "app", "test", LocalDateTime.now());
+        ResponseEntity<Object> getAppV2ExpectedResponse = createExpectedResponse(HttpStatus.OK, getAppV2Response);
+
         when(appService.getAppV2(any(Long.class))).thenReturn(getAppV2Response);
 
         ResponseEntity<AppV2Response> res = appController.getAppV2(correlationId, 1L);
@@ -132,6 +72,9 @@ class AppControllerTest {
 
     @Test
     void getAppList() {
+        List<AppResponse> getAppListResponse = List.of(createAppResponse(1L, "app", "test", LocalDateTime.now()));
+        ResponseEntity<Object> getAppListExpectedResponse = createExpectedResponse(HttpStatus.OK, getAppListResponse);
+
         when(appService.getAppList()).thenReturn(getAppListResponse);
 
         ResponseEntity<List<AppResponse>> res = appController.getAppList(correlationId);
@@ -143,6 +86,10 @@ class AppControllerTest {
 
     @Test
     void updateApp() {
+        AppRequest updateAppRequest = createAppRequest("new name", "new desc");
+        AppResponse updateAppResponse = createAppResponse(1L, "new name", "new desc", LocalDateTime.now());
+        ResponseEntity<Object> updateAppExpectedResponse = createExpectedResponse(HttpStatus.OK, updateAppResponse);
+
         when(appService.updateApp(any(Long.class), any(AppRequest.class))).thenReturn(updateAppResponse);
 
         ResponseEntity<AppResponse> res = appController.updateApp(correlationId, 1L, updateAppRequest);
