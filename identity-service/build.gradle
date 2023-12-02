@@ -57,14 +57,6 @@ test {
 	useJUnitPlatform()
 }
 
-jacocoTestReport {
-	reports {
-		xml.required = true
-		csv.required = false
-		xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
-	}
-}
-
 sonarqube {
 	properties {
 		property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
@@ -113,4 +105,12 @@ task functionalTest(type: Test) {
 	group = "verification"
 	testClassesDirs = sourceSets.functionalTest.output.classesDirs
 	classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+jacocoTestReport {
+	reports {
+		xml.required = true
+		csv.required = false
+		xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+	}
 }
