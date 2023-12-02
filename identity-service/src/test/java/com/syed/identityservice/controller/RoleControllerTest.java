@@ -1,10 +1,10 @@
 package com.syed.identityservice.controller;
 
+import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.RoleToEnum;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.RoleService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RoleControllerTest {
+class RoleControllerTest extends BaseTest<Object> {
 
     @Mock
     private RoleService roleService;
@@ -29,39 +29,12 @@ class RoleControllerTest {
     @InjectMocks
     private RoleController roleController;
 
-    private String correlationId;
-    private RoleRequest createRoleRequest;
-    private RoleResponse createRoleResponse;
-    private ResponseEntity<RoleResponse> createRoleExpectedResponse;
-    private List<String> getRoleListResponse;
-    private ResponseEntity<List<String>> getRoleListExpectedResponse;
-    private MessageResponse addRoleResponse;
-    private ResponseEntity<MessageResponse> addRoleExpectedResponse;
-
-    @BeforeEach
-    void setUp() {
-        correlationId = "1";
-
-        createRoleRequest = RoleRequest.builder()
-                .name("ADMIN")
-                .build();
-        createRoleResponse = RoleResponse.builder()
-                .id(1L)
-                .name("ADMIN")
-                .build();
-        createRoleExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(createRoleResponse);
-
-        getRoleListResponse = List.of("ADMIN");
-        getRoleListExpectedResponse = ResponseEntity.status(HttpStatus.OK).body(getRoleListResponse);
-
-        addRoleResponse = MessageResponse.builder()
-                .message("Role ADMIN added to user Test")
-                .build();
-        addRoleExpectedResponse = ResponseEntity.status(HttpStatus.CREATED).body(addRoleResponse);
-    }
-
     @Test
     void createRole() {
+        RoleRequest createRoleRequest = createRoleRequest("ADMIN");
+        RoleResponse createRoleResponse = createRoleResponse(1L, "ADMIN");
+        ResponseEntity<Object> createRoleExpectedResponse = createExpectedResponse(HttpStatus.CREATED, createRoleResponse);
+
         when(roleService.createRole(any(RoleRequest.class))).thenReturn(createRoleResponse);
 
         ResponseEntity<RoleResponse> res = roleController.createRole(correlationId, createRoleRequest);
@@ -73,6 +46,9 @@ class RoleControllerTest {
 
     @Test
     void addRole_ToUser() {
+        MessageResponse addRoleResponse = createMessageResponse("Role ADMIN added to user Test");
+        ResponseEntity<Object> addRoleExpectedResponse = createExpectedResponse(HttpStatus.CREATED, addRoleResponse);
+
         when(roleService.addRole(any(RoleToEnum.class), any(Long.class), any(Long.class))).thenReturn(addRoleResponse);
 
         ResponseEntity<MessageResponse> res = roleController.addRole(correlationId, RoleToEnum.USER, 1L, 1L);
@@ -84,6 +60,9 @@ class RoleControllerTest {
 
     @Test
     void getRoleList() {
+        List<String> getRoleListResponse = List.of("ADMIN");
+        ResponseEntity<Object> getRoleListExpectedResponse = createExpectedResponse(HttpStatus.OK, getRoleListResponse);
+
         when(roleService.getRoleList()).thenReturn(getRoleListResponse);
 
         ResponseEntity<List<String>> res = roleController.getRoleList(correlationId);
