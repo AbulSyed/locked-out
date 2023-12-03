@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-// @AutoConfigureTestDatabase - don't configure embedded db, use test containers one
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+// ^ don't configure embedded db, use test containers one
 public class AppRepositoryTest extends RepositoryBaseTest {
 
     @Autowired
