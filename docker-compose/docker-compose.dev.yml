@@ -81,3 +81,18 @@ services:
     depends_on:
       - postgres-db
     restart: always
+
+  pact-broker:
+    image: pactfoundation/pact-broker
+    container_name: pact-broker
+    ports:
+      - 9292:9292
+    environment:
+      PACT_BROKER_DATABASE_HOST: postgres-db
+      PACT_BROKER_DATABASE_USERNAME: admin
+      PACT_BROKER_DATABASE_PASSWORD: admin
+      PACT_BROKER_DATABASE_NAME: locked_out
+      PACT_BROKER_LOG_LEVEL: DEBUG
+    depends_on:
+      - postgres-db
+    restart: always
