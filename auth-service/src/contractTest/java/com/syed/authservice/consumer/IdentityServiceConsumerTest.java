@@ -75,16 +75,16 @@ class IdentityServiceConsumerTest {
     // examples: https://docs.pact.io/implementation_guides/jvm/consumer#examples
     private DslPart buildGetClientPact() {
         return newJsonBody((o) -> {
-            o.numberValue("id", 1);
-            o.stringValue("clientId", "client1");
-            o.stringValue("clientSecret", "secret");
+            o.numberType("id", 1);
+            o.stringType("clientId", "client1");
+            o.stringType("clientSecret", "secret");
             o.array("roles", a -> {});
             o.array("authorities", a -> {});
             o.array("scopes", a -> {});
             o.array("authMethod", a -> {});
             o.array("authGrantType", a -> {});
-            o.stringValue("redirectUri", "http://127.0.0.1:3000/authorized");
-            o.stringValue("createdAt", "2023-11-30T12:26:55.732213");
+            o.stringType("redirectUri", "http://127.0.0.1:3000/authorized");
+            o.stringType("createdAt", "2023-11-30T12:26:55.732213");
         }).build();
     }
 }
