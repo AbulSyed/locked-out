@@ -127,4 +127,6 @@ task contractTest(type: Test) {
 	group = "verification"
 	testClassesDirs = sourceSets.contractTest.output.classesDirs
 	classpath = sourceSets.contractTest.runtimeClasspath
+
+	systemProperty 'pact.verifier.publishResults', 'true'
 }
