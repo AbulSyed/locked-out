@@ -5,8 +5,8 @@ import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
-import com.syed.identityservice.BaseTest;
+import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
+import com.syed.identityservice.ContractBaseTest;
 import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.service.ClientService;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +25,9 @@ import static org.mockito.Mockito.any;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("lockedOut_identityService")
-@PactBroker(url = "http://localhost:9292")
-class AuthServiceProviderTest extends BaseTest {
+//@PactBroker(url = "http://localhost:9292")
+@PactFolder("src/contractTest/resources/pacts")
+class AuthServiceProviderTest extends ContractBaseTest {
 
     @MockBean
     private ClientService clientService;

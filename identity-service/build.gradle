@@ -99,6 +99,10 @@ sourceSets {
 		resources.srcDir 'src/contractTest/resources'
 		compileClasspath += sourceSets.main.output + sourceSets.test.output
 		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+
+		// to remove error Entry features/*.feature is a duplicate but no duplicate handling strategy has been set
+		// duplicate file added to ./build/..
+		resources.exclude 'pacts/**'
 	}
 }
 
