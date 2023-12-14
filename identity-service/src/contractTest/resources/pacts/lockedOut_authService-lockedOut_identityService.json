@@ -1,0 +1,251 @@
+{
+  "consumer": {
+    "name": "lockedOut_authService"
+  },
+  "interactions": [
+    {
+      "description": "A request for a client by appName & clientId",
+      "key": "3d94e78",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "Get client by appName & clientId"
+        }
+      ],
+      "request": {
+        "headers": {
+          "x-correlation-id": [
+            "123"
+          ]
+        },
+        "method": "GET",
+        "path": "/get-client",
+        "query": {
+          "appName": [
+            "myapp"
+          ],
+          "clientId": [
+            "client1"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "authGrantType": [
+
+            ],
+            "authMethod": [
+
+            ],
+            "authorities": [
+
+            ],
+            "clientId": "client1",
+            "clientSecret": "secret",
+            "createdAt": "2023-11-30T12:26:55.732213",
+            "id": 1,
+            "redirectUri": "http://127.0.0.1:3000/authorized",
+            "roles": [
+
+            ],
+            "scopes": [
+
+            ]
+          },
+          "contentType": "application/json; charset=UTF-8",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=UTF-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.clientId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.clientSecret": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.createdAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            },
+            "$.redirectUri": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "transport": "https",
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "A request for a user by username",
+      "key": "d8b7d7cc",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "Get user by username"
+        }
+      ],
+      "request": {
+        "headers": {
+          "x-correlation-id": [
+            "123"
+          ]
+        },
+        "method": "GET",
+        "path": "/get-user",
+        "query": {
+          "username": [
+            "admin"
+          ]
+        }
+      },
+      "response": {
+        "body": {
+          "content": {
+            "authorities": [
+
+            ],
+            "createdAt": "2023-11-30T12:26:55.732213",
+            "email": "a@m.com",
+            "id": 1,
+            "password": "admin",
+            "phoneNumber": "07123123123",
+            "roles": [
+
+            ],
+            "username": "admin"
+          },
+          "contentType": "application/json; charset=UTF-8",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json; charset=UTF-8"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$.createdAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.email": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "number"
+                }
+              ]
+            },
+            "$.password": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.phoneNumber": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.username": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {
+            "Content-Type": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json(;\\s?charset=[\\w\\-]+)?"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "transport": "https",
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.6.3"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "lockedOut_identityService"
+  }
+}

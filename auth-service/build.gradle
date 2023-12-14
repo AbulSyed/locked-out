@@ -4,6 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.2'
 	id 'jacoco'
 	id 'org.sonarqube' version '4.4.1.3373'
+	id 'au.com.dius.pact' version '4.6.3'
 }
 
 group = 'com.syed.authservice'
@@ -35,6 +36,7 @@ dependencies {
 	testImplementation 'io.cucumber:cucumber-spring:6.10.4'
 	testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
 	testImplementation "org.wiremock:wiremock:3.3.1"
+	testImplementation 'au.com.dius.pact.consumer:junit5:4.6.3'
 }
 
 configurations {
@@ -47,6 +49,8 @@ configurations {
 	functionalTestImplementation.extendsFrom(testImplementation)
 	functionalTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 	cucumberRuntime.extendsFrom(testImplementation)
+	contractTestImplementation.extendsFrom(testImplementation)
+	contractTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
 
 test {
@@ -89,6 +93,13 @@ sourceSets {
 		// duplicate file added to ./build/..
 		resources.exclude '**/features/**'
 	}
+
+	contractTest {
+		java.srcDir 'src/contractTest/java'
+		resources.srcDir 'src/contractTest/resources'
+		compileClasspath += sourceSets.main.output + sourceSets.test.output
+		runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+	}
 }
 
 task integrationTest(type: Test) {
@@ -107,4 +118,19 @@ task functionalTest(type: Test) {
 	group = "verification"
 	testClassesDirs = sourceSets.functionalTest.output.classesDirs
 	classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+task contractTest(type: Test) {
+	useJUnitPlatform()
+
+	description = "Run contract tests"
+	group = "verification"
+	testClassesDirs = sourceSets.contractTest.output.classesDirs
+	classpath = sourceSets.contractTest.runtimeClasspath
+}
+
+pact {
+	publish {
+		pactBrokerUrl = 'http://localhost:9292/'
+	}
 }
