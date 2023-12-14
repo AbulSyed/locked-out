@@ -6,6 +6,7 @@ import com.syed.identityservice.domain.enums.ScopeEnum;
 import com.syed.identityservice.domain.model.AuthorityModel;
 import com.syed.identityservice.domain.model.RoleModel;
 import com.syed.identityservice.domain.model.response.ClientResponse;
+import com.syed.identityservice.domain.model.response.UserV2Response;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -42,6 +43,20 @@ public class ContractBaseTest {
                 .roles(roles)
                 .scopes(scopes)
                 .redirectUri(redirectUri)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    protected UserV2Response createUserV2Response(Long id, String username, String password, String email, String phoneNumber,
+                                                  Set<AuthorityModel> authorities, Set<RoleModel> roles, LocalDateTime createdAt) {
+        return UserV2Response.builder()
+                .id(id)
+                .username(username)
+                .password(password)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .authorities(authorities)
+                .roles(roles)
                 .createdAt(createdAt)
                 .build();
     }
