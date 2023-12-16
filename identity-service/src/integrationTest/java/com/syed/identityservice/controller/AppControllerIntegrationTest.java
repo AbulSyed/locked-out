@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class AppControllerIT extends ControllerBaseTest {
+public class AppControllerIntegrationTest extends ControllerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
