@@ -9,19 +9,14 @@ import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.*;
 import au.com.dius.pact.core.model.annotations.Pact;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.syed.authservice.clients.IdentityServiceClient;
 import com.syed.authservice.domain.model.response.ClientResponse;
 import com.syed.authservice.domain.model.response.UserV2Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @PactConsumerTest
 //@ExtendWith(PactConsumerTestExt.class) - alternative for `@PactConsumerTest`
 @PactTestFor(providerName = "lockedOut_identityService")
-//@MockServerConfig(hostInterface = "localhost", port = "1234")
+@MockServerConfig(hostInterface = "localhost", port = "8081")
 class IdentityServiceConsumerTest {
 
     @Autowired
-    private ObjectMapper mapper;
+    private IdentityServiceClient identityServiceClient;
 
     @Pact(provider = "lockedOut_identityService", consumer = "lockedOut_authService")
     public V4Pact getClientPact(PactDslWithProvider builder) {
@@ -68,39 +63,21 @@ class IdentityServiceConsumerTest {
     }
 
     @Test
-    @PactTestFor(pactMethod = "getClientPact")
-    void getClientTest(MockServer mockServer) throws JsonProcessingException {
-        String url = mockServer.getUrl() + "/get-client?appName=myapp&clientId=client1";
+    @PactTestFor(pactMethod = "getClientPact", pactVersion = PactSpecVersion.V4)
+    void getClientTest(MockServer mockServer) {
+        ResponseEntity<ClientResponse> res = identityServiceClient.getClient("123", "myapp", "client1");
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("x-correlation-id", "123");
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-        ClientResponse clientResponse = mapper.readValue(response.getBody(), ClientResponse.class);
+        ClientResponse clientResponse = res.getBody();
 
         assertNotNull(clientResponse);
     }
 
     @Test
-    @PactTestFor(pactMethod = "getUserPact")
-    void getUserTest(MockServer mockServer) throws JsonProcessingException {
-        String url = mockServer.getUrl() + "/get-user?username=admin";
+    @PactTestFor(pactMethod = "getUserPact", pactVersion = PactSpecVersion.V4)
+    void getUserTest(MockServer mockServer) {
+        ResponseEntity<UserV2Response> res = identityServiceClient.getUser("123", null, null, "admin");
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("x-correlation-id", "123");
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-        UserV2Response userV2Response = mapper.readValue(response.getBody(), UserV2Response.class);
+        UserV2Response userV2Response = res.getBody();
 
         assertNotNull(userV2Response);
     }
