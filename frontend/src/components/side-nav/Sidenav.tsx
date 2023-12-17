@@ -5,7 +5,10 @@ import { useLocation } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import { setActiveNavReducer } from '../../store/active-nav/activeNavSlice'
 
-const Sidenav: React.FC = () => {
+interface SidenavProps {
+}
+
+const Sidenav: React.FC<SidenavProps> = () => {
   const state = useAppSelector(state => state.app)
   const location = useLocation()
   const dispatch = useAppDispatch()

@@ -5,7 +5,10 @@ import DefaultCard from '../../components/card/default-card/DefaultCard';
 
 import { useAppSelector } from '../../store/hooks'
 
-const Home: React.FC = () => {
+interface HomeProps {
+}
+
+const Home: React.FC<HomeProps> = () => {
   const state = useAppSelector(state => state.app)
 
   return (

@@ -1,15 +1,18 @@
 import './MainLayout.scss'
 
 import Topnav from '../components/top-nav/Topnav'
-import Sidenav from '../components/side-nav/Sidenav'
 import Home from '../pages/home/Home'
+import AppDetails from '../components/app-details/AppDetails'
 
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { getApps } from '../store/app/appSlice'
 
-const MainLayout: React.FC = () => {
+interface MainLayoutProps {
+}
+
+const MainLayout: React.FC<MainLayoutProps> = () => {
   const [isShowingSidenav, setIsShowingSidenav] = useState(true)
   const location = useLocation()
   const dispatch = useAppDispatch()
@@ -31,7 +34,7 @@ const MainLayout: React.FC = () => {
       <Topnav />
       <div style={{ display: isShowingSidenav ? 'flex' : 'initial' }}>
         {
-          isShowingSidenav ? <Sidenav /> : null
+          isShowingSidenav ? <AppDetails /> : null
         }
         <div>
           <Routes>

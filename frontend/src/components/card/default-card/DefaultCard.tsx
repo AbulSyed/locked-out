@@ -5,7 +5,10 @@ import AppForm from '../../form/app-form/AppForm'
 import { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 
-const DefaultCard: React.FC = () => {
+interface DefaultCardProps {
+}
+
+const DefaultCard: React.FC<DefaultCardProps> = () => {
   const [showAppForm, setShowAppForm] = useState(true)
 
   return (
