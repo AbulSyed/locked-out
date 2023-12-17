@@ -1,6 +1,6 @@
 import './Sidenav.scss'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import { setActiveNavReducer } from '../../store/active-nav/activeNavSlice'
@@ -12,6 +12,10 @@ const Sidenav: React.FC = () => {
   const activeApp = location.pathname.split('/')[2]
   const [activeNav, setActiveNav] = useState('Overview')
   const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Scopes', 'Tokens']
+
+  useEffect(() => {
+    dispatch(setActiveNavReducer('Overview'))
+  }, [])
 
   const updateActiveNav = (navItem: string) => {
     setActiveNav(navItem)
