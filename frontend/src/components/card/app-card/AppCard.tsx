@@ -16,7 +16,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ id, title, description, to }) => {
-  const [showAppForm, setShowAppForm] = useState(true)
+  const [showAppForm, setShowAppForm] = useState(false)
   const dispatch = useAppDispatch()
 
   const handleDelete = (id: string) => {
@@ -28,14 +28,14 @@ const Card: React.FC<CardProps> = ({ id, title, description, to }) => {
   return ( 
     <div>
       {
-        showAppForm ? (
+        !showAppForm ? (
           <div className="app-card">
             <div className="app-card-top-and-bottom p-1">
               <div>
                 <div className='app-card-top'>
                   <h2>{title}</h2>
                   <div>
-                    <EditOutlined className='app-card-icon' onClick={() => setShowAppForm(false)} />
+                    <EditOutlined className='app-card-icon' onClick={() => setShowAppForm(true)} />
                     <DeleteOutlined className='app-card-icon' onClick={() => handleDelete(id)} />
                   </div>
                 </div>
@@ -51,7 +51,7 @@ const Card: React.FC<CardProps> = ({ id, title, description, to }) => {
               </div>
             </div>
           </div>
-        ) : <AppForm type='Update' initName={title} initDesc={description} showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
+        ) : <AppForm type='Update' id={id} initName={title} initDesc={description} showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
       }
     </div>
   );
