@@ -33,9 +33,9 @@ export const createApp = createAsyncThunk('app/createApp', async (data: AppDto, 
       }
     })
     
-    return res.data;
+    return res.data
   } catch (err: any) {
-    return thunkAPI.rejectWithValue({ message: err.message });
+    return thunkAPI.rejectWithValue({ message: err.message })
   }
 })
 
@@ -47,9 +47,25 @@ export const getApps = createAsyncThunk('app/getApps', async () => {
       }
     })
 
-    return res.data;
+    return res.data
   } catch (err: any) {
-    return err.message;
+    return err.message
+  }
+})
+
+export const deleteApp = createAsyncThunk('app/deleteApp', async (appId: string) => {
+  try {
+    const res = await identityServiceApi.delete(`/delete-app/${appId}`, {
+      headers: {
+        'x-correlation-id': 'frontend/deleteApp'
+      }
+    })
+
+    if (res.status == 200) {
+      return appId
+    }
+  } catch (err: any) {
+    return err.message
   }
 })
 
@@ -82,6 +98,20 @@ const appSlice = createSlice({
       state.error = '';
     })
     builder.addCase(getApps.rejected, (state, action) => {
+      state.loading = false;
+      state.apps = [];
+      state.error = action.error.message || 'Something went wrong';
+    })
+    // delete app
+    builder.addCase(deleteApp.pending, (state) => {
+      state.loading = true;
+    })
+    builder.addCase(deleteApp.fulfilled, (state, action) => {
+      state.loading = false;
+      state.apps = state.apps.filter(app => app.id != action.payload);
+      state.error = '';
+    })
+    builder.addCase(deleteApp.rejected, (state, action) => {
       state.loading = false;
       state.apps = [];
       state.error = action.error.message || 'Something went wrong';

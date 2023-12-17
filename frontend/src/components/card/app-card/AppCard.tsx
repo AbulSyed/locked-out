@@ -5,6 +5,8 @@ import AppForm from '../../form/app-form/AppForm'
 import { ArrowRightOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAppDispatch } from '../../../store/hooks'
+import { deleteApp } from '../../../store/app/appSlice'
 
 interface CardProps {
   id: string,
@@ -13,11 +15,14 @@ interface CardProps {
   to: string
 }
 
-const Card: React.FC<CardProps> = ({ title, description, to }) => {
+const Card: React.FC<CardProps> = ({ id, title, description, to }) => {
   const [showAppForm, setShowAppForm] = useState(true)
+  const dispatch = useAppDispatch()
 
-  const handleDelete = () => {
-    alert('Are you sure, you want to delete?')
+  const handleDelete = (id: string) => {
+    alert('Are you sure, you want to delete app with id: ' + id + '?')
+
+    dispatch(deleteApp(id))
   }
 
   return ( 
@@ -31,7 +36,7 @@ const Card: React.FC<CardProps> = ({ title, description, to }) => {
                   <h2>{title}</h2>
                   <div>
                     <EditOutlined className='app-card-icon' onClick={() => setShowAppForm(false)} />
-                    <DeleteOutlined className='app-card-icon' onClick={() => handleDelete()} />
+                    <DeleteOutlined className='app-card-icon' onClick={() => handleDelete(id)} />
                   </div>
                 </div>
                 <hr />
