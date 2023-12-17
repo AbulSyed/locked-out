@@ -16,7 +16,7 @@ const Home: React.FC = () => {
           <DefaultCard />
           {
             state.apps.map((app) => (
-              <AppCard key={app.id} id={app.id} title={app.name} description={app.description} to={`/${app.name}/overview`} />
+              <AppCard key={app.id} id={app.id} title={app.name} description={app.description} to={`/${app.name}`} />
             ))
           }
         </div>

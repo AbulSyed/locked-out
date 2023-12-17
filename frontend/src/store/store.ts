@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import appSlice from './app/appSlice'
+import activeNavSlice from './active-nav/activeNavSlice'
 
 const store = configureStore({
   reducer: {
-    app: appSlice
+    app: appSlice,
+    activeNav: activeNavSlice
   },
 });
 

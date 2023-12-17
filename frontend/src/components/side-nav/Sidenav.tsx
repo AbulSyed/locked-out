@@ -1,12 +1,22 @@
 import './Sidenav.scss'
 
-import { NavLink, useLocation } from 'react-router-dom'
-import { useAppSelector } from '../../store/hooks'
+import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import { setActiveNavReducer } from '../../store/active-nav/activeNavSlice'
 
 const Sidenav: React.FC = () => {
   const state = useAppSelector(state => state.app)
   const location = useLocation()
+  const dispatch = useAppDispatch()
   const activeApp = location.pathname.split('/')[2]
+  const [activeNav, setActiveNav] = useState('Overview')
+  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Scopes', 'Tokens']
+
+  const updateActiveNav = (navItem: string) => {
+    setActiveNav(navItem)
+    dispatch(setActiveNavReducer(navItem))
+  }
 
   return (
     <div className='sidenav'>
@@ -18,25 +28,18 @@ const Sidenav: React.FC = () => {
             ))
           }
         </select>
+
         <hr className='sidenav-hr'/>
-        <NavLink className={({ isActive, isPending }) => isPending ? 'pending li' : isActive ? 'active li' : 'li'} to={'/apps/' + activeApp + '/overview'}>
-          Overview
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? 'pending li' : isActive ? 'active li' : 'li'} to={'/apps/' + activeApp + '/users'}>
-          Users
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? 'pending li' : isActive ? 'active li' : 'li'} to={'/apps/' + activeApp + '/clients'}>
-          Clients
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? 'pending li' : isActive ? 'active li' : 'li'} to={'/apps/' + activeApp + '/roles'}>
-          Roles
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? 'pending li' : isActive ? 'active li' : 'li'} to={'/apps/' + activeApp + '/scopes'}>
-          Scopes
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? 'pending li' : isActive ? 'active li' : 'li'} to={'/apps/' + activeApp + '/token'}>
-          Token
-        </NavLink>
+
+        <ul>
+          {
+            navItems.map(navItem => (
+              <li className={activeNav == `${navItem}` ? 'active li' : 'li'} onClick={() => updateActiveNav(navItem)}>
+                {navItem}
+              </li>
+            ))
+          }
+        </ul>
       </ul>
       <span className='version'>{import.meta.env.VITE_APP_VERSION}</span>
     </div>
