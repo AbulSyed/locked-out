@@ -4,7 +4,7 @@ import Topnav from '../components/top-nav/Topnav'
 import Sidenav from '../components/side-nav/Sidenav'
 import Home from '../pages/home/Home'
 
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { getApps } from '../store/app/appSlice'
@@ -35,6 +35,7 @@ const MainLayout: React.FC = () => {
         }
         <div>
           <Routes>
+            <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<Home />} />
           </Routes>
         </div>
