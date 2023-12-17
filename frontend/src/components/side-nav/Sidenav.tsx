@@ -1,5 +1,6 @@
 import './Sidenav.scss'
-import { NavLink } from 'react-router-dom';
+
+import { NavLink } from 'react-router-dom'
 
 interface SidenavProps {
   route: string
@@ -39,4 +40,4 @@ const Sidenav: React.FC<SidenavProps> = ({ route }) => {
   )
 }
 
-export default Sidenav;
+export default Sidenav

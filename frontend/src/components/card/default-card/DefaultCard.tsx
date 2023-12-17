@@ -1,10 +1,12 @@
 import './DefaultCard.scss'
+
+import AppForm from '../../form/app-form/AppForm'
+
 import { useState } from 'react'
-import { PlusOutlined } from '@ant-design/icons';
-import AppForm from '../../form/app-form/AppForm';
+import { PlusOutlined } from '@ant-design/icons'
 
 const DefaultCard: React.FC = () => {
-  const [showAppForm, setShowAppForm] = useState(true);
+  const [showAppForm, setShowAppForm] = useState(true)
 
   return (
     <div>
@@ -34,4 +36,4 @@ const DefaultCard: React.FC = () => {
   )
 }
 
-export default DefaultCard;
+export default DefaultCard
