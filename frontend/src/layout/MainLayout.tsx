@@ -31,7 +31,7 @@ const MainLayout: React.FC = () => {
       <Topnav />
       <div style={{ display: isShowingSidenav ? 'flex' : 'initial' }}>
         {
-          isShowingSidenav ? <Sidenav route='/apps/app-1' /> : null
+          isShowingSidenav ? <Sidenav /> : null
         }
         <div>
           <Routes>
