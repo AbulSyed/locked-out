@@ -1,5 +1,6 @@
 import './Topnav.scss'
-import { NavLink } from 'react-router-dom';
+
+import { NavLink } from 'react-router-dom'
 
 const Topnav: React.FC = () => {
 	return (
@@ -27,4 +28,4 @@ const Topnav: React.FC = () => {
 	);
 }
   
-export default Topnav;
+export default Topnav
