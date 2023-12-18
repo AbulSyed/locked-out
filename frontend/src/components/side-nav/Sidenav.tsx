@@ -41,7 +41,7 @@ const Sidenav: React.FC<SidenavProps> = () => {
         <ul>
           {
             navItems.map(navItem => (
-              <li className={activeNav == `${navItem}` ? 'active li' : 'li'} onClick={() => updateActiveNav(navItem)}>
+              <li key={navItem} className={activeNav == `${navItem}` ? 'active li' : 'li'} onClick={() => updateActiveNav(navItem)}>
                 {navItem}
               </li>
             ))
