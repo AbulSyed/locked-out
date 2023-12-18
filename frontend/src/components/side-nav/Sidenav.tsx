@@ -1,7 +1,7 @@
 import './Sidenav.scss'
 
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import { setActiveNavReducer } from '../../store/active-nav/activeNavSlice'
 
@@ -27,7 +27,7 @@ const Sidenav: React.FC<SidenavProps> = () => {
 
   return (
     <div className='sidenav'>
-      <ul className='sidenav-list'>
+      <div className='sidenav-list'>
         <select className='app-select'>
           {
             state.apps.map(app => (
@@ -41,13 +41,17 @@ const Sidenav: React.FC<SidenavProps> = () => {
         <ul>
           {
             navItems.map(navItem => (
-              <li key={navItem} className={activeNav == `${navItem}` ? 'active li' : 'li'} onClick={() => updateActiveNav(navItem)}>
-                {navItem}
-              </li>
+              <NavLink 
+                to={`apps/${activeApp}/${navItem.toLowerCase()}`}
+              >
+                <li key={navItem} className={activeNav == `${navItem}` ? 'li active-item' : 'li'} onClick={() => updateActiveNav(navItem)}>
+                  {navItem}
+                </li>
+              </NavLink>
             ))
           }
         </ul>
-      </ul>
+      </div>
       <span className='version'>{import.meta.env.VITE_APP_VERSION}</span>
     </div>
   )
