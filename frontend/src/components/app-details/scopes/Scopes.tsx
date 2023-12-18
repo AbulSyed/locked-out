@@ -5,7 +5,7 @@ interface ScopesProps {
 
 const Scopes: React.FC<ScopesProps> = () => {
   return ( 
-    <div>
+    <div className='scopes'>
       Scopes
     </div>
   );

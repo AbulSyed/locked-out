@@ -5,7 +5,7 @@ interface RolesProps {
 
 const Roles: React.FC<RolesProps> = () => {
   return ( 
-    <div>
+    <div className='roles'>
       Roles
     </div>
   );

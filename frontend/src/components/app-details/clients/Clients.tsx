@@ -5,7 +5,7 @@ interface ClientsProps {
 
 const Clients: React.FC<ClientsProps> = () => {
   return ( 
-    <div>
+    <div className='clients'>
       Clients
     </div>
   );
