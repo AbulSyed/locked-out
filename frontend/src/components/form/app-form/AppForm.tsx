@@ -1,24 +1,43 @@
-import { useState } from 'react'
 import './AppForm.scss'
+
+import { useState } from 'react'
+import { useAppDispatch } from '../../../store/hooks'
+import { createApp, updateApp } from '../../../store/app/appSlice'
 
 interface CreateAppFormInterface {
   type: string,
+  id?: string,
   initName: string,
   initDesc: string,
   showAppForm: boolean,
   setShowAppForm: any
 }
 
-const CreateAppForm: React.FC<CreateAppFormInterface> = ({ type, initName, initDesc, showAppForm, setShowAppForm }) => {
+const CreateAppForm: React.FC<CreateAppFormInterface> = ({ type, id, initName, initDesc, showAppForm, setShowAppForm }) => {
   const [name, setName] = useState(initName)
   const [desc, setDesc] = useState(initDesc)
+  const dispatch = useAppDispatch()
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    console.log('form submitted', {
-      name,
-      desc
-    })
+
+    if (type == 'Create') {
+      console.log('create request')
+      dispatch(createApp({
+        name: name,
+        description: desc
+      }))
+    }
+
+    if (type == 'Update' && id != null) {
+      console.log('update request')
+      dispatch(updateApp({
+        id,
+        name: name,
+        description: desc
+      }))
+    }
+
     setShowAppForm(!showAppForm)
   }
 
@@ -42,4 +61,4 @@ const CreateAppForm: React.FC<CreateAppFormInterface> = ({ type, initName, initD
   )
 }
 
-export default CreateAppForm;
+export default CreateAppForm

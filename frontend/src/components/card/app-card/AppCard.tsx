@@ -1,8 +1,12 @@
 import './AppCard.scss'
-import { ArrowRightOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import AppForm from '../../form/app-form/AppForm';
+
+import AppForm from '../../form/app-form/AppForm'
+
+import { ArrowRightOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useAppDispatch } from '../../../store/hooks'
+import { deleteApp } from '../../../store/app/appSlice'
 
 interface CardProps {
   id: string,
@@ -11,25 +15,28 @@ interface CardProps {
   to: string
 }
 
-const Card: React.FC<CardProps> = ({ title, description, to }) => {
-  const [showAppForm, setShowAppForm] = useState(true);
+const Card: React.FC<CardProps> = ({ id, title, description, to }) => {
+  const [showAppForm, setShowAppForm] = useState(false)
+  const dispatch = useAppDispatch()
 
-  const handleDelete = () => {
-    alert('Are you sure, you want to delete?')
+  const handleDelete = (id: string) => {
+    alert('Are you sure, you want to delete app with id: ' + id + '?')
+
+    dispatch(deleteApp(id))
   }
 
   return ( 
     <div>
       {
-        showAppForm ? (
+        !showAppForm ? (
           <div className="app-card">
             <div className="app-card-top-and-bottom p-1">
               <div>
                 <div className='app-card-top'>
                   <h2>{title}</h2>
                   <div>
-                    <EditOutlined className='app-card-icon' onClick={() => setShowAppForm(false)} />
-                    <DeleteOutlined className='app-card-icon' onClick={() => handleDelete()} />
+                    <EditOutlined className='app-card-icon' onClick={() => setShowAppForm(true)} />
+                    <DeleteOutlined className='app-card-icon' onClick={() => handleDelete(id)} />
                   </div>
                 </div>
                 <hr />
@@ -44,10 +51,10 @@ const Card: React.FC<CardProps> = ({ title, description, to }) => {
               </div>
             </div>
           </div>
-        ) : <AppForm type='Update' initName={title} initDesc={description} showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
+        ) : <AppForm type='Update' id={id} initName={title} initDesc={description} showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
       }
     </div>
   );
 }
  
-export default Card;
+export default Card
