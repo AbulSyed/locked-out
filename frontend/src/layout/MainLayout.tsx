@@ -13,8 +13,8 @@ import Tokens from '../components/app-details/tokens/Tokens'
 
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useAppDispatch } from '../store/hooks'
-import { getApps } from '../store/app/appSlice'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { getAppDetails, getApps } from '../store/app/appSlice'
 import { getRoles } from '../store/role/roleSlice'
 import { getAuthorities } from '../store/authority/authoritySlice'
 
@@ -25,10 +25,17 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
   const [isShowingSidenav, setIsShowingSidenav] = useState(true)
   const location = useLocation()
   const dispatch = useAppDispatch()
+  const apps = useAppSelector(state => state.app.apps)
+  const activeApp = location.pathname.split('/')[2]
+  const app = apps.find(app => app.name == activeApp)
 
   useEffect(() => {
     if (location.pathname.startsWith('/apps')) {
       setIsShowingSidenav(true)
+
+      if (app) {
+        dispatch(getAppDetails(activeApp))
+      }
     } else {
       setIsShowingSidenav(false)
     }
@@ -51,13 +58,13 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
           <Routes>
             <Route path='/' element={<Navigate to='/home' />} />
             <Route path='/home' element={<Home />} />
-            <Route path='/apps/:appname/overview' element={<Overview />} />
-            <Route path='/apps/:appname/users' element={<Users />} />
-            <Route path='/apps/:appname/clients' element={<Clients />} />
-            <Route path='/apps/:appname/roles' element={<Roles />} />
-            <Route path='/apps/:appname/authorities' element={<Authority />} />
-            <Route path='/apps/:appname/scopes' element={<Scopes />} />
-            <Route path='/apps/:appname/tokens' element={<Tokens />} />
+            <Route path='/apps/:appname/overview' element={app ? <Overview /> : <Navigate to="/home" />} />
+            <Route path='/apps/:appname/users' element={app ? <Users /> : <Navigate to="/home" />} />
+            <Route path='/apps/:appname/clients' element={app ? <Clients /> : <Navigate to="/home" />} />
+            <Route path='/apps/:appname/roles' element={app ? <Roles /> : <Navigate to="/home" />} />
+            <Route path='/apps/:appname/authorities' element={app ? <Authority /> : <Navigate to="/home" />} />
+            <Route path='/apps/:appname/scopes' element={app ? <Scopes /> : <Navigate to="/home" />} />
+            <Route path='/apps/:appname/tokens' element={app ? <Tokens /> : <Navigate to="/home" />} />
           </Routes>
         </div>
       </div>
