@@ -13,6 +13,7 @@ import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MapperUtil {
 
@@ -223,6 +224,30 @@ public class MapperUtil {
                     .phoneNumber(userEntity.getPhoneNumber())
                     .createdAt(userEntity.getCreatedAt())
                     .build();
+
+            Set<RoleModel> roleModels = new HashSet<>();
+
+            for (RoleEntity roleEntity : userEntity.getRoles()) {
+                RoleModel roleModel = RoleModel.builder()
+                        .id(roleEntity.getId())
+                        .name(roleEntity.getName())
+                        .build();
+
+                roleModels.add(roleModel);
+            }
+            getUserResponse.setRoles(roleModels);
+
+            Set<AuthorityModel> authorityModels = new HashSet<>();
+
+            for (AuthorityEntity authorityEntity : userEntity.getAuthorities()) {
+                AuthorityModel authorityModel = AuthorityModel.builder()
+                        .id(authorityEntity.getId())
+                        .name(authorityEntity.getName())
+                        .build();
+
+                authorityModels.add(authorityModel);
+            }
+            getUserResponse.setAuthorities(authorityModels);
 
             userResponseList.add(getUserResponse);
         }
