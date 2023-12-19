@@ -7,6 +7,7 @@ import Overview from '../components/app-details/overview/Overview'
 import Users from '../components/app-details/users/Users'
 import Clients from '../components/app-details/clients/Clients'
 import Roles from '../components/app-details/roles/Roles'
+import Authority from '../components/app-details/authority/Authority'
 import Scopes from '../components/app-details/scopes/Scopes'
 import Tokens from '../components/app-details/tokens/Tokens'
 
@@ -15,6 +16,7 @@ import { useEffect, useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { getApps } from '../store/app/appSlice'
 import { getRoles } from '../store/role/roleSlice'
+import { getAuthorities } from '../store/authority/authoritySlice'
 
 interface MainLayoutProps {
 }
@@ -35,6 +37,7 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
   useEffect(() => {
     dispatch(getApps())
     dispatch(getRoles())
+    dispatch(getAuthorities())
   }, [])
 
   return (
@@ -52,6 +55,7 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
             <Route path='/apps/:appname/users' element={<Users />} />
             <Route path='/apps/:appname/clients' element={<Clients />} />
             <Route path='/apps/:appname/roles' element={<Roles />} />
+            <Route path='/apps/:appname/authorities' element={<Authority />} />
             <Route path='/apps/:appname/scopes' element={<Scopes />} />
             <Route path='/apps/:appname/tokens' element={<Tokens />} />
           </Routes>

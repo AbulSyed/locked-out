@@ -14,7 +14,7 @@ const Sidenav: React.FC<SidenavProps> = () => {
   const dispatch = useAppDispatch()
   const activeApp = location.pathname.split('/')[2]
   const [activeNav, setActiveNav] = useState('Overview')
-  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Scopes', 'Tokens']
+  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Authorities', 'Scopes', 'Tokens']
 
   useEffect(() => {
     dispatch(setActiveNavReducer('Overview'))

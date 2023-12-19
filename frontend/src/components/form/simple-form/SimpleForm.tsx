@@ -3,6 +3,7 @@ import './SimpleForm.scss'
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { createRole } from '../../../store/role/roleSlice'
+import { createAuthority } from '../../../store/authority/authoritySlice'
 
 interface SimpleFormInterface {
   type: string
@@ -22,7 +23,9 @@ const SimpleForm: React.FC<SimpleFormInterface> = ({ type }) => {
     }
 
     if (type == 'Create authority') {
-      
+      dispatch(createAuthority({
+        name: name.toLowerCase()
+      }))
     }
 
     setName('')
