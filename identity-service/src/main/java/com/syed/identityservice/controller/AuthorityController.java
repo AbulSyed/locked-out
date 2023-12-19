@@ -58,7 +58,7 @@ public class AuthorityController {
             log = "get list of authorities"
     )
     @GetMapping("/get-authority-list")
-    public ResponseEntity<List<String>> getAuthorityList(
+    public ResponseEntity<List<AuthorityResponse>> getAuthorityList(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(authorityService.getAuthorityList(), HttpStatus.OK);

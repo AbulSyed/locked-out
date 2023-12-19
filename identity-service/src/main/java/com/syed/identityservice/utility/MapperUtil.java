@@ -359,11 +359,11 @@ public class MapperUtil {
                 .build();
     }
 
-    public static List<String> mapAuthorityEntityListToStringList(List<AuthorityEntity> entityList) {
-        List<String> authorities = new ArrayList<>();
+    public static List<AuthorityResponse> mapAuthorityEntityAuthorityResponseList(List<AuthorityEntity> entityList) {
+        List<AuthorityResponse> authorities = new ArrayList<>();
 
         for (AuthorityEntity authorityEntity : entityList) {
-            authorities.add(authorityEntity.getName());
+            authorities.add(mapAuthorityEntityToResponse(authorityEntity));
         }
         return authorities;
     }

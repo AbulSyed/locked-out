@@ -11,7 +11,7 @@ public interface AuthorityService {
 
     AuthorityResponse createAuthority(AuthorityRequest request);
     MessageResponse addAuthority(AuthorityToEnum addAuthorityTo, Long id, Long authorityId);
-    List<String> getAuthorityList();
+    List<AuthorityResponse> getAuthorityList();
     void deleteAuthorityFrom(AuthorityToEnum deleteAuthorityFrom, Long id, Long authorityId);
     void deleteAuthority(Long authorityId);
 }

@@ -88,10 +88,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public List<String> getAuthorityList() {
+    public List<AuthorityResponse> getAuthorityList() {
         List<AuthorityEntity> authorityEntityList = authorityRepository.findAll();
 
-        return MapperUtil.mapAuthorityEntityListToStringList(authorityEntityList);
+        return MapperUtil.mapAuthorityEntityAuthorityResponseList(authorityEntityList);
     }
 
     @Override
