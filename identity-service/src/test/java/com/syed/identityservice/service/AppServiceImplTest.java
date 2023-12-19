@@ -99,9 +99,9 @@ class AppServiceImplTest extends BaseTest<Object> {
         ClientEntity clientEntity = createClientEntity(1L, "abc", "secret", Collections.emptySet(), Collections.emptySet(), createdAt);
         AppEntity appV2Entity = createAppEntity(1L, "app", "desc", Set.of(userEntity), Set.of(clientEntity), createdAt);
 
-        when(appRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(appV2Entity));
+        when(appRepository.findByName(any(String.class))).thenReturn(appV2Entity);
 
-        AppV2Response res = appService.getAppV2(1L);
+        AppV2Response res = appService.getAppV2("test");
 
         assertThat(res)
                 .isNotNull()

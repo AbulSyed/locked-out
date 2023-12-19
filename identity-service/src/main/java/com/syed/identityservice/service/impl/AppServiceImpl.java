@@ -22,6 +22,7 @@ public class AppServiceImpl implements AppService {
     private final AppRepository appRepository;
 
     private static final String APP_WITH_ID = "App with id ";
+    private static final String APP_WITH_NAME = "App with name ";
 
     @Override
     public AppResponse createApp(AppRequest request) {
@@ -44,10 +45,12 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public AppV2Response getAppV2(Long appId) {
-        AppEntity appEntity = appRepository.findById(appId).orElseThrow(
-                () -> new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(APP_WITH_ID + appId))
-        );
+    public AppV2Response getAppV2(String appName) {
+        AppEntity appEntity = appRepository.findByName(appName);
+
+        if (appEntity == null) {
+            throw new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(APP_WITH_NAME + appName));
+        }
 
         return MapperUtil.mapAppEntityToAppV2Response(appEntity);
     }
