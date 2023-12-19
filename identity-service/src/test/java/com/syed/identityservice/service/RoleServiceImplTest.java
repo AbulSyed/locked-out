@@ -85,7 +85,7 @@ class RoleServiceImplTest extends BaseTest<Object> {
 
         when(roleRepository.findAll()).thenReturn(getRoleEntityList);
 
-        List<String> res = roleService.getRoleList();
+        List<RoleResponse> res = roleService.getRoleList();
 
         assertThat(res).isNotNull()
                 .hasSize(1);

@@ -60,12 +60,12 @@ class RoleControllerTest extends BaseTest<Object> {
 
     @Test
     void getRoleList() {
-        List<String> getRoleListResponse = List.of("ADMIN");
+        List<RoleResponse> getRoleListResponse = List.of(new RoleResponse(1L, "ADMIN"));
         ResponseEntity<Object> getRoleListExpectedResponse = createExpectedResponse(HttpStatus.OK, getRoleListResponse);
 
         when(roleService.getRoleList()).thenReturn(getRoleListResponse);
 
-        ResponseEntity<List<String>> res = roleController.getRoleList(correlationId);
+        ResponseEntity<List<RoleResponse>> res = roleController.getRoleList(correlationId);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getRoleListExpectedResponse.getStatusCode());
