@@ -1,11 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
+
 import appSlice from './app/appSlice'
 import activeNavSlice from './active-nav/activeNavSlice'
+import roleSlice from './role/roleSlice'
 
 const store = configureStore({
   reducer: {
     app: appSlice,
-    activeNav: activeNavSlice
+    activeNav: activeNavSlice,
+    role: roleSlice
   },
 });
 

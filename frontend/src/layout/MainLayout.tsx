@@ -14,6 +14,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { getApps } from '../store/app/appSlice'
+import { getRoles } from '../store/role/roleSlice'
 
 interface MainLayoutProps {
 }
@@ -33,6 +34,7 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
 
   useEffect(() => {
     dispatch(getApps())
+    dispatch(getRoles())
   }, [])
 
   return (
@@ -44,14 +46,14 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
         }
         <div>
           <Routes>
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/apps/:appname/overview" element={<Overview />} />
-            <Route path="/apps/:appname/users" element={<Users />} />
-            <Route path="/apps/:appname/clients" element={<Clients />} />
-            <Route path="/apps/:appname/roles" element={<Roles />} />
-            <Route path="/apps/:appname/scopes" element={<Scopes />} />
-            <Route path="/apps/:appname/tokens" element={<Tokens />} />
+            <Route path='/' element={<Navigate to='/home' />} />
+            <Route path='/home' element={<Home />} />
+            <Route path='/apps/:appname/overview' element={<Overview />} />
+            <Route path='/apps/:appname/users' element={<Users />} />
+            <Route path='/apps/:appname/clients' element={<Clients />} />
+            <Route path='/apps/:appname/roles' element={<Roles />} />
+            <Route path='/apps/:appname/scopes' element={<Scopes />} />
+            <Route path='/apps/:appname/tokens' element={<Tokens />} />
           </Routes>
         </div>
       </div>

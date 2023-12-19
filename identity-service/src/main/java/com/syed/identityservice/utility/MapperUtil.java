@@ -337,11 +337,11 @@ public class MapperUtil {
                 .build();
     }
 
-    public static List<String> mapRoleEntityListToStringList(List<RoleEntity> entityList) {
-        List<String> roles = new ArrayList<>();
+    public static List<RoleResponse> mapRoleEntityListToRoleResponseList(List<RoleEntity> entityList) {
+        List<RoleResponse> roles = new ArrayList<>();
 
         for (RoleEntity roleEntity : entityList) {
-            roles.add(roleEntity.getName());
+            roles.add(mapRoleEntityToResponse(roleEntity));
         }
         return roles;
     }

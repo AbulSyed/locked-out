@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
 import identityServiceApi from '../../api/identityServiceApi'
 
 const initialState: InitialState = {
@@ -106,7 +107,6 @@ const appSlice = createSlice({
     })
     builder.addCase(createApp.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
       state.error = action.error.message || 'Something went wrong...'
     })
     // get apps
@@ -120,7 +120,6 @@ const appSlice = createSlice({
     })
     builder.addCase(getApps.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
       state.error = action.error.message || 'Something went wrong'
     })
     // update app
@@ -140,7 +139,6 @@ const appSlice = createSlice({
     })
     builder.addCase(updateApp.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
       state.error = action.error.message || 'Something went wrong'
     })
     // delete app
@@ -154,7 +152,6 @@ const appSlice = createSlice({
     })
     builder.addCase(deleteApp.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
       state.error = action.error.message || 'Something went wrong'
     })
   },

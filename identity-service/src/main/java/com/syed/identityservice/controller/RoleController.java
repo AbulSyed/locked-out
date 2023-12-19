@@ -61,7 +61,7 @@ public class RoleController {
             log = "get list of roles"
     )
     @GetMapping("/get-role-list")
-    public ResponseEntity<List<String>> getRoleList(
+    public ResponseEntity<List<RoleResponse>> getRoleList(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId
     ) {
         return new ResponseEntity<>(roleService.getRoleList(), HttpStatus.OK);

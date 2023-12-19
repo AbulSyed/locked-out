@@ -88,10 +88,10 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<String> getRoleList() {
+    public List<RoleResponse> getRoleList() {
         List<RoleEntity> roleEntityList = roleRepository.findAll();
 
-        return MapperUtil.mapRoleEntityListToStringList(roleEntityList);
+        return MapperUtil.mapRoleEntityListToRoleResponseList(roleEntityList);
     }
 
     @Override
