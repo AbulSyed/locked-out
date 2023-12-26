@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { getAppDetails, getApps } from '../store/app/appSlice'
 import { getRoles } from '../store/role/roleSlice'
 import { getAuthorities } from '../store/authority/authoritySlice'
+import { getUsersByAppName } from '../store/user/userSlice'
 
 interface MainLayoutProps {
 }
@@ -35,6 +36,7 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
 
       if (app) {
         dispatch(getAppDetails(activeApp))
+        dispatch(getUsersByAppName(activeApp))
       }
     } else {
       setIsShowingSidenav(false)

@@ -1,0 +1,52 @@
+.user-card {
+  background: #ffffff;
+  color: #000;
+  border: .5px solid #cccbcb;
+  border-top: 3px solid #cccbcb;
+  border-radius: 1px;
+
+  .user-card-top-and-bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+
+    .user-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .user-card-icon {
+        margin: 0 1rem;
+        transition: all .4s;
+
+        &:hover {
+          cursor: pointer;
+          opacity: .8;
+        }
+      }
+    }
+
+    .parag {
+      margin-top: 1.3rem;
+    }
+  }
+
+  .category {
+    display: inline-block;
+    color: #fff;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    padding: 0.4rem 0.6rem;
+    border-radius: 15px;
+    margin-bottom: 0.5rem;
+  }
+
+  .role {
+    background: rgb(0, 51, 255);
+  }
+
+  .authority {
+    background: rgb(40, 8, 155);
+  }
+}

@@ -9,10 +9,10 @@ import { useAppDispatch } from '../../../store/hooks'
 import { deleteApp } from '../../../store/app/appSlice'
 
 interface AppCardProps {
-  id: string,
-  title: string,
-  description: string,
-  to: string
+  id: string;
+  title: string;
+  description: string;
+  to: string;
 }
 
 const AppCard: React.FC<AppCardProps> = ({ id, title, description, to }) => {
@@ -51,7 +51,14 @@ const AppCard: React.FC<AppCardProps> = ({ id, title, description, to }) => {
               </div>
             </div>
           </div>
-        ) : <AppForm type='Update' id={id} initName={title} initDesc={description} showAppForm={showAppForm} setShowAppForm={setShowAppForm} />
+        ) : <AppForm 
+              type='Update'
+              id={id}
+              initName={title}
+              initDesc={description}
+              showAppForm={showAppForm}
+              setShowAppForm={setShowAppForm}
+            />
       }
     </div>
   );
