@@ -39,12 +39,12 @@ interface AppDetails {
   id: string;
   name: string;
   description: string;
-  users: Users[];
-  clients: Clients[];
+  users: User[];
+  clients: Client[];
   createdAt: string;
 }
 
-interface Users {
+interface User {
   id: string;
   username: string;
   password: string;
@@ -55,7 +55,7 @@ interface Users {
   createdAt: string;
 }
 
-interface Clients {
+interface Client {
   id: string;
   clientId: string;
   secret: string;
