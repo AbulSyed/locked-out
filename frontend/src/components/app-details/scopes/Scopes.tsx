@@ -6,7 +6,7 @@ interface ScopesProps {
 const Scopes: React.FC<ScopesProps> = () => {
   return ( 
     <div className='scopes'>
-      Scopes
+      <p className='m-heading py-2'>Scopes</p>
     </div>
   );
 }

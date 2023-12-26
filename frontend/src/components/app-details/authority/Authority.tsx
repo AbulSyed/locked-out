@@ -14,6 +14,8 @@ const Authority: React.FC<AuthorityProps> = () => {
 
   return ( 
     <div className='authority'>
+      <p className='m-heading py-2'>Authorities</p>
+
       <p>Authorities can be added to both <i>Users</i> & <i>Clients</i>. Authorities added to either a <i>User</i> or <i>Client</i> will be present as a claim on the JWT.</p>
 
       <br />

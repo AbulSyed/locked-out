@@ -14,6 +14,8 @@ const Roles: React.FC<RolesProps> = () => {
 
   return ( 
     <div className='roles'>
+      <p className='m-heading py-2'>Roles</p>
+
       <p>Roles can be added to both <i>Users</i> & <i>Clients</i>. Roles added to either a <i>User</i> or <i>Client</i> will be present as a claim on the JWT.</p>
 
       <br />

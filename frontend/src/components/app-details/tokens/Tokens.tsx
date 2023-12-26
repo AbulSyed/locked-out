@@ -6,7 +6,7 @@ interface TokensProps {
 const Tokens: React.FC<TokensProps> = () => {
   return ( 
     <div className='tokens'>
-      Tokens
+      <p className='m-heading py-2'>Tokens</p>
     </div>
   );
 }

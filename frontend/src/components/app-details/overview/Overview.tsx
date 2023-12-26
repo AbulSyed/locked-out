@@ -10,7 +10,7 @@ const Overview: React.FC<OverviewProps> = () => {
 
   return ( 
     <div className='overview'>
-      {appname}
+      <p className='m-heading py-2'>App: {appname}</p>
     </div>
   );
 }
