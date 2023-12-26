@@ -8,14 +8,14 @@ import { Link } from 'react-router-dom'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteApp } from '../../../store/app/appSlice'
 
-interface CardProps {
+interface AppCardProps {
   id: string,
   title: string,
   description: string,
   to: string
 }
 
-const Card: React.FC<CardProps> = ({ id, title, description, to }) => {
+const AppCard: React.FC<AppCardProps> = ({ id, title, description, to }) => {
   const [showAppForm, setShowAppForm] = useState(false)
   const dispatch = useAppDispatch()
 
@@ -57,4 +57,4 @@ const Card: React.FC<CardProps> = ({ id, title, description, to }) => {
   );
 }
  
-export default Card
+export default AppCard
