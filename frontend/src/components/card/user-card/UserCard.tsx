@@ -2,10 +2,11 @@ import './UserCard.scss'
 
 import UserForm from '../../form/user-form/UserForm'
 
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { AimOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteUser } from '../../../store/user/userSlice'
+import RoleAuthCard from '../role-auth-card/RoleAuthCard'
 
 interface UserCardProps {
   id: string;
@@ -30,7 +31,14 @@ interface Authority {
 
 const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phoneNumber, roles, authorities }) => {
   const [showUserForm, setShowUserForm] = useState(false)
+  const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
   const dispatch = useAppDispatch()
+
+  const handleAddRoleAuth = () => {
+    // show users all roles & authorities
+    // allow user to pick which roles/authorities to add
+    console.log('hi')
+  }
 
   const handleDelete = (id: string) => {
     alert('Are you sure, you want to delete user with id: ' + id + '?')
@@ -41,13 +49,16 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
   return ( 
     <div>
       {
-        !showUserForm ? (
+        // condition 1
+        // show card with values
+        !showUserForm && !showRoleAuthForm ? (
           <div className="user-card">
             <div className="user-card-top-and-bottom p-1">
               <div>
                 <div className='user-card-top'>
                   <p>{username}</p>
                   <div>
+                    <AimOutlined className='user-card-icon' onClick={() => setShowRoleAuthForm(true)} />
                     <EditOutlined className='user-card-icon' onClick={() => setShowUserForm(true)} />
                     <DeleteOutlined className='user-card-icon' onClick={() => handleDelete(id)} />
                   </div>
@@ -72,6 +83,17 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
             </div>
           </div>
         ) : 
+        // condition 2
+        // show card to allow user to add roles/authorities
+        !showUserForm && showRoleAuthForm ? (
+          <RoleAuthCard
+            userId={id}
+            setShowRoleAuthForm={setShowRoleAuthForm}
+          />
+        ) :
+        // condition 3
+        // show edit form
+        (
           <UserForm
             type='Update'
             id={id}
@@ -82,6 +104,7 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
             showUserForm={showUserForm}
             setShowUserForm={setShowUserForm}
           />
+        )
       }
     </div>
   );

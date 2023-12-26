@@ -19,7 +19,8 @@ const Users: React.FC<UsersProps> = () => {
         {
           users && users.length > 0 ? (
             users.map(user => (
-              <UserCard 
+              <UserCard
+                key={user.id}
                 id={user.id}
                 username={user.username}
                 password={user.password}
