@@ -45,7 +45,11 @@ const Sidenav: React.FC<SidenavProps> = () => {
                 key={navItem}
                 to={`apps/${activeApp}/${navItem.toLowerCase()}`}
               >
-                <li key={navItem} className={activeNav == `${navItem}` ? 'li active-item' : 'li'} onClick={() => updateActiveNav(navItem)}>
+                <li 
+                  key={navItem}
+                  className={activeNav == `${navItem}` ? 'li active-item' : 'li'}
+                  onClick={() => updateActiveNav(navItem)}
+                >
                   {navItem}
                 </li>
               </NavLink>

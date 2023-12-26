@@ -29,7 +29,11 @@ const DefaultUserCard: React.FC<DefaultUserCardProps> = () => {
                 </div>
             </div>
         </div> :
-        <UserForm type='Create' showUserForm={showUserForm} setShowUserForm={setShowUserForm} />
+        <UserForm
+          type='Create'
+          showUserForm={showUserForm}
+          setShowUserForm={setShowUserForm}
+        />
       }
     </div>
   )
