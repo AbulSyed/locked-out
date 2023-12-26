@@ -1,7 +1,7 @@
 import './Home.scss'
 
 import AppCard from '../../components/card/app-card/AppCard'
-import DefaultCard from '../../components/card/default-card/DefaultCard';
+import DefaultAppCard from '../../components/card/default-card/DefaultAppCard';
 
 import { useAppSelector } from '../../store/hooks'
 
@@ -16,7 +16,7 @@ const Home: React.FC<HomeProps> = () => {
       <div className='home-container'>
         <p className='m-heading py-2'>Welcome to LockedOut</p>
         <div className='card-container'>
-          <DefaultCard />
+          <DefaultAppCard />
           {
             state.apps.map((app) => (
               <AppCard key={app.id} id={app.id} title={app.name} description={app.description} to={`/${app.name}`} />
