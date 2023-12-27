@@ -7,13 +7,14 @@ import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.data.repository.RoleRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.RoleToEnum;
+import com.syed.identityservice.domain.model.request.AlterRoleRequest;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
+import com.syed.identityservice.exception.custom.InvalidRequestException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
-import com.syed.identityservice.exception.custom.RoleAlreadyPresentException;
 import com.syed.identityservice.service.RoleService;
 import com.syed.identityservice.utility.MapperUtil;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @AllArgsConstructor
@@ -45,41 +47,48 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public MessageResponse addRole(RoleToEnum addRoleTo, Long id, Long roleId) {
-        RoleEntity roleEntity = roleRepository.findById(roleId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(ROLE_WITH_ID + roleId)));
+    public MessageResponse alterRoles(RoleToEnum addRoleTo, AlterRoleRequest alterRoleRequest) {
+        Set<RoleEntity> roleEntityList = roleRepository.findByIdIn(alterRoleRequest.getRoleIds());
+
+        if (roleEntityList.isEmpty()) {
+            return MessageResponse.builder()
+                    .message("No roles found to add")
+                    .build();
+        }
 
         if (addRoleTo.toString().equals("USER")) {
-            log.info("we need to add a role to a user with id {}", id);
-
-            UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
-
-            if (userEntity.getRoles().contains(roleEntity)) {
-                throw new RoleAlreadyPresentException(ErrorConstant.ROLE_ALREADY_PRESENT.formatMessage("user " + userEntity.getUsername()));
-            } else {
-                userEntity.getRoles().add(roleEntity);
-                userRepository.save(userEntity);
+            if (alterRoleRequest.getUserId() == null) {
+                throw new InvalidRequestException("User id must be present");
             }
 
+            log.info("we need to add role/s to user with id {}", alterRoleRequest.getUserId());
+
+            UserEntity userEntity = userRepository.findById(alterRoleRequest.getUserId()).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + alterRoleRequest.getUserId())));
+
+            userEntity.getRoles().clear();
+            userEntity.setRoles(roleEntityList);
+            userRepository.save(userEntity);
+
             return MessageResponse.builder()
-                    .message("Role " + roleEntity.getName() + " added to user " + userEntity.getUsername())
+                    .message("Role/s added to user " + userEntity.getUsername())
                     .build();
         } else if (addRoleTo.toString().equals("CLIENT")) {
-            log.info("we need to add a role to a client with id {}", id);
-
-            ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
-
-            if (clientEntity.getRoles().contains(roleEntity)) {
-                throw new RoleAlreadyPresentException(ErrorConstant.ROLE_ALREADY_PRESENT.formatMessage("client " + clientEntity.getClientId()));
-            } else {
-                clientEntity.getRoles().add(roleEntity);
-                clientRepository.save(clientEntity);
+            if (alterRoleRequest.getClientId() == null) {
+                throw new InvalidRequestException("Client id must be present");
             }
 
+            log.info("we need to add role/s to client with id {}", alterRoleRequest.getClientId());
+
+            ClientEntity clientEntity = clientRepository.findById(alterRoleRequest.getClientId()).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + alterRoleRequest.getClientId())));
+
+            clientEntity.getRoles().clear();
+            clientEntity.setRoles(roleEntityList);
+            clientRepository.save(clientEntity);
+
             return MessageResponse.builder()
-                    .message("Role " + roleEntity.getName() + " added to client " + clientEntity.getClientId())
+                    .message("Role/s added to client " + clientEntity.getClientId())
                     .build();
         }
         // no need for else clause as DefaultHandlerExceptionResolver exception

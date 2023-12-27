@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class BaseTest<T> {
@@ -225,6 +226,20 @@ public class BaseTest<T> {
                 .name(name)
                 .users(users)
                 .clients(clients)
+                .build();
+    }
+
+    protected AlterRoleRequest createAlterRoleRequest(Long userId, List<Long> roleIds) {
+        return AlterRoleRequest.builder()
+                .userId(userId)
+                .roleIds(roleIds)
+                .build();
+    }
+
+    protected AlterAuthorityRequest createAlterAuthorityRequest(Long userId, List<Long> authorityIds) {
+        return AlterAuthorityRequest.builder()
+                .userId(userId)
+                .authorityIds(authorityIds)
                 .build();
     }
 

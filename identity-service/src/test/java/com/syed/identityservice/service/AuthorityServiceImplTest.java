@@ -6,6 +6,7 @@ import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AuthorityRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
+import com.syed.identityservice.domain.model.request.AlterAuthorityRequest;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
@@ -51,18 +52,19 @@ class AuthorityServiceImplTest extends BaseTest<Object> {
     }
 
     @Test
-    void addAuthority_ToUser() {
+    void alterAuthority_OfUser() {
+        AlterAuthorityRequest alterAuthorityRequest = createAlterAuthorityRequest(1L, List.of(1L));
         AuthorityEntity authorityEntity = createAuthorityEntity(1L, "write", Collections.emptySet(), Collections.emptySet());
         UserEntity userEntity = createUserEntity(1L, "harry", "123", "harry@mail.com", "079",
                 new HashSet<>(), new HashSet<>(), LocalDateTime.now());
 
-        when(authorityRepository.findById(any(Long.class))).thenReturn(Optional.of(authorityEntity));
+        when(authorityRepository.findByIdIn(any())).thenReturn(Set.of(authorityEntity));
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
-        MessageResponse res = authorityService.addAuthority(AuthorityToEnum.USER, 1L, 1L);
+        MessageResponse res = authorityService.alterAuthority(AuthorityToEnum.USER, alterAuthorityRequest);
 
         assertThat(res).isNotNull()
-                .hasFieldOrPropertyWithValue("message", "Authority write added to user harry");
+                .hasFieldOrPropertyWithValue("message", "Authority/s added to user harry");
     }
 
     @Test
