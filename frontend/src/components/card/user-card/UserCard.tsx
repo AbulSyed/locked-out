@@ -1,12 +1,12 @@
 import './UserCard.scss'
 
 import UserForm from '../../form/user-form/UserForm'
+import RoleAuthCard from '../role-auth-card/RoleAuthCard'
 
 import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteUser } from '../../../store/user/userSlice'
-import RoleAuthCard from '../role-auth-card/RoleAuthCard'
 
 interface UserCardProps {
   id: string;
