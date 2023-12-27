@@ -5,6 +5,7 @@ import com.syed.identityservice.domain.enums.RoleToEnum;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
+import com.syed.identityservice.domain.model.request.AlterRoleRequest;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
@@ -42,15 +43,14 @@ public class RoleController {
             process = ProcessEnum.ROLE,
             requestType = RequestTypeEnum.CREATE,
             requestStatus = RequestStatusEnum.PENDING,
-            log = "add role to user/client request initiated"
+            log = "alter roles of user/client request initiated"
     )
-    @PostMapping("/add-role")
-    public ResponseEntity<MessageResponse> addRole(
+    @PutMapping("/alter-roles")
+    public ResponseEntity<MessageResponse> alterRoles(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam RoleToEnum addRoleTo,
-            @RequestParam Long id,
-            @RequestParam Long roleId) {
-        return new ResponseEntity<>(roleService.addRole(addRoleTo, id, roleId), HttpStatus.CREATED);
+            @RequestBody AlterRoleRequest alterRoleRequest) {
+        return new ResponseEntity<>(roleService.alterRoles(addRoleTo, alterRoleRequest), HttpStatus.CREATED);
     }
 
     @AuditRequest(
