@@ -47,6 +47,12 @@ interface UpdateUserDto extends CreateUserDto {
   id: string;
 }
 
+interface AlterUserRoleDto {
+  userId: string;
+  roleIds: string[];
+  rolesToAdd: Role[]
+}
+
 export const getUsersByAppName = createAsyncThunk('user/getUsersByAppName', async (appName: string) => {
   try {
     const res = await identityServiceApi.get(`/get-user-list-by-app?appName=${appName}`, {
@@ -112,6 +118,28 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async (userId: str
   }
 })
 
+export const alterUserRoles = createAsyncThunk('user/alterUserRoles', async (data: AlterUserRoleDto, thunkAPI: any) => {
+  try {
+    const res = await identityServiceApi.put(`/alter-roles?addRoleTo=USER`, {
+      userId: data.userId,
+      roleIds: data.roleIds
+    }, {
+      headers: {
+        'x-correlation-id': 'frontend/alterUserRoles'
+      }
+    })
+
+    if (res.status == 201) {
+      return {
+        userId: data.userId,
+        rolesToAdd: data.rolesToAdd
+      }
+    }
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue({ message: err.message })
+  }
+})
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -169,6 +197,27 @@ const userSlice = createSlice({
       state.error = ''
     })
     builder.addCase(deleteUser.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Something went wrong'
+    })
+    // alter user roles
+    builder.addCase(alterUserRoles.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(alterUserRoles.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.loading = false
+      state.users = state.users.map(user => {
+        if (user.id = action.payload.userId) {
+          user.roles = action.payload.rolesToAdd
+          return user
+        } else {
+          return user
+        }
+      })
+      state.error = ''
+    })
+    builder.addCase(alterUserRoles.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || 'Something went wrong'
     })

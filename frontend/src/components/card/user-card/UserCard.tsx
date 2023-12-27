@@ -34,12 +34,6 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
   const dispatch = useAppDispatch()
 
-  const handleAddRoleAuth = () => {
-    // show users all roles & authorities
-    // allow user to pick which roles/authorities to add
-    console.log('hi')
-  }
-
   const handleDelete = (id: string) => {
     alert('Are you sure, you want to delete user with id: ' + id + '?')
 

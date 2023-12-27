@@ -18,14 +18,24 @@
       padding: 0.4rem 0.6rem;
       border-radius: 15px;
       margin-bottom: 0.5rem;
+      transition: all .4s;
     }
   
     .role {
       background: rgb(138, 138, 138);
+
+      &:hover {
+        cursor: pointer;
+      }
     }
 
     .active {
       background: rgb(0, 51, 255);
+
+      &:hover {
+        cursor: pointer;
+        opacity: 0.6;
+      }
     }
   
     .authority {

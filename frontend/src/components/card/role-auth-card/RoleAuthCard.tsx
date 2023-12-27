@@ -2,6 +2,7 @@ import './RoleAuthCard.scss'
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { alterUserRoles } from '../../../store/user/userSlice';
 
 interface RoleAuthCardInterface {
   userId: string;
@@ -25,11 +26,9 @@ const RoleAuthCard: React.FC<RoleAuthCardInterface> = ({ userId, setShowRoleAuth
     const roleExists = isRolePresent(role)
 
     if (roleExists) {
-      console.log('exists')
       const filteredArr = rolesToAdd.filter(existingRole => existingRole.id != role.id)
       setRolesToAdd(filteredArr)
     } else {
-      console.log('doesn\'t exist')
       setRolesToAdd([...rolesToAdd, role])
     }
   }
@@ -44,16 +43,22 @@ const RoleAuthCard: React.FC<RoleAuthCardInterface> = ({ userId, setShowRoleAuth
     }
   }, [])
 
-  useEffect(() => {
-    console.log(rolesToAdd)
-  }, [rolesToAdd])
-
   const addAuthorityToSet = (authority: any) => {
     console.log(authority)
   }
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
+
+    const roleIds = rolesToAdd.map(el => el.id)
+
+    dispatch(alterUserRoles({
+      userId,
+      roleIds,
+      rolesToAdd
+    }))
+
+    setShowRoleAuthForm(false)
   }
 
   return (
