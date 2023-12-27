@@ -2,7 +2,7 @@ import './RoleAuthCard.scss'
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { alterUserRoles } from '../../../store/user/userSlice';
+import { alterUserAuthority, alterUserRoles } from '../../../store/user/userSlice';
 
 interface RoleAuthCardInterface {
   userId: string;
@@ -14,12 +14,19 @@ interface Role {
   name: string;
 }
 
+interface Authority {
+  id: string;
+  name: string;
+}
+
 const RoleAuthCard: React.FC<RoleAuthCardInterface> = ({ userId, setShowRoleAuthForm }) => {
   const roles = useAppSelector(state => state.role.roles)
   const users = useAppSelector(state => state.user.users)
   const currUserRoles = users.find(el => el.id == userId)?.roles
-  const authorities = useAppSelector(state => state.authority.authorities)
   const [rolesToAdd, setRolesToAdd] = useState([])
+  const authorities = useAppSelector(state => state.authority.authorities)
+  const currUserAuthority = users.find(el => el.id == userId)?.authorities
+  const [authorityToAdd, setAuthorityToAdd] = useState([])
   const dispatch = useAppDispatch()
 
   const addRoleToSet = (role: Role) => {
@@ -44,8 +51,25 @@ const RoleAuthCard: React.FC<RoleAuthCardInterface> = ({ userId, setShowRoleAuth
   }, [])
 
   const addAuthorityToSet = (authority: any) => {
-    console.log(authority)
+    const authorityExists = isAuthorityPresent(authority)
+
+    if (authorityExists) {
+      const filteredArr = authorityToAdd.filter(existingAuthority => existingAuthority.id != authority.id)
+      setAuthorityToAdd(filteredArr)
+    } else {
+      setAuthorityToAdd([...authorityToAdd, authority])
+    }
   }
+
+  const isAuthorityPresent = (authority: Authority) => {
+    return authorityToAdd.some(existingAuthority => existingAuthority.name == authority.name)
+  }
+
+  useEffect(() => {
+    if (currUserAuthority) {
+      setAuthorityToAdd(currUserAuthority)
+    }
+  }, [])
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
@@ -59,6 +83,14 @@ const RoleAuthCard: React.FC<RoleAuthCardInterface> = ({ userId, setShowRoleAuth
     }))
 
     setShowRoleAuthForm(false)
+
+    const authorityIds = authorityToAdd.map(el => el.id)
+
+    dispatch(alterUserAuthority({
+      userId,
+      authorityIds,
+      authorityToAdd
+    }))
   }
 
   return (
@@ -69,7 +101,7 @@ const RoleAuthCard: React.FC<RoleAuthCardInterface> = ({ userId, setShowRoleAuth
             roles && roles.map(role => (
               <p 
                 key={role.id}
-                className={isRolePresent(role) ? 'category role active' : 'category role'}
+                className={isRolePresent(role) ? 'category role active-role' : 'category role'}
                 onClick={() => addRoleToSet(role)}
               >
                 {role.name}
@@ -81,7 +113,7 @@ const RoleAuthCard: React.FC<RoleAuthCardInterface> = ({ userId, setShowRoleAuth
             authorities && authorities.map(authority => (
               <p
                 key={authority.id}
-                className='category authority'
+                className={isAuthorityPresent(authority) ? 'category authority active-authority' : 'category authority'}
                 onClick={() => addAuthorityToSet(authority)}
               >
                 {authority.name}

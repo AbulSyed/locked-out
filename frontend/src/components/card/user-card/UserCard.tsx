@@ -2,7 +2,7 @@ import './UserCard.scss'
 
 import UserForm from '../../form/user-form/UserForm'
 
-import { AimOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteUser } from '../../../store/user/userSlice'
@@ -52,7 +52,8 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
                 <div className='user-card-top'>
                   <p>{username}</p>
                   <div>
-                    <AimOutlined className='user-card-icon' onClick={() => setShowRoleAuthForm(true)} />
+                    <IdcardOutlined className='user-card-icon' onClick={() => setShowRoleAuthForm(true)} />
+                    {/* <AimOutlined className='user-card-icon' onClick={() => setShowRoleAuthForm(true)} /> */}
                     <EditOutlined className='user-card-icon' onClick={() => setShowUserForm(true)} />
                     <DeleteOutlined className='user-card-icon' onClick={() => handleDelete(id)} />
                   </div>

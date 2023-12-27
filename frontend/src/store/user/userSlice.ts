@@ -53,6 +53,12 @@ interface AlterUserRoleDto {
   rolesToAdd: Role[]
 }
 
+interface AlterUserAuthorityDto {
+  userId: string;
+  authorityIds: string[];
+  authorityToAdd: Authority[]
+}
+
 export const getUsersByAppName = createAsyncThunk('user/getUsersByAppName', async (appName: string) => {
   try {
     const res = await identityServiceApi.get(`/get-user-list-by-app?appName=${appName}`, {
@@ -140,6 +146,28 @@ export const alterUserRoles = createAsyncThunk('user/alterUserRoles', async (dat
   }
 })
 
+export const alterUserAuthority = createAsyncThunk('user/alterUserAuthority', async (data: AlterUserAuthorityDto, thunkAPI: any) => {
+  try {
+    const res = await identityServiceApi.put(`/alter-authority?addAuthorityTo=USER`, {
+      userId: data.userId,
+      authorityIds: data.authorityIds
+    }, {
+      headers: {
+        'x-correlation-id': 'frontend/alterUserAuthority'
+      }
+    })
+
+    if (res.status == 201) {
+      return {
+        userId: data.userId,
+        authorityToAdd: data.authorityToAdd
+      }
+    }
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue({ message: err.message })
+  }
+})
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -205,7 +233,6 @@ const userSlice = createSlice({
       state.loading = true
     })
     builder.addCase(alterUserRoles.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.loading = false
       state.users = state.users.map(user => {
         if (user.id = action.payload.userId) {
@@ -218,6 +245,26 @@ const userSlice = createSlice({
       state.error = ''
     })
     builder.addCase(alterUserRoles.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Something went wrong'
+    })
+    // alter user authority
+    builder.addCase(alterUserAuthority.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(alterUserAuthority.fulfilled, (state, action) => {
+      state.loading = false
+      state.users = state.users.map(user => {
+        if (user.id = action.payload.userId) {
+          user.authorities = action.payload.authorityToAdd
+          return user
+        } else {
+          return user
+        }
+      })
+      state.error = ''
+    })
+    builder.addCase(alterUserAuthority.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || 'Something went wrong'
     })

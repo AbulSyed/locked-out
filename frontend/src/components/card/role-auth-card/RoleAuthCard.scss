@@ -29,7 +29,7 @@
       }
     }
 
-    .active {
+    .active-role {
       background: rgb(0, 51, 255);
 
       &:hover {
@@ -39,7 +39,20 @@
     }
   
     .authority {
+      background: rgb(138, 138, 138);
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .active-authority {
       background: rgb(40, 8, 155);
+
+      &:hover {
+        cursor: pointer;
+        opacity: 0.6;
+      }
     }
 
     .form-group {
