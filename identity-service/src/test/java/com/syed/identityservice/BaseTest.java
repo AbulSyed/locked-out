@@ -236,6 +236,13 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected AlterAuthorityRequest createAlterAuthorityRequest(Long userId, List<Long> authorityIds) {
+        return AlterAuthorityRequest.builder()
+                .userId(userId)
+                .authorityIds(authorityIds)
+                .build();
+    }
+
     protected ScopeRequest createScopeRequest(Set<ScopeEnum> scopes) {
         return ScopeRequest.builder()
                 .scopes(scopes)

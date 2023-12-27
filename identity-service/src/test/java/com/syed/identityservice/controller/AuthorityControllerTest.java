@@ -2,6 +2,7 @@ package com.syed.identityservice.controller;
 
 import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
+import com.syed.identityservice.domain.model.request.AlterAuthorityRequest;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.domain.model.response.MessageResponse;
@@ -46,13 +47,14 @@ class AuthorityControllerTest extends BaseTest<Object> {
     }
 
     @Test
-    void addAuthority_ToUser() {
-        MessageResponse addAuthorityResponse = createMessageResponse("Authority read added to user Test");
+    void alterAuthority_OfUser() {
+        AlterAuthorityRequest alterAuthorityRequest = createAlterAuthorityRequest(1L, List.of(1L));
+        MessageResponse addAuthorityResponse = createMessageResponse("Authority/s added to user  Test");
         ResponseEntity<Object> addAuthorityExpectedResponse = createExpectedResponse(HttpStatus.CREATED, addAuthorityResponse);
 
-        when(authorityService.addAuthority(any(AuthorityToEnum.class), any(Long.class), any(Long.class))).thenReturn(addAuthorityResponse);
+        when(authorityService.alterAuthority(any(AuthorityToEnum.class), any(AlterAuthorityRequest.class))).thenReturn(addAuthorityResponse);
 
-        ResponseEntity<MessageResponse> res = authorityController.addAuthority(correlationId, AuthorityToEnum.USER, 1L, 1L);
+        ResponseEntity<MessageResponse> res = authorityController.alterAuthority(correlationId, AuthorityToEnum.USER, alterAuthorityRequest);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), addAuthorityExpectedResponse.getStatusCode());

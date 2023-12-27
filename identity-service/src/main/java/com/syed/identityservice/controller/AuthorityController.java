@@ -2,6 +2,7 @@ package com.syed.identityservice.controller;
 
 import com.syed.identityservice.aspect.AuditRequest;
 import com.syed.identityservice.domain.enums.*;
+import com.syed.identityservice.domain.model.request.AlterAuthorityRequest;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.domain.model.response.MessageResponse;
@@ -39,15 +40,14 @@ public class AuthorityController {
             process = ProcessEnum.AUTHORITY,
             requestType = RequestTypeEnum.CREATE,
             requestStatus = RequestStatusEnum.PENDING,
-            log = "add authority to user/client request initiated"
+            log = "alter authorities of user/client request initiated"
     )
-    @PostMapping("/add-authority")
-    public ResponseEntity<MessageResponse> addAuthority(
+    @PutMapping("/alter-authority")
+    public ResponseEntity<MessageResponse> alterAuthority(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam AuthorityToEnum addAuthorityTo,
-            @RequestParam Long id,
-            @RequestParam Long authorityId) {
-        return new ResponseEntity<>(authorityService.addAuthority(addAuthorityTo, id, authorityId), HttpStatus.CREATED);
+            @RequestBody AlterAuthorityRequest alterAuthorityRequest) {
+        return new ResponseEntity<>(authorityService.alterAuthority(addAuthorityTo, alterAuthorityRequest), HttpStatus.CREATED);
     }
 
     @AuditRequest(
