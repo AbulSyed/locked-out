@@ -1,16 +1,17 @@
 import './ClientForm.scss'
 
 import { useState } from 'react'
-import { useAppDispatch } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { createClient } from '../../../store/client/clientSlice';
 
 interface ClientFormInterface {
   type: string;
   id?: string;
-  initClientId?: string;
-  initClientSecret?: string;
+  initClientId: string;
+  initClientSecret: string;
   initAuthMethod: string[];
   initAuthGrantType: string[];
-  initRedirectUri?: string;
+  initRedirectUri: string;
   showClientForm: boolean;
   setShowClientForm: any;
 }
@@ -26,6 +27,8 @@ const ClientForm: React.FC<ClientFormInterface> = ({ type, id, initClientId, ini
   const [client_secret_postChecked, setclient_secret_postChecked] = useState(false)
   const [authorization_codeChecked, setAuthorization_codeChecked] = useState(false)
   const [client_credentialsChecked, setClient_credentialsChecked] = useState(false)
+
+  const appId = useAppSelector(state => state.app.appDetails.id)
   
   const dispatch = useAppDispatch()
 
@@ -35,13 +38,16 @@ const ClientForm: React.FC<ClientFormInterface> = ({ type, id, initClientId, ini
     if (type == 'Create') {
       console.log('create client request')
 
-      console.log({
+      const data = {
+        appId,
         clientId,
         clientSecret,
         authMethod,
         authGrantType,
         redirectUri
-      })
+      }
+
+      dispatch(createClient(data))
     }
 
     if (type == 'Update' && id != null) {
@@ -68,28 +74,28 @@ const ClientForm: React.FC<ClientFormInterface> = ({ type, id, initClientId, ini
   }
 
   const handleAuthMethodCheckbox = (val: string) => {
-    if (val == 'client_secret_basic') {
+    if (val == 'CLIENT_SECRET_BASIC') {
       setClient_secret_basicChecked(!client_secret_basicChecked)
 
-      updateArr(client_secret_basicChecked, 'client_secret_basic', authMethod, setAuthMethod)
+      updateArr(client_secret_basicChecked, 'CLIENT_SECRET_BASIC', authMethod, setAuthMethod)
     }
-    if (val == 'client_secret_post') {
+    if (val == 'CLIENT_SECRET_POST') {
       setclient_secret_postChecked(!client_secret_postChecked)
 
-      updateArr(client_secret_postChecked, 'client_secret_post', authMethod, setAuthMethod)
+      updateArr(client_secret_postChecked, 'CLIENT_SECRET_POST', authMethod, setAuthMethod)
     }
   }
 
   const handleAuthGrantTypeCheckbox = (val: string) => {
-    if (val == 'authorization_code') {
+    if (val == 'AUTHORIZATION_CODE') {
       setAuthorization_codeChecked(!authorization_codeChecked)
 
-      updateArr(authorization_codeChecked, 'authorization_code', authGrantType, setAuthGrantType)
+      updateArr(authorization_codeChecked, 'AUTHORIZATION_CODE', authGrantType, setAuthGrantType)
     }
-    if (val == 'client_credentials') {
+    if (val == 'CLIENT_CREDENTIALS') {
       setClient_credentialsChecked(!client_credentialsChecked)
 
-      updateArr(client_credentialsChecked, 'client_credentials', authGrantType, setAuthGrantType)
+      updateArr(client_credentialsChecked, 'CLIENT_CREDENTIALS', authGrantType, setAuthGrantType)
     }
   }
 
@@ -106,16 +112,16 @@ const ClientForm: React.FC<ClientFormInterface> = ({ type, id, initClientId, ini
         </div>
         <div className="form-group">
           <label className='label'>Auth method<span className="required">*</span></label>
-          <input type="checkbox" name="client_secret_basic" value="client_secret_basic" onChange={() => handleAuthMethodCheckbox('client_secret_basic')}/>
+          <input type="checkbox" name="client_secret_basic" value="client_secret_basic" onChange={() => handleAuthMethodCheckbox('CLIENT_SECRET_BASIC')}/>
           <label> client_secret_basic</label><br/>
-          <input type="checkbox" name="client_secret_post" value="client_secret_post" onChange={() => handleAuthMethodCheckbox('client_secret_post')}/>
+          <input type="checkbox" name="client_secret_post" value="client_secret_post" onChange={() => handleAuthMethodCheckbox('CLIENT_SECRET_POST')}/>
           <label> client_secret_post</label><br/>
         </div>
         <div className="form-group">
           <label className='label'>Auth grant type<span className="required">*</span></label>
-          <input type="checkbox" name="authorization_code" value="authorization_code" onChange={() => handleAuthGrantTypeCheckbox('authorization_code')}/>
+          <input type="checkbox" name="authorization_code" value="authorization_code" onChange={() => handleAuthGrantTypeCheckbox('AUTHORIZATION_CODE')}/>
           <label> authorization_code</label><br/>
-          <input type="checkbox" name="client_credentials" value="client_credentials" onChange={() => handleAuthGrantTypeCheckbox('client_credentials')}/>
+          <input type="checkbox" name="client_credentials" value="client_credentials" onChange={() => handleAuthGrantTypeCheckbox('CLIENT_CREDENTIALS')}/>
           <label> client_credentials</label><br/>
         </div>
         <div className="form-group">

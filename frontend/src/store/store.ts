@@ -5,6 +5,7 @@ import activeNavSlice from './active-nav/activeNavSlice'
 import roleSlice from './role/roleSlice'
 import authoritySlice from './authority/authoritySlice';
 import userSlice from './user/userSlice';
+import clientSlice from './client/clientSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ const store = configureStore({
     activeNav: activeNavSlice,
     role: roleSlice,
     authority: authoritySlice,
-    user: userSlice
+    user: userSlice,
+    client: clientSlice
   },
 });
 

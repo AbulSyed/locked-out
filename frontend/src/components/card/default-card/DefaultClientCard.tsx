@@ -31,8 +31,11 @@ const DefaultClientCard: React.FC<DefaultClientCardProps> = () => {
         </div> :
         <ClientForm
           type='Create'
+          initClientId=""
+          initClientSecret=""
           initAuthMethod={[]}
           initAuthGrantType={[]}
+          initRedirectUri=""
           showClientForm={showClientForm}
           setShowClientForm={setShowClientForm}
         />
