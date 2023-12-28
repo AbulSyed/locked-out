@@ -235,7 +235,7 @@ const userSlice = createSlice({
     builder.addCase(alterUserRoles.fulfilled, (state, action) => {
       state.loading = false
       state.users = state.users.map(user => {
-        if (user.id = action.payload.userId) {
+        if (user.id == action.payload.userId) {
           user.roles = action.payload.rolesToAdd
           return user
         } else {
@@ -255,7 +255,7 @@ const userSlice = createSlice({
     builder.addCase(alterUserAuthority.fulfilled, (state, action) => {
       state.loading = false
       state.users = state.users.map(user => {
-        if (user.id = action.payload.userId) {
+        if (user.id == action.payload.userId) {
           user.authorities = action.payload.authorityToAdd
           return user
         } else {
