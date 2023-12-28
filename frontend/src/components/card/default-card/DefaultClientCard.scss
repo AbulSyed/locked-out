@@ -1,0 +1,38 @@
+.default-client-card {
+  background: #ffffff;
+  color: #000;
+  border: .5px solid #cccbcb;
+  border-top: 3px solid #cccbcb;
+  border-radius: 1px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .default-client-card-top-and-bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+
+    .default-client-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .default-client-card-icon {
+        transition: .5s all;
+        margin-top: -.8rem;
+
+        &:hover {
+          cursor: pointer;
+          opacity: .8;
+        }
+      }
+    }
+
+    .desc {
+      margin-top: 1.5rem;
+    }
+  }
+}
+
