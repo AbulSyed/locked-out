@@ -26,7 +26,7 @@ public class ScopeController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "alter client scope request initiated"
     )
-    @PostMapping("/alter-client-scopes/{id}")
+    @PutMapping("/alter-client-scopes/{id}")
     public ResponseEntity<MessageResponse> alterClientScopes(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long id,

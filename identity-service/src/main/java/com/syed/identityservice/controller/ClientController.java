@@ -101,7 +101,7 @@ public class ClientController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "update client request initiated"
     )
-    @PostMapping("/update-client/{clientId}")
+    @PutMapping("/update-client/{clientId}")
     public ResponseEntity<ClientResponse> updateClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long clientId,

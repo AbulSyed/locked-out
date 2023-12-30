@@ -10,7 +10,7 @@ public interface AppService {
 
     AppResponse createApp(AppRequest request);
     AppResponse getApp(Long appId);
-    AppV2Response getAppV2(Long appId);
+    AppV2Response getAppV2(String appName);
     List<AppResponse> getAppList();
     AppResponse updateApp(Long appId, AppRequest request);
     void deleteApp(Long appId);

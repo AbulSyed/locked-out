@@ -12,7 +12,7 @@ public interface AuthorityService {
 
     AuthorityResponse createAuthority(AuthorityRequest request);
     MessageResponse alterAuthority(AuthorityToEnum addAuthorityTo, AlterAuthorityRequest alterAuthorityRequest);
-    List<String> getAuthorityList();
+    List<AuthorityResponse> getAuthorityList();
     void deleteAuthorityFrom(AuthorityToEnum deleteAuthorityFrom, Long id, Long authorityId);
     void deleteAuthority(Long authorityId);
 }

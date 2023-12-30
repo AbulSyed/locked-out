@@ -12,7 +12,7 @@ public interface RoleService {
 
     RoleResponse createRole(RoleRequest request);
     MessageResponse alterRoles(RoleToEnum addRoleTo, AlterRoleRequest alterRoleRequest);
-    List<String> getRoleList();
+    List<RoleResponse> getRoleList();
     void deleteRoleFrom(RoleToEnum deleteRoleFrom, Long id, Long roleId);
     void deleteRole(Long roleId);
 }

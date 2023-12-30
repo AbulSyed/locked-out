@@ -58,12 +58,12 @@ public class AppController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "get app request v2 initiated"
     )
-    @GetMapping("/get-app-v2/{appId}")
+    @GetMapping("/get-app-v2/{appName}")
     public ResponseEntity<AppV2Response> getAppV2(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @PathVariable Long appId
+            @PathVariable String appName
     ) {
-        return new ResponseEntity<>(appService.getAppV2(appId), HttpStatus.OK);
+        return new ResponseEntity<>(appService.getAppV2(appName), HttpStatus.OK);
     }
 
     @AuditRequest(

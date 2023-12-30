@@ -1,32 +1,85 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
 import identityServiceApi from '../../api/identityServiceApi'
 
 const initialState: InitialState = {
   loading: false,
   apps: [],
+  appDetails: {
+    id: '',
+    name: '',
+    description: '',
+    users: [],
+    clients: [],
+    createdAt: ''
+  },
   error: '',
 }
 
 interface InitialState {
   loading: boolean;
   apps: App[];
+  appDetails: AppDetails;
   error: string;
 }
 
 interface App {
-  id: string,
-  name: string,
-  description: string,
-  createdAt: string
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
 }
 
 interface CreateAppDto {
-  name: string,
-  description: string
+  name: string;
+  description: string;
+}
+
+interface AppDetails {
+  id: string;
+  name: string;
+  description: string;
+  users: User[];
+  clients: Client[];
+  createdAt: string;
+}
+
+interface User {
+  id: string;
+  username: string;
+  password: string;
+  email: string;
+  phoneNumber: string;
+  roles: Role[];
+  authorities: Authority[];
+  createdAt: string;
+}
+
+interface Client {
+  id: string;
+  clientId: string;
+  secret: string;
+  roles: Role[];
+  authorities: Authority[];
+  scopes: string[];
+  authMethods: string[];
+  authGrantTypes: string[];
+  redirectUri: string;
+  createdAt: string;
+}
+
+interface Role {
+  id: string;
+  name: string;
+}
+
+interface Authority {
+  id: string;
+  name: string;
 }
 
 interface UpdateAppDto extends CreateAppDto {
-  id: string
+  id: string;
 }
 
 export const createApp = createAsyncThunk('app/createApp', async (data: CreateAppDto, thunkAPI: any) => {
@@ -48,6 +101,20 @@ export const getApps = createAsyncThunk('app/getApps', async () => {
     const res = await identityServiceApi.get(`/get-app-list`, {
       headers: {
         'x-correlation-id': 'frontend/getApps'
+      }
+    })
+
+    return res.data
+  } catch (err: any) {
+    return err.message
+  }
+})
+
+export const getAppDetails = createAsyncThunk('app/getAppDetails', async (appId: string) => {
+  try {
+    const res = await identityServiceApi.get(`/get-app-v2/${appId}`, {
+      headers: {
+        'x-correlation-id': 'frontend/getAppDetails'
       }
     })
 
@@ -106,7 +173,6 @@ const appSlice = createSlice({
     })
     builder.addCase(createApp.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
       state.error = action.error.message || 'Something went wrong...'
     })
     // get apps
@@ -120,7 +186,19 @@ const appSlice = createSlice({
     })
     builder.addCase(getApps.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
+      state.error = action.error.message || 'Something went wrong'
+    })
+    // get app details
+    builder.addCase(getAppDetails.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(getAppDetails.fulfilled, (state, action) => {
+      state.loading = false
+      state.appDetails = action.payload
+      state.error = ''
+    })
+    builder.addCase(getAppDetails.rejected, (state, action) => {
+      state.loading = false
       state.error = action.error.message || 'Something went wrong'
     })
     // update app
@@ -140,7 +218,6 @@ const appSlice = createSlice({
     })
     builder.addCase(updateApp.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
       state.error = action.error.message || 'Something went wrong'
     })
     // delete app
@@ -154,7 +231,6 @@ const appSlice = createSlice({
     })
     builder.addCase(deleteApp.rejected, (state, action) => {
       state.loading = false
-      state.apps = []
       state.error = action.error.message || 'Something went wrong'
     })
   },

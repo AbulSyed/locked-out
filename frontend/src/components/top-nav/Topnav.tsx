@@ -2,7 +2,10 @@ import './Topnav.scss'
 
 import { NavLink } from 'react-router-dom'
 
-const Topnav: React.FC = () => {
+interface TopnavProps {
+}
+
+const Topnav: React.FC<TopnavProps> = () => {
 	return (
 		<nav className="navbar">
 			<div className="container">

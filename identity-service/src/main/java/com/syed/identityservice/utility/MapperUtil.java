@@ -13,6 +13,7 @@ import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MapperUtil {
 
@@ -224,6 +225,30 @@ public class MapperUtil {
                     .createdAt(userEntity.getCreatedAt())
                     .build();
 
+            Set<RoleModel> roleModels = new HashSet<>();
+
+            for (RoleEntity roleEntity : userEntity.getRoles()) {
+                RoleModel roleModel = RoleModel.builder()
+                        .id(roleEntity.getId())
+                        .name(roleEntity.getName())
+                        .build();
+
+                roleModels.add(roleModel);
+            }
+            getUserResponse.setRoles(roleModels);
+
+            Set<AuthorityModel> authorityModels = new HashSet<>();
+
+            for (AuthorityEntity authorityEntity : userEntity.getAuthorities()) {
+                AuthorityModel authorityModel = AuthorityModel.builder()
+                        .id(authorityEntity.getId())
+                        .name(authorityEntity.getName())
+                        .build();
+
+                authorityModels.add(authorityModel);
+            }
+            getUserResponse.setAuthorities(authorityModels);
+
             userResponseList.add(getUserResponse);
         }
 
@@ -337,11 +362,11 @@ public class MapperUtil {
                 .build();
     }
 
-    public static List<String> mapRoleEntityListToStringList(List<RoleEntity> entityList) {
-        List<String> roles = new ArrayList<>();
+    public static List<RoleResponse> mapRoleEntityListToRoleResponseList(List<RoleEntity> entityList) {
+        List<RoleResponse> roles = new ArrayList<>();
 
         for (RoleEntity roleEntity : entityList) {
-            roles.add(roleEntity.getName());
+            roles.add(mapRoleEntityToResponse(roleEntity));
         }
         return roles;
     }
@@ -359,11 +384,11 @@ public class MapperUtil {
                 .build();
     }
 
-    public static List<String> mapAuthorityEntityListToStringList(List<AuthorityEntity> entityList) {
-        List<String> authorities = new ArrayList<>();
+    public static List<AuthorityResponse> mapAuthorityEntityAuthorityResponseList(List<AuthorityEntity> entityList) {
+        List<AuthorityResponse> authorities = new ArrayList<>();
 
         for (AuthorityEntity authorityEntity : entityList) {
-            authorities.add(authorityEntity.getName());
+            authorities.add(mapAuthorityEntityToResponse(authorityEntity));
         }
         return authorities;
     }

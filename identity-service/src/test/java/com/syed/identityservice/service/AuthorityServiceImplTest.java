@@ -74,7 +74,7 @@ class AuthorityServiceImplTest extends BaseTest<Object> {
 
         when(authorityRepository.findAll()).thenReturn(getAuthorityEntityList);
 
-        List<String> res = authorityService.getAuthorityList();
+        List<AuthorityResponse> res = authorityService.getAuthorityList();
 
         assertThat(res).isNotNull()
                 .hasSize(1);

@@ -63,12 +63,12 @@ class AuthorityControllerTest extends BaseTest<Object> {
 
     @Test
     void getAuthorityList() {
-        List<String> getAuthorityListResponse = List.of("read");
+        List<AuthorityResponse> getAuthorityListResponse = List.of(new AuthorityResponse(1L, "read"));
         ResponseEntity<Object> getAuthorityListExpectedResponse = createExpectedResponse(HttpStatus.OK, getAuthorityListResponse);
 
         when(authorityService.getAuthorityList()).thenReturn(getAuthorityListResponse);
 
-        ResponseEntity<List<String>> res = authorityController.getAuthorityList(correlationId);
+        ResponseEntity<List<AuthorityResponse>> res = authorityController.getAuthorityList(correlationId);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAuthorityListExpectedResponse.getStatusCode());

@@ -62,9 +62,9 @@ class AppControllerTest extends BaseTest<Object> {
         AppV2Response getAppV2Response = createAppV2Response(1L, "app", "test", LocalDateTime.now());
         ResponseEntity<Object> getAppV2ExpectedResponse = createExpectedResponse(HttpStatus.OK, getAppV2Response);
 
-        when(appService.getAppV2(any(Long.class))).thenReturn(getAppV2Response);
+        when(appService.getAppV2(any(String.class))).thenReturn(getAppV2Response);
 
-        ResponseEntity<AppV2Response> res = appController.getAppV2(correlationId, 1L);
+        ResponseEntity<AppV2Response> res = appController.getAppV2(correlationId, "test");
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAppV2ExpectedResponse.getStatusCode());
