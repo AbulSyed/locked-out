@@ -25,6 +25,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = () => {
   const [isShowingSidenav, setIsShowingSidenav] = useState(true)
+
   const location = useLocation()
   const dispatch = useAppDispatch()
   const apps = useAppSelector(state => state.app.apps)

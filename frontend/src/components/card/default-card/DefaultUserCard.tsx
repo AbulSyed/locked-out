@@ -20,7 +20,10 @@ const DefaultUserCard: React.FC<DefaultUserCardProps> = () => {
                 <div>
                   <div className='default-user-card-top'>
                     <p>Create user</p>
-                    <PlusOutlined className='default-user-card-icon' onClick={() => setShowUserForm(!showUserForm)} />
+                    <PlusOutlined
+                      className='default-user-card-icon'
+                      onClick={() => setShowUserForm(!showUserForm)}
+                    />
                   </div>
                   <br />
                   <hr />

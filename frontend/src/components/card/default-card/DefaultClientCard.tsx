@@ -20,7 +20,10 @@ const DefaultClientCard: React.FC<DefaultClientCardProps> = () => {
                 <div>
                   <div className='default-client-card-top'>
                     <p>Create client</p>
-                    <PlusOutlined className='default-client-card-icon' onClick={() => setShowClientForm(!showClientForm)} />
+                    <PlusOutlined
+                      className='default-client-card-icon'
+                      onClick={() => setShowClientForm(!showClientForm)}
+                    />
                   </div>
                   <br />
                   <hr />

@@ -20,7 +20,10 @@ const DefaultAppCard: React.FC<DefaultAppCardProps> = () => {
                 <div>
                   <div className='default-app-card-top'>
                     <h2>Create an App</h2>
-                    <PlusOutlined className='default-app-card-icon' onClick={() => setShowAppForm(!showAppForm)} />
+                    <PlusOutlined
+                      className='default-app-card-icon'
+                      onClick={() => setShowAppForm(!showAppForm)}
+                    />
                   </div>
                   <hr />
                   <p className='desc'>An App represents a resource that requires authentication & authorization.</p>

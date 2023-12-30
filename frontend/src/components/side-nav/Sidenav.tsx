@@ -9,12 +9,13 @@ interface SidenavProps {
 }
 
 const Sidenav: React.FC<SidenavProps> = () => {
+  const [activeNav, setActiveNav] = useState('Overview')
+  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Authorities', 'Scopes', 'Tokens']
+  
   const state = useAppSelector(state => state.app)
   const location = useLocation()
   const dispatch = useAppDispatch()
   const activeApp = location.pathname.split('/')[2]
-  const [activeNav, setActiveNav] = useState('Overview')
-  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Authorities', 'Scopes', 'Tokens']
 
   useEffect(() => {
     dispatch(setActiveNavReducer('Overview'))
@@ -31,7 +32,13 @@ const Sidenav: React.FC<SidenavProps> = () => {
         <select className='app-select'>
           {
             state.apps.map(app => (
-              <option key={app.id} value={app.name} selected={app.name == activeApp}>{app.name}</option>
+              <option
+                key={app.id}
+                value={app.name}
+                selected={app.name == activeApp}
+              >
+                {app.name}
+              </option>
             ))
           }
         </select>

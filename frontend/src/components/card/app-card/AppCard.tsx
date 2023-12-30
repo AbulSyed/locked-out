@@ -17,6 +17,7 @@ interface AppCardProps {
 
 const AppCard: React.FC<AppCardProps> = ({ id, title, description, to }) => {
   const [showAppForm, setShowAppForm] = useState(false)
+  
   const dispatch = useAppDispatch()
 
   const handleDelete = (id: string) => {

@@ -16,6 +16,7 @@ interface CreateAppFormInterface {
 const CreateAppForm: React.FC<CreateAppFormInterface> = ({ type, id, initName, initDesc, showAppForm, setShowAppForm }) => {
   const [name, setName] = useState(initName)
   const [desc, setDesc] = useState(initDesc)
+
   const dispatch = useAppDispatch()
 
   const handleSubmit = (e: any) => {

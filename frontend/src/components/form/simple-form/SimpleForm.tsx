@@ -11,6 +11,7 @@ interface SimpleFormInterface {
 
 const SimpleForm: React.FC<SimpleFormInterface> = ({ type }) => {
   const [name, setName] = useState('')
+
   const dispatch = useAppDispatch()
 
   const handleSubmit = (e: any) => {

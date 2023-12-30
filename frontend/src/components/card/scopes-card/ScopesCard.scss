@@ -1,11 +1,11 @@
-.scope-auth-container {
+.scope-container {
   border: 1px solid red;
   height: 100%;
   padding: 1rem;
   // display: flex;
   // justify-content: center;
 
-  .scope-auth {
+  .scope {
     // width: 50%;
     display: flex;
     flex-direction: column;
@@ -31,23 +31,6 @@
 
     .active-scope {
       background: rgb(155, 131, 8);
-
-      &:hover {
-        cursor: pointer;
-        opacity: 0.6;
-      }
-    }
-  
-    .authority {
-      background: rgb(138, 138, 138);
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    .active-authority {
-      background: rgb(40, 8, 155);
 
       &:hover {
         cursor: pointer;

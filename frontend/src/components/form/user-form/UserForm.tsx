@@ -20,8 +20,10 @@ const UserForm: React.FC<UserFormInterface> = ({ type, id, initUserame, initPass
   const [password, setPassword] = useState(initPassword)
   const [email, setEmail] = useState(initEmail)
   const [phoneNumber, setPhoneNumber] = useState(initPhoneNumber)
-  const dispatch = useAppDispatch()
+  
   const appId = useAppSelector(state => state.app.appDetails.id)
+
+  const dispatch = useAppDispatch()
 
   const handleSubmit = (e: any) => {
     e.preventDefault()

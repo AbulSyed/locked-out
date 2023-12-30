@@ -54,8 +54,8 @@ const ScopesCard: React.FC<ScopesCardInterface> = ({ clientId, setShowScopesCard
   }
 
   return (
-    <div className='scope-auth-container'>
-      <form className='scope-auth' onSubmit={handleSubmit}>
+    <div className='scope-container'>
+      <form className='scope' onSubmit={handleSubmit}>
         <div>
           {
             scopes && scopes.map(scope => (
