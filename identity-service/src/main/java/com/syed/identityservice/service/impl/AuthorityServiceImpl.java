@@ -51,7 +51,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     public MessageResponse alterAuthority(AuthorityToEnum addAuthorityTo, AlterAuthorityRequest alterAuthorityRequest) {
         Set<AuthorityEntity> authorityEntitySet = authorityRepository.findByIdIn(alterAuthorityRequest.getAuthorityIds());
 
-        if (authorityEntitySet.isEmpty()) {
+        if (authorityEntitySet.isEmpty() && !alterAuthorityRequest.getAuthorityIds().isEmpty()) {
             return MessageResponse.builder()
                     .message("No authorities found to add")
                     .build();
@@ -66,6 +66,16 @@ public class AuthorityServiceImpl implements AuthorityService {
 
             UserEntity userEntity = userRepository.findById(alterAuthorityRequest.getUserId()).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + alterAuthorityRequest.getUserId())));
+
+            if (alterAuthorityRequest.getAuthorityIds().isEmpty()) {
+                log.info("empty authorityIds[] request, hence removing all authorities");
+                userEntity.getAuthorities().clear();
+                userRepository.save(userEntity);
+
+                return MessageResponse.builder()
+                        .message("All authorities removed from user " + userEntity.getUsername())
+                        .build();
+            }
 
             userEntity.getAuthorities().clear();
             userEntity.setAuthorities(authorityEntitySet);
@@ -83,6 +93,16 @@ public class AuthorityServiceImpl implements AuthorityService {
 
             ClientEntity clientEntity = clientRepository.findById(alterAuthorityRequest.getClientId()).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + alterAuthorityRequest.getClientId())));
+
+            if (alterAuthorityRequest.getAuthorityIds().isEmpty()) {
+                log.info("empty authorityIds[] request, hence removing all authorities");
+                clientEntity.getAuthorities().clear();
+                clientRepository.save(clientEntity);
+
+                return MessageResponse.builder()
+                        .message("All authorities removed from client " + clientEntity.getClientId())
+                        .build();
+            }
 
             clientEntity.getAuthorities().clear();
             clientEntity.setAuthorities(authorityEntitySet);

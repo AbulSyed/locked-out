@@ -50,7 +50,7 @@ public class RoleServiceImpl implements RoleService {
     public MessageResponse alterRoles(RoleToEnum addRoleTo, AlterRoleRequest alterRoleRequest) {
         Set<RoleEntity> roleEntityList = roleRepository.findByIdIn(alterRoleRequest.getRoleIds());
 
-        if (roleEntityList.isEmpty()) {
+        if (roleEntityList.isEmpty() && !alterRoleRequest.getRoleIds().isEmpty()) {
             return MessageResponse.builder()
                     .message("No roles found to add")
                     .build();
@@ -65,6 +65,16 @@ public class RoleServiceImpl implements RoleService {
 
             UserEntity userEntity = userRepository.findById(alterRoleRequest.getUserId()).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + alterRoleRequest.getUserId())));
+
+            if (alterRoleRequest.getRoleIds().isEmpty()) {
+                log.info("empty roleIds[] request, hence removing all roles");
+                userEntity.getRoles().clear();
+                userRepository.save(userEntity);
+
+                return MessageResponse.builder()
+                        .message("All roles removed from user " + userEntity.getUsername())
+                        .build();
+            }
 
             userEntity.getRoles().clear();
             userEntity.setRoles(roleEntityList);
@@ -82,6 +92,16 @@ public class RoleServiceImpl implements RoleService {
 
             ClientEntity clientEntity = clientRepository.findById(alterRoleRequest.getClientId()).orElseThrow(() ->
                     new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + alterRoleRequest.getClientId())));
+
+            if (alterRoleRequest.getRoleIds().isEmpty()) {
+                log.info("empty roleIds[] request, hence removing all roles");
+                clientEntity.getRoles().clear();
+                clientRepository.save(clientEntity);
+
+                return MessageResponse.builder()
+                        .message("All roles removed from client " + clientEntity.getClientId())
+                        .build();
+            }
 
             clientEntity.getRoles().clear();
             clientEntity.setRoles(roleEntityList);
