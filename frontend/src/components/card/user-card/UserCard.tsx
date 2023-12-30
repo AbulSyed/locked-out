@@ -3,7 +3,7 @@ import './UserCard.scss'
 import UserForm from '../../form/user-form/UserForm'
 import RoleAuthCard from '../role-auth-card/RoleAuthCard'
 
-import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { IdcardOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteUser } from '../../../store/user/userSlice'
@@ -32,6 +32,7 @@ interface Authority {
 const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phoneNumber, roles, authorities }) => {
   const [showUserForm, setShowUserForm] = useState(false)
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
+
   const dispatch = useAppDispatch()
 
   const handleDelete = (id: string) => {
