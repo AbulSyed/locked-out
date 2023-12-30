@@ -2,6 +2,7 @@ import './ClientCard.scss'
 
 import ClientForm from '../../form/client-form/ClientForm'
 import RoleAuthCard from '../role-auth-card/RoleAuthCard'
+import ScopesCard from '../scopes-card/ScopesCard'
 
 import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
@@ -34,6 +35,7 @@ interface Authority {
 const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, roles, authorities, scopes, authMethod, authGrantType, redirectUri, createdAt }) => {
   const [showClientForm, setShowClientForm] = useState(false)
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
+  const [showScopesCard, setShowScopesCard] = useState(false)
 
   const dispatch = useAppDispatch()
 
@@ -48,7 +50,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
       {
         // condition 1
         // show card with values
-        !showClientForm && !showRoleAuthForm ? (
+        !showClientForm && !showRoleAuthForm && !showScopesCard ? (
           <div className="client-card">
             <div className="client-card-top-and-bottom p-1">
               <div>
@@ -56,7 +58,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                   <p>{clientId}</p>
                   <div>
                     <IdcardOutlined className='client-card-icon' onClick={() => setShowRoleAuthForm(true)} />
-                    <AimOutlined className='client-card-icon' />
+                    <AimOutlined className='client-card-icon' onClick={() => setShowScopesCard(true)} />
                     <EditOutlined className='client-card-icon' onClick={() => setShowClientForm(true)} />
                     <DeleteOutlined className='client-card-icon' onClick={() => handleDelete(id)} />
                   </div>
@@ -98,6 +100,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
             </div>
           </div>
         ) : 
+
         // condition 2
         // show card to allow user to add roles/authorities
         !showClientForm && showRoleAuthForm ? (
@@ -107,7 +110,18 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
             setShowRoleAuthForm={setShowRoleAuthForm}
           />
         ) :
+
         // condition 3
+        // show card to allow user to add scopes
+        !showClientForm && showScopesCard ? 
+        (
+          <ScopesCard
+            clientId={id}
+            setShowScopesCard={setShowScopesCard}
+          />
+        ) :
+
+        // condition 4
         // show edit form
         (
           <ClientForm

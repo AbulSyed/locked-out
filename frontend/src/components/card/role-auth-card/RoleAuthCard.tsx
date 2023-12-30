@@ -2,7 +2,7 @@ import './RoleAuthCard.scss'
 
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { alterUserAuthority, alterUserRoles } from '../../../store/user/userSlice';
+import { alterUserAuthority, alterUserRoles } from '../../../store/user/userSlice'
 import { alterClientAuthority, alterClientRoles } from '../../../store/client/clientSlice';
 
 interface RoleAuthCardInterface {

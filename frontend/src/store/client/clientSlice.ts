@@ -53,13 +53,18 @@ interface UpdateClientDto extends CreateClientDto {
 interface AlterClientRoleDto {
   clientId: string;
   roleIds: string[];
-  rolesToAdd: Role[]
+  rolesToAdd: Role[];
 }
 
 interface AlterClientAuthorityDto {
   clientId: string;
   authorityIds: string[];
-  authorityToAdd: Authority[]
+  authorityToAdd: Authority[];
+}
+
+interface AlterClientScopesDto {
+  clientId: string;
+  scopesToAdd: string[];
 }
 
 export const createClient = createAsyncThunk('client/createClient', async (data: CreateClientDto, thunkAPI: any) => {
@@ -170,6 +175,27 @@ export const alterClientAuthority = createAsyncThunk('client/alterClientAuthorit
   }
 })
 
+export const alterClientScopes = createAsyncThunk('client/alterClientScopes', async (data: AlterClientScopesDto, thunkAPI: any) => {
+  try {
+    const res = await identityServiceApi.put(`/alter-client-scopes/${data.clientId}`, {
+      scopes: data.scopesToAdd
+    }, {
+      headers: {
+        'x-correlation-id': 'frontend/alterClientScopes'
+      }
+    })
+
+    if (res.status == 200) {
+      return {
+        clientId: data.clientId,
+        scopesToAdd: data.scopesToAdd
+      }
+    }
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue({ message: err.message })
+  }
+})
+
 const clientSlice = createSlice({
   name: 'client',
   initialState,
@@ -267,6 +293,26 @@ const clientSlice = createSlice({
       state.error = ''
     })
     builder.addCase(alterClientAuthority.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Something went wrong'
+    })
+    // alter client scopes
+    builder.addCase(alterClientScopes.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(alterClientScopes.fulfilled, (state, action) => {
+      state.loading = false
+      state.clients = state.clients.map(client => {
+        if (client.id == action.payload.clientId) {
+          client.scopes = action.payload.scopesToAdd
+          return client
+        } else {
+          return client
+        }
+      })
+      state.error = ''
+    })
+    builder.addCase(alterClientScopes.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || 'Something went wrong'
     })
