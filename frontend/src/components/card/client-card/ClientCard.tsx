@@ -56,7 +56,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                   <p>{clientId}</p>
                   <div>
                     <IdcardOutlined className='client-card-icon' onClick={() => setShowRoleAuthForm(true)} />
-                    {/* <AimOutlined className='client-card-icon' onClick={() => setShowRoleAuthForm(true)} /> */}
+                    <AimOutlined className='client-card-icon' />
                     <EditOutlined className='client-card-icon' onClick={() => setShowClientForm(true)} />
                     <DeleteOutlined className='client-card-icon' onClick={() => handleDelete(id)} />
                   </div>
@@ -102,7 +102,8 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
         // show card to allow user to add roles/authorities
         !showClientForm && showRoleAuthForm ? (
           <RoleAuthCard
-            userId={id}
+            type='CLIENT'
+            clientId={id}
             setShowRoleAuthForm={setShowRoleAuthForm}
           />
         ) :

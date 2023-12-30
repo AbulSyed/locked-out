@@ -50,6 +50,18 @@ interface UpdateClientDto extends CreateClientDto {
   id: string
 }
 
+interface AlterClientRoleDto {
+  clientId: string;
+  roleIds: string[];
+  rolesToAdd: Role[]
+}
+
+interface AlterClientAuthorityDto {
+  clientId: string;
+  authorityIds: string[];
+  authorityToAdd: Authority[]
+}
+
 export const createClient = createAsyncThunk('client/createClient', async (data: CreateClientDto, thunkAPI: any) => {
   try {
     const res = await identityServiceApi.post(`/create-client/${data.appId}`, data, {
@@ -114,6 +126,50 @@ export const deleteClient = createAsyncThunk('client/deleteClient', async (id: s
   }
 })
 
+export const alterClientRoles = createAsyncThunk('client/alterClientRoles', async (data: AlterClientRoleDto, thunkAPI: any) => {
+  try {
+    const res = await identityServiceApi.put(`/alter-roles?addRoleTo=CLIENT`, {
+      clientId: data.clientId,
+      roleIds: data.roleIds
+    }, {
+      headers: {
+        'x-correlation-id': 'frontend/alterClientRoles'
+      }
+    })
+
+    if (res.status == 201) {
+      return {
+        clientId: data.clientId,
+        rolesToAdd: data.rolesToAdd
+      }
+    }
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue({ message: err.message })
+  }
+})
+
+export const alterClientAuthority = createAsyncThunk('client/alterClientAuthority', async (data: AlterClientAuthorityDto, thunkAPI: any) => {
+  try {
+    const res = await identityServiceApi.put(`/alter-authority?addAuthorityTo=CLIENT`, {
+      clientId: data.clientId,
+      authorityIds: data.authorityIds
+    }, {
+      headers: {
+        'x-correlation-id': 'frontend/alterClientAuthority'
+      }
+    })
+
+    if (res.status == 201) {
+      return {
+        clientId: data.clientId,
+        authorityToAdd: data.authorityToAdd
+      }
+    }
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue({ message: err.message })
+  }
+})
+
 const clientSlice = createSlice({
   name: 'client',
   initialState,
@@ -171,6 +227,46 @@ const clientSlice = createSlice({
       state.error = ''
     })
     builder.addCase(deleteClient.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Something went wrong'
+    })
+    // alter client roles
+    builder.addCase(alterClientRoles.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(alterClientRoles.fulfilled, (state, action) => {
+      state.loading = false
+      state.clients = state.clients.map(client => {
+        if (client.id == action.payload.clientId) {
+          client.roles = action.payload.rolesToAdd
+          return client
+        } else {
+          return client
+        }
+      })
+      state.error = ''
+    })
+    builder.addCase(alterClientRoles.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Something went wrong'
+    })
+    // alter client authority
+    builder.addCase(alterClientAuthority.pending, (state) => {
+      state.loading = true
+    })
+    builder.addCase(alterClientAuthority.fulfilled, (state, action) => {
+      state.loading = false
+      state.clients = state.clients.map(client => {
+        if (client.id == action.payload.clientId) {
+          client.authorities = action.payload.authorityToAdd
+          return client
+        } else {
+          return client
+        }
+      })
+      state.error = ''
+    })
+    builder.addCase(alterClientAuthority.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || 'Something went wrong'
     })

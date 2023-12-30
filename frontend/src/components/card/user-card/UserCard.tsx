@@ -54,7 +54,6 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
                   <p>{username}</p>
                   <div>
                     <IdcardOutlined className='user-card-icon' onClick={() => setShowRoleAuthForm(true)} />
-                    {/* <AimOutlined className='user-card-icon' onClick={() => setShowRoleAuthForm(true)} /> */}
                     <EditOutlined className='user-card-icon' onClick={() => setShowUserForm(true)} />
                     <DeleteOutlined className='user-card-icon' onClick={() => handleDelete(id)} />
                   </div>
@@ -83,6 +82,7 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
         // show card to allow user to add roles/authorities
         !showUserForm && showRoleAuthForm ? (
           <RoleAuthCard
+            type='USER'
             userId={id}
             setShowRoleAuthForm={setShowRoleAuthForm}
           />
