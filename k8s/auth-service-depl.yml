@@ -16,16 +16,18 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: abulsy3d/locked-out-auth-service:v202307222259
+        image: abulsy3d/locked-out-auth-service:v202312162215
         ports:
         - containerPort: 8080
         env:
-          - name: SPLUNK_URL
-            value: http://51.142.141.163:8088
-          - name: SPLUNK_TOKEN
-            value: 2e79c9f3-c81b-46c1-a31c-387d51d6e766
-          - name: SPLUNK_INDEX
-            value: auth_service_api
+          - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+            value: xxxxx
+          # - name: SPLUNK_URL
+          #   value: http://51.142.141.163:8088
+          # - name: SPLUNK_TOKEN
+          #   value: 2e79c9f3-c81b-46c1-a31c-387d51d6e766
+          # - name: SPLUNK_INDEX
+          #   value: auth_service_api
 ---
 apiVersion: v1
 kind: Service

@@ -16,9 +16,12 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: abulsy3d/locked-out-frontend:v202307291526
+        image: abulsy3d/locked-out-frontend:v202401021952
         ports:
           - containerPort: 3000
+        env:
+          - name: VITE_IDENTITY_SERVICE_HOST
+            value: http://51.140.249.42:8081
 ---
 apiVersion: v1
 kind: Service
