@@ -16,22 +16,24 @@ spec:
     spec:
       containers:
       - name: identity-service
-        image: abulsy3d/locked-out-identity-service:v202307241955
+        image: abulsy3d/locked-out-identity-service:v202312301722
         ports:
         - containerPort: 8081
         env:
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://51.142.179.184:5432/locked_out
+          value: jdbc:postgresql://51.142.177.163:5432/locked_out
         - name: SPRING_DATASOURCE_USERNAME
           value: admin
         - name: SPRING_DATASOURCE_PASSWORD
           value: admin
-        - name: SPLUNK_URL
-          value: http://51.142.141.163:8088
-        - name: SPLUNK_TOKEN
-          value: f82c5b71-b9a9-44f3-ae1e-47923bd6f0e6
-        - name: SPLUNK_INDEX
-          value: identity_service_api
+        - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+          value: xxxxx
+        # - name: SPLUNK_URL
+        #   value: http://51.142.141.163:8088
+        # - name: SPLUNK_TOKEN
+        #   value: f82c5b71-b9a9-44f3-ae1e-47923bd6f0e6
+        # - name: SPLUNK_INDEX
+        #   value: identity_service_api
 ---
 apiVersion: v1
 kind: Service
