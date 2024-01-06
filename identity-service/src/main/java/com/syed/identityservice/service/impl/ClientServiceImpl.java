@@ -5,13 +5,18 @@ import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientPageResponse;
 import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.ClientService;
 import com.syed.identityservice.utility.MapperUtil;
+import com.syed.identityservice.utility.Utility;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,10 +70,22 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientResponse> getClientList() {
-        List<ClientEntity> clients = clientRepository.findAll();
+    public ClientPageResponse getClientList(int page, int size) {
+        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
 
-        return MapperUtil.mapClientEntityListToGetClientListResponse(clients);
+        Page<ClientEntity> clientEntityPage = clientRepository.findAll(pageable);
+        List<ClientEntity> clientEntityList = clientEntityPage.getContent();
+
+        List<ClientResponse> clientResponseList = MapperUtil.mapClientEntityListToGetClientListResponse(clientEntityList);
+
+        return MapperUtil.mapClientResponseListToClientPageResponse(
+                clientResponseList,
+                clientEntityPage.getNumber() + 1,
+                clientEntityPage.getSize(),
+                clientEntityPage.getTotalElements(),
+                clientEntityPage.getTotalPages(),
+                clientEntityPage.isLast()
+        );
     }
 
     @Override

@@ -229,6 +229,17 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected ClientPageResponse createClientPageResponse(List<ClientResponse> clients, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return ClientPageResponse.builder()
+                .clients(clients)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     protected RoleRequest createRoleRequest(String name) {
         return RoleRequest.builder()
                 .name(name)

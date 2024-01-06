@@ -4,6 +4,7 @@ import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientPageResponse;
 import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.service.ClientService;
 import org.junit.jupiter.api.Test;
@@ -66,11 +67,12 @@ class ClientControllerTest extends BaseTest<Object> {
         List<ClientResponse> getClientListResponse = List.of(
                 createClientResponse(1L, "client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000", LocalDateTime.now())
         );
-        ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, getClientListResponse);
+        ClientPageResponse clientPageResponse = createClientPageResponse(getClientListResponse, 1, 10, 5L, 1, true);
+        ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, clientPageResponse);
 
-        when(clientService.getClientList()).thenReturn(getClientListResponse);
+        when(clientService.getClientList(1, 10)).thenReturn(clientPageResponse);
 
-        ResponseEntity<List<ClientResponse>> res = clientController.getClientList(correlationId);
+        ResponseEntity<ClientPageResponse> res = clientController.getClientList(correlationId, 1, 10);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientListExpectedResponse.getStatusCode());

@@ -367,6 +367,17 @@ public class MapperUtil {
         return clientResponseList;
     }
 
+    public static ClientPageResponse mapClientResponseListToClientPageResponse(List<ClientResponse> clients, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return ClientPageResponse.builder()
+                .clients(clients)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     public static RoleEntity mapRoleModelToEntity(RoleRequest request) {
         return RoleEntity.builder()
                 .name(request.getName())

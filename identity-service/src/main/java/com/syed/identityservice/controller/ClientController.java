@@ -5,6 +5,7 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientPageResponse;
 import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.InvalidRequestException;
@@ -68,10 +69,12 @@ public class ClientController {
             log = "get client list request initiated"
     )
     @GetMapping("/get-client-list")
-    public ResponseEntity<List<ClientResponse>> getClientList(
-            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    public ResponseEntity<ClientPageResponse> getClientList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
-        return new ResponseEntity<>(clientService.getClientList(), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientList(page, size), HttpStatus.OK);
     }
 
     @AuditRequest(
