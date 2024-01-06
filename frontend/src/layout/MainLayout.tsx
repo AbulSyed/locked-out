@@ -43,7 +43,11 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
           "page": "1",
           "size": "100"
         }))
-        dispatch(getClientsByAppName(activeApp))
+        dispatch(getClientsByAppName({
+          "appName": activeApp,
+          "page": "1",
+          "size": "100"
+        }))
       }
     } else {
       setIsShowingSidenav(false)

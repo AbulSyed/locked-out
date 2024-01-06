@@ -89,7 +89,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientResponse> getClientListByApp(Long appId, String appName) {
+    public ClientPageResponse getClientListByApp(Long appId, String appName, int page, int size) {
+        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
+
         AppEntity app = null;
 
         if (appId != null) {
@@ -102,9 +104,19 @@ public class ClientServiceImpl implements ClientService {
             }
         }
 
-        List<ClientEntity> clients = clientRepository.getClientEntitiesByUserApp(app);
+        Page<ClientEntity> clientEntityPage = clientRepository.getClientEntitiesByUserApp(app, pageable);
+        List<ClientEntity> clientEntityList = clientEntityPage.getContent();
 
-        return MapperUtil.mapClientEntityListToGetClientListResponse(clients);
+        List<ClientResponse> clientResponseList = MapperUtil.mapClientEntityListToGetClientListResponse(clientEntityList);
+
+        return MapperUtil.mapClientResponseListToClientPageResponse(
+                clientResponseList,
+                clientEntityPage.getNumber() + 1,
+                clientEntityPage.getSize(),
+                clientEntityPage.getTotalElements(),
+                clientEntityPage.getTotalPages(),
+                clientEntityPage.isLast()
+        );
     }
 
     @Override

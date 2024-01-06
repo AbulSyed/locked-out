@@ -131,13 +131,28 @@ class ClientServiceImplTest extends BaseTest<Object> {
                 "http://localhost:3000", LocalDateTime.now());
         List<ClientEntity> clientEntityList = List.of(clientEntity);
 
-        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
-        when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class))).thenReturn(clientEntityList);
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
 
-        List<ClientResponse> res = clientService.getClientListByApp(1L, null);
+        Page<ClientEntity> clientEntityPage = mock(Page.class);
+
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
+        when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class), eq(pageable))).thenReturn(clientEntityPage);
+
+        when(clientEntityPage.getContent()).thenReturn(clientEntityList);
+        when(clientEntityPage.getNumber()).thenReturn(0);
+        when(clientEntityPage.getSize()).thenReturn(10);
+        when(clientEntityPage.getTotalElements()).thenReturn(1L);
+        when(clientEntityPage.getTotalPages()).thenReturn(1);
+        when(clientEntityPage.isLast()).thenReturn(true);
+
+        ClientPageResponse res = clientService.getClientListByApp(1L, null, 1, 10);
 
         assertThat(res).isNotNull()
-                .hasSize(1);
+                .hasFieldOrPropertyWithValue("page", 1)
+                .hasFieldOrPropertyWithValue("size", 10)
+                .hasFieldOrPropertyWithValue("totalElements", 1L)
+                .hasFieldOrPropertyWithValue("totalPages", 1)
+                .hasFieldOrPropertyWithValue("lastPage", true);
     }
 
     @Test

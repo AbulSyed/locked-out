@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @AllArgsConstructor
 @RestController
 public class ClientController {
@@ -85,16 +83,18 @@ public class ClientController {
             log = "get client list by app request initiated"
     )
     @GetMapping("/get-client-list-by-app")
-    public ResponseEntity<List<ClientResponse>> getClientListByApp(
+    public ResponseEntity<ClientPageResponse> getClientListByApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam(value = "appId", required = false) Long appId,
-            @RequestParam(value = "appName", required = false) String appName
+            @RequestParam(value = "appName", required = false) String appName,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
         if (appId == null && appName == null) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
-        return new ResponseEntity<>(clientService.getClientListByApp(appId, appName), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientListByApp(appId, appName, page, size), HttpStatus.OK);
     }
 
     @AuditRequest(

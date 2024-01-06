@@ -84,11 +84,12 @@ class ClientControllerTest extends BaseTest<Object> {
         List<ClientResponse> getClientListResponse = List.of(
                 createClientResponse(1L, "client id", "secret", Set.of(AuthMethodEnum.CLIENT_SECRET_BASIC), Set.of(AuthGrantTypeEnum.AUTHORIZATION_CODE), "http://localhost:3000", LocalDateTime.now())
         );
-        ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, getClientListResponse);
+        ClientPageResponse clientPageResponse = createClientPageResponse(getClientListResponse, 1, 10, 5L, 1, true);
+        ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, clientPageResponse);
 
-        when(clientService.getClientListByApp(any(Long.class), eq(null))).thenReturn(getClientListResponse);
+        when(clientService.getClientListByApp(any(Long.class), eq(null), 1, 10)).thenReturn(clientPageResponse);
 
-        ResponseEntity<List<ClientResponse>> res = clientController.getClientListByApp(correlationId, 1L, null);
+        ResponseEntity<ClientPageResponse> res = clientController.getClientListByApp(correlationId, 1L, null, 1, 10);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientListExpectedResponse.getStatusCode());
