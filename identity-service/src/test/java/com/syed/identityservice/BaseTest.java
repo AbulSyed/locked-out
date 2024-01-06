@@ -37,6 +37,17 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected AppPageResponse createAppPageResponse(List<AppResponse> apps, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return AppPageResponse.builder()
+                .apps(apps)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     protected AppV2Response createAppV2Response(Long id, String name, String description, LocalDateTime createdAt) {
         return AppV2Response.builder()
                 .id(id)

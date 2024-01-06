@@ -6,6 +6,7 @@ import com.syed.identityservice.data.entity.ClientEntity;
 import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.AppRequest;
+import com.syed.identityservice.domain.model.response.AppPageResponse;
 import com.syed.identityservice.domain.model.response.AppResponse;
 import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
@@ -13,6 +14,7 @@ import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.AppServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.syed.identityservice.utility.Utility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -112,18 +117,33 @@ class AppServiceImplTest extends BaseTest<Object> {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void getAppList_Success() {
         List<AppEntity> appEntityList = List.of(
                 createAppEntity(1L,"app","test", new HashSet<>(), new HashSet<>(), LocalDateTime.now())
         );
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "name"));
 
-        when(appRepository.findAll()).thenReturn(appEntityList);
+        Page<AppEntity> appEntityPage = mock(Page.class);
 
-        List<AppResponse> res = appService.getAppList();
+        when(appRepository.findAll(pageable)).thenReturn(appEntityPage);
+
+        when(appEntityPage.getContent()).thenReturn(appEntityList);
+        when(appEntityPage.getNumber()).thenReturn(0);
+        when(appEntityPage.getSize()).thenReturn(10);
+        when(appEntityPage.getTotalElements()).thenReturn(1L);
+        when(appEntityPage.getTotalPages()).thenReturn(1);
+        when(appEntityPage.isLast()).thenReturn(true);
+
+        AppPageResponse res = appService.getAppList(1, 10);
 
         assertThat(res)
                 .isNotNull()
-                .hasSize(1);
+                .hasFieldOrPropertyWithValue("page", 1)
+                .hasFieldOrPropertyWithValue("size", 10)
+                .hasFieldOrPropertyWithValue("totalElements", 1L)
+                .hasFieldOrPropertyWithValue("totalPages", 1)
+                .hasFieldOrPropertyWithValue("lastPage", true);
     }
 
     @Test

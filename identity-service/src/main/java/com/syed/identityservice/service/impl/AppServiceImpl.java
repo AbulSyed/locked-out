@@ -3,6 +3,7 @@ package com.syed.identityservice.service.impl;
 import com.syed.identityservice.data.entity.AppEntity;
 import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.domain.model.request.AppRequest;
+import com.syed.identityservice.domain.model.response.AppPageResponse;
 import com.syed.identityservice.domain.model.response.AppResponse;
 import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.exception.ErrorConstant;
@@ -10,7 +11,11 @@ import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.AppService;
 import com.syed.identityservice.utility.MapperUtil;
+import com.syed.identityservice.utility.Utility;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,10 +61,22 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public List<AppResponse> getAppList() {
-        List<AppEntity> appEntityList = appRepository.findAll();
+    public AppPageResponse getAppList(int page, int size) {
+        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "name"));
 
-        return MapperUtil.mapAppEntityListToAppListResponse(appEntityList);
+        Page<AppEntity> appEntityPage = appRepository.findAll(pageable);
+        List<AppEntity> appEntityList = appEntityPage.getContent();
+
+        List<AppResponse> appResponseList = MapperUtil.mapAppEntityListToAppListResponse(appEntityList);
+
+        return MapperUtil.mapAppListResponseToAppPageResponse(
+                appResponseList,
+                appEntityPage.getNumber() + 1,
+                appEntityPage.getSize(),
+                appEntityPage.getTotalElements(),
+                appEntityPage.getTotalPages(),
+                appEntityPage.isLast()
+        );
     }
 
     @Override

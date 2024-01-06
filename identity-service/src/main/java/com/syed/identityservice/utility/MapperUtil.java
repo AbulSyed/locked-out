@@ -4,16 +4,12 @@ import com.syed.identityservice.data.entity.*;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
-import com.syed.identityservice.domain.model.AuthorityModel;
-import com.syed.identityservice.domain.model.ClientModel;
-import com.syed.identityservice.domain.model.RoleModel;
-import com.syed.identityservice.domain.model.UserModel;
+import com.syed.identityservice.domain.model.*;
 import com.syed.identityservice.domain.model.request.*;
 import com.syed.identityservice.domain.model.response.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MapperUtil {
 
@@ -154,6 +150,17 @@ public class MapperUtil {
         }
 
         return appResponseList;
+    }
+
+    public static AppPageResponse mapAppListResponseToAppPageResponse(List<AppResponse> apps, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return AppPageResponse.builder()
+                .apps(apps)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
     }
 
     public static UserEntity mapUserModelToEntity(UserRequest request) {

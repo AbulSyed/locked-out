@@ -47,7 +47,10 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
   })
 
   useEffect(() => {
-    dispatch(getApps())
+    dispatch(getApps({
+      "page": "1",
+      "size": "100"
+    }))
     dispatch(getRoles())
     dispatch(getAuthorities())
   }, [])
