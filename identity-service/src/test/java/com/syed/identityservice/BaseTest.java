@@ -37,6 +37,17 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected AppPageResponse createAppPageResponse(List<AppResponse> apps, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return AppPageResponse.builder()
+                .apps(apps)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     protected AppV2Response createAppV2Response(Long id, String name, String description, LocalDateTime createdAt) {
         return AppV2Response.builder()
                 .id(id)
@@ -95,6 +106,17 @@ public class BaseTest<T> {
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .createdAt(createdAt)
+                .build();
+    }
+
+    protected UserV2PageResponse createUserV2PageResponse(List<UserV2Response> users, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return UserV2PageResponse.builder()
+                .users(users)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
                 .build();
     }
 
@@ -204,6 +226,17 @@ public class BaseTest<T> {
                 .authGrantType(authGrantTypes)
                 .redirectUri(redirectUri)
                 .createdAt(createdAt)
+                .build();
+    }
+
+    protected ClientPageResponse createClientPageResponse(List<ClientResponse> clients, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return ClientPageResponse.builder()
+                .clients(clients)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
                 .build();
     }
 

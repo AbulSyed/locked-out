@@ -38,8 +38,16 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
 
       if (app) {
         dispatch(getAppDetails(activeApp))
-        dispatch(getUsersByAppName(activeApp))
-        dispatch(getClientsByAppName(activeApp))
+        dispatch(getUsersByAppName({
+          "appName": activeApp,
+          "page": "1",
+          "size": "100"
+        }))
+        dispatch(getClientsByAppName({
+          "appName": activeApp,
+          "page": "1",
+          "size": "100"
+        }))
       }
     } else {
       setIsShowingSidenav(false)
@@ -47,7 +55,10 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
   })
 
   useEffect(() => {
-    dispatch(getApps())
+    dispatch(getApps({
+      "page": "1",
+      "size": "100"
+    }))
     dispatch(getRoles())
     dispatch(getAuthorities())
   }, [])

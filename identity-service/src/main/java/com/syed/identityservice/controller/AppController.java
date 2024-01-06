@@ -5,6 +5,7 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.AppRequest;
+import com.syed.identityservice.domain.model.response.AppPageResponse;
 import com.syed.identityservice.domain.model.response.AppResponse;
 import com.syed.identityservice.domain.model.response.AppV2Response;
 import com.syed.identityservice.service.AppService;
@@ -13,8 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -74,10 +73,12 @@ public class AppController {
             log = "get app list request initiated"
     )
     @GetMapping("/get-app-list")
-    public ResponseEntity<List<AppResponse>> getAppList(
-            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    public ResponseEntity<AppPageResponse> getAppList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
-        return new ResponseEntity<>(appService.getAppList(), HttpStatus.OK);
+        return new ResponseEntity<>(appService.getAppList(page, size), HttpStatus.OK);
     }
 
     @AuditRequest(
