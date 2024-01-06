@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @AllArgsConstructor
 @RestController
 public class UserController {
@@ -86,16 +84,18 @@ public class UserController {
             log = "get user list by app request initiated"
     )
     @GetMapping("/get-user-list-by-app")
-    public ResponseEntity<List<UserV2Response>> getUserListByApp(
+    public ResponseEntity<UserV2PageResponse> getUserListByApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam(value = "appId", required = false) Long appId,
-            @RequestParam(value = "appName", required = false) String appName
+            @RequestParam(value = "appName", required = false) String appName,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
         if (appId == null && appName == null) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
-        return new ResponseEntity<>(userService.getUserListByApp(appId, appName), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserListByApp(appId, appName, page, size), HttpStatus.OK);
     }
 
     @AuditRequest(

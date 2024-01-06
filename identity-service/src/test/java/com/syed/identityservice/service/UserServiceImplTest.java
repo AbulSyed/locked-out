@@ -109,18 +109,34 @@ class UserServiceImplTest extends BaseTest<Object> {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void getUserListByApp() {
         AppEntity appEntity = createAppEntity(1L, "app", "desc", LocalDateTime.now());
         UserEntity userEntity = createUserEntity(1L, "joe", "123", "joe@mail.com", "079", appEntity,
                 Collections.emptySet(), Collections.emptySet(), LocalDateTime.now());
 
-        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
-        when(userRepository.getUserEntitiesByUserApp(any(AppEntity.class))).thenReturn(List.of(userEntity));
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "username"));
 
-        List<UserV2Response> res = userService.getUserListByApp(1L, null);
+        Page<UserEntity> userEntityPage = mock(Page.class);
+
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
+        when(userRepository.getUserEntitiesByUserApp(any(AppEntity.class), eq(pageable))).thenReturn(userEntityPage);
+
+        when(userEntityPage.getContent()).thenReturn(List.of(userEntity));
+        when(userEntityPage.getNumber()).thenReturn(0);
+        when(userEntityPage.getSize()).thenReturn(10);
+        when(userEntityPage.getTotalElements()).thenReturn(1L);
+        when(userEntityPage.getTotalPages()).thenReturn(1);
+        when(userEntityPage.isLast()).thenReturn(true);
+
+        UserV2PageResponse res = userService.getUserListByApp(1L, null, 1, 10);
 
         assertThat(res).isNotNull()
-                .hasSize(1);
+                .hasFieldOrPropertyWithValue("page", 1)
+                .hasFieldOrPropertyWithValue("size", 10)
+                .hasFieldOrPropertyWithValue("totalElements", 1L)
+                .hasFieldOrPropertyWithValue("totalPages", 1)
+                .hasFieldOrPropertyWithValue("lastPage", true);
     }
 
     @Test

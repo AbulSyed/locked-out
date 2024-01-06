@@ -14,6 +14,12 @@ interface InitialState {
   error: string;
 }
 
+interface GetUsersByAppNameReqData {
+  appName: string;
+  page: string;
+  size: string;
+}
+
 interface CreateUserDto {
   appId: string;
   username: string;
@@ -59,15 +65,15 @@ interface AlterUserAuthorityDto {
   authorityToAdd: Authority[]
 }
 
-export const getUsersByAppName = createAsyncThunk('user/getUsersByAppName', async (appName: string) => {
+export const getUsersByAppName = createAsyncThunk('user/getUsersByAppName', async (data: GetUsersByAppNameReqData) => {
   try {
-    const res = await identityServiceApi.get(`/get-user-list-by-app?appName=${appName}`, {
+    const res = await identityServiceApi.get(`/get-user-list-by-app?appName=${data.appName}&page=${data.page}&size=${data.size}`, {
       headers: {
         'x-correlation-id': 'frontend/getUsersByAppName'
       }
     })
 
-    return res.data
+    return res.data.users
   } catch (err: any) {
     return err.message
   }

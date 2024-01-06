@@ -38,7 +38,11 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
 
       if (app) {
         dispatch(getAppDetails(activeApp))
-        dispatch(getUsersByAppName(activeApp))
+        dispatch(getUsersByAppName({
+          "appName": activeApp,
+          "page": "1",
+          "size": "100"
+        }))
         dispatch(getClientsByAppName(activeApp))
       }
     } else {

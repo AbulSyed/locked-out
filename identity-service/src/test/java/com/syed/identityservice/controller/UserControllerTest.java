@@ -82,11 +82,12 @@ class UserControllerTest extends BaseTest<Object> {
         List<UserV2Response> getUserListResponse = List.of(
                 createUserV2Response(1L, "joe", "123", "joe@mail.com", "079", LocalDateTime.now())
         );
-        ResponseEntity<Object> getUserListExpectedResponse = createExpectedResponse(HttpStatus.OK, getUserListResponse);
+        UserV2PageResponse userV2PageResponse = createUserV2PageResponse(getUserListResponse, 1, 10, 5L, 1, true);
+        ResponseEntity<Object> getUserListExpectedResponse = createExpectedResponse(HttpStatus.OK, userV2PageResponse);
 
-        when(userService.getUserListByApp(any(Long.class), eq(null))).thenReturn(getUserListResponse);
+        when(userService.getUserListByApp(any(Long.class), eq(null), any(Integer.class), any(Integer.class))).thenReturn(userV2PageResponse);
 
-        ResponseEntity<List<UserV2Response>> res = userController.getUserListByApp(correlationId, 1L, null);
+        ResponseEntity<UserV2PageResponse> res = userController.getUserListByApp(correlationId, 1L, null, 1, 10);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());

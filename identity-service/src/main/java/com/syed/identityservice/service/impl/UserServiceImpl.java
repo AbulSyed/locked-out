@@ -96,7 +96,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserV2Response> getUserListByApp(Long appId, String appName) {
+    public UserV2PageResponse getUserListByApp(Long appId, String appName, int page, int size) {
+        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "username"));
+
         AppEntity app = null;
 
         if (appId != null) {
@@ -109,9 +111,19 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        List<UserEntity> userEntityList = userRepository.getUserEntitiesByUserApp(app);
+        Page<UserEntity> userEntityPage = userRepository.getUserEntitiesByUserApp(app, pageable);
+        List<UserEntity> userEntityList = userEntityPage.getContent();
 
-        return MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);
+        List<UserV2Response> userV2ResponseList = MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);
+
+        return MapperUtil.mapUserV2ResponseListToUserV2PageResponse(
+                userV2ResponseList,
+                userEntityPage.getNumber() + 1,
+                userEntityPage.getSize(),
+                userEntityPage.getTotalElements(),
+                userEntityPage.getTotalPages(),
+                userEntityPage.isLast()
+        );
     }
 
     @Override
