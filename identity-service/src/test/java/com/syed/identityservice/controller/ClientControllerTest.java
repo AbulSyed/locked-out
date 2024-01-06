@@ -87,7 +87,7 @@ class ClientControllerTest extends BaseTest<Object> {
         ClientPageResponse clientPageResponse = createClientPageResponse(getClientListResponse, 1, 10, 5L, 1, true);
         ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, clientPageResponse);
 
-        when(clientService.getClientListByApp(any(Long.class), eq(null), 1, 10)).thenReturn(clientPageResponse);
+        when(clientService.getClientListByApp(any(Long.class), eq(null), any(Integer.class), any(Integer.class))).thenReturn(clientPageResponse);
 
         ResponseEntity<ClientPageResponse> res = clientController.getClientListByApp(correlationId, 1L, null, 1, 10);
 
