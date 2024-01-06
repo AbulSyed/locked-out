@@ -109,6 +109,17 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected UserV2PageResponse createUserV2PageResponse(List<UserV2Response> users, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return UserV2PageResponse.builder()
+                .users(users)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     protected UserEntity createUserEntity(Long id, String username, String password, String email, String phoneNumber,
                                           Set<RoleEntity> roles, Set<AuthorityEntity> authorities, LocalDateTime createdAt) {
         return UserEntity.builder()

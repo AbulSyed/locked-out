@@ -6,13 +6,18 @@ import com.syed.identityservice.data.repository.AppRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.model.request.UserRequest;
 import com.syed.identityservice.domain.model.response.UserResponse;
+import com.syed.identityservice.domain.model.response.UserV2PageResponse;
 import com.syed.identityservice.domain.model.response.UserV2Response;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.UserService;
 import com.syed.identityservice.utility.MapperUtil;
+import com.syed.identityservice.utility.Utility;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,10 +77,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserV2Response> getUserList() {
-        List<UserEntity> userEntityList = userRepository.findAll();
+    public UserV2PageResponse getUserList(int page, int size) {
+        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "username"));
 
-        return MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);
+        Page<UserEntity> userEntityPage = userRepository.findAll(pageable);
+        List<UserEntity> userEntityList = userEntityPage.getContent();
+
+        List<UserV2Response> userV2ResponseList = MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);
+
+        return MapperUtil.mapUserV2ResponseListToUserV2PageResponse(
+                userV2ResponseList,
+                userEntityPage.getNumber() + 1,
+                userEntityPage.getSize(),
+                userEntityPage.getTotalElements(),
+                userEntityPage.getTotalPages(),
+                userEntityPage.isLast()
+        );
     }
 
     @Override

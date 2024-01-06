@@ -262,6 +262,17 @@ public class MapperUtil {
         return userResponseList;
     }
 
+    public static UserV2PageResponse mapUserV2ResponseListToUserV2PageResponse(List<UserV2Response> users, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return UserV2PageResponse.builder()
+                .users(users)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     public static ClientEntity mapClientModelToEntity(ClientRequest request) {
         return ClientEntity.builder()
                 .clientId(request.getClientId())
