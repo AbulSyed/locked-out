@@ -47,6 +47,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
     dispatch(deleteClient(id))
   }
 
+  // endpoint should be used when redirecting a user to login page
   const generateAuthorizeEndpoint = () => {
     if (authGrantType.includes('AUTHORIZATION_CODE')) {
       const authendpoint =  `http://localhost:8080/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&appname=${activeApp}${scopes.length >= 1 ? '&scope=' : ''}${scopes.join('%20')}`
@@ -57,6 +58,7 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
     }
   }
 
+  // endpoint should be used to obtain an access token
   const generateTokenEndpoint = () => {
     if (authGrantType.includes('AUTHORIZATION_CODE')) {
       const tokenEndpoint = `http://localhost:8080/oauth2/token?client_id=${clientId}&redirect_uri=${redirectUri}&grant_type=authorization_code&code=YOUR_AUTH_CODE&appname=${activeApp}`
