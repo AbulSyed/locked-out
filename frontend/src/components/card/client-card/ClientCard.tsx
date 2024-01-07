@@ -8,6 +8,7 @@ import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteClient } from '../../../store/client/clientSlice'
+import { message, Modal } from 'antd'
 
 interface ClientCardProps {
   id: string;
@@ -36,17 +37,68 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
   const [showClientForm, setShowClientForm] = useState(false)
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
   const [showScopesCard, setShowScopesCard] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  
+  const [messageApi, contextHolder] = message.useMessage()
+
+  const activeApp = location.pathname.split('/')[2]
 
   const dispatch = useAppDispatch()
 
-  const handleDelete = (id: string) => {
-    alert('Are you sure, you want to delete client with id: ' + id + '?')
+  // endpoint should be used when redirecting a user to login page
+  const generateAuthorizeEndpoint = () => {
+    if (authGrantType.includes('AUTHORIZATION_CODE')) {
+      const authendpoint =  `http://localhost:8080/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&appname=${activeApp}${scopes.length >= 1 ? '&scope=' : ''}${scopes.join('%20')}`
+      console.log(authendpoint)
+      navigator.clipboard.writeText(authendpoint)
+      showSuccessPopup('Authorize endpoint copied')
+    } else {
+      errorPopup('The oauth2/authorize endpoint requires client to have AUTHORIZATION_CODE grant type')
+    }
+  }
 
+  // endpoint should be used to obtain an access token
+  const generateTokenEndpoint = () => {
+    if (authGrantType.includes('AUTHORIZATION_CODE')) {
+      const tokenEndpoint = `http://localhost:8080/oauth2/token?client_id=${clientId}&redirect_uri=${redirectUri}&grant_type=authorization_code&code=YOUR_AUTH_CODE&appname=${activeApp}`
+      console.log(tokenEndpoint)
+      navigator.clipboard.writeText(tokenEndpoint)
+      showSuccessPopup('Token endpoint copied')
+    } else {
+      errorPopup('The oauth2/token endpoint requires client to have AUTHORIZATION_CODE grant type')
+    }
+  }
+
+  const showSuccessPopup = (message: string) => {
+    messageApi.open({
+      type: 'success',
+      content: message,
+    })
+  }
+
+  const errorPopup = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    })
+  }
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleOk = () => {
+    setIsModalOpen(false)
     dispatch(deleteClient(id))
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
   }
 
   return ( 
     <div>
+      {contextHolder}
       {
         // condition 1
         // show card with values
@@ -57,10 +109,30 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                 <div className='client-card-top'>
                   <p>{clientId}</p>
                   <div>
-                    <IdcardOutlined className='client-card-icon' onClick={() => setShowRoleAuthForm(true)} />
-                    <AimOutlined className='client-card-icon' onClick={() => setShowScopesCard(true)} />
-                    <EditOutlined className='client-card-icon' onClick={() => setShowClientForm(true)} />
-                    <DeleteOutlined className='client-card-icon' onClick={() => handleDelete(id)} />
+                    <IdcardOutlined
+                      className='client-card-icon'
+                      onClick={() => setShowRoleAuthForm(true)}
+                    />
+                    <AimOutlined
+                      className='client-card-icon'
+                      onClick={() => setShowScopesCard(true)}
+                    />
+                    <EditOutlined
+                      className='client-card-icon'
+                      onClick={() => setShowClientForm(true)}
+                    />
+                    <DeleteOutlined
+                      className='client-card-icon'
+                      onClick={showModal}
+                    />
+                    <Modal
+                      title="Deletion"
+                      open={isModalOpen}
+                      onOk={handleOk}
+                      onCancel={handleCancel}
+                    >
+                      <p>Are you sure, you want to delete client with id: {id}?</p>
+                    </Modal>
                   </div>
                 </div>
                 <p className='parag'>Secret: {clientSecret}</p>
@@ -95,8 +167,24 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                   ))
                 }
               </div>
-              <div>
-              </div>
+            </div>
+            <div style={{ 
+              'display': 'flex',
+              'justifyContent': 'space-around',
+              'marginBottom': '1rem'
+              }}>
+              <button 
+                className='btn btn-secondary' 
+                onClick={() => generateAuthorizeEndpoint()}
+              >
+                Authorize endpoint
+              </button>
+              <button 
+                className='btn btn-secondary'
+                onClick={() => generateTokenEndpoint()}
+              >
+                Token endpoint
+              </button>
             </div>
           </div>
         ) : 

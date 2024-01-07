@@ -5,6 +5,7 @@
   --light-grey: #d0d0d0;
   --purple-color: #5236AB;
   --green-color: #44a15d;
+  --night-blue-color: #445873;
   --dark-color: #333;
   --dark-grey-color: #4e4e4e;
   --max-width: 1650px;
@@ -61,6 +62,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .btn-primary { background: var(--green-color); }
+.btn-secondary { background: var(--night-blue-color); }
 .btn-cancel { background: var(--dark-grey-color); }
 
 .btn:hover {
