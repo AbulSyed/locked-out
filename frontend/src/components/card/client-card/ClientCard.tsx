@@ -8,6 +8,7 @@ import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteClient } from '../../../store/client/clientSlice'
+import { message } from 'antd'
 
 interface ClientCardProps {
   id: string;
@@ -36,6 +37,8 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
   const [showClientForm, setShowClientForm] = useState(false)
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
   const [showScopesCard, setShowScopesCard] = useState(false)
+  
+  const [messageApi, contextHolder] = message.useMessage()
 
   const activeApp = location.pathname.split('/')[2]
 
@@ -53,8 +56,9 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
       const authendpoint =  `http://localhost:8080/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&appname=${activeApp}${scopes.length >= 1 ? '&scope=' : ''}${scopes.join('%20')}`
       console.log(authendpoint)
       navigator.clipboard.writeText(authendpoint)
+      showSuccessPopup('Authorize endpoint copied')
     } else {
-      alert('The oauth2/authorize endpoint requires client to have AUTHORIZATION_CODE grant type')
+      errorPopup('The oauth2/authorize endpoint requires client to have AUTHORIZATION_CODE grant type')
     }
   }
 
@@ -64,13 +68,30 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
       const tokenEndpoint = `http://localhost:8080/oauth2/token?client_id=${clientId}&redirect_uri=${redirectUri}&grant_type=authorization_code&code=YOUR_AUTH_CODE&appname=${activeApp}`
       console.log(tokenEndpoint)
       navigator.clipboard.writeText(tokenEndpoint)
+      showSuccessPopup('Token endpoint copied')
     } else {
-      alert('The oauth2/authorize endpoint requires client to have AUTHORIZATION_CODE grant type')
+      errorPopup('The oauth2/token endpoint requires client to have AUTHORIZATION_CODE grant type')
     }
   }
 
+  // antd message (pop up)
+  const showSuccessPopup = (message: string) => {
+    messageApi.open({
+      type: 'success',
+      content: message,
+    });
+  };
+
+  const errorPopup = (message: string) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+    });
+  };
+
   return ( 
     <div>
+      {contextHolder}
       {
         // condition 1
         // show card with values
@@ -81,10 +102,22 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                 <div className='client-card-top'>
                   <p>{clientId}</p>
                   <div>
-                    <IdcardOutlined className='client-card-icon' onClick={() => setShowRoleAuthForm(true)} />
-                    <AimOutlined className='client-card-icon' onClick={() => setShowScopesCard(true)} />
-                    <EditOutlined className='client-card-icon' onClick={() => setShowClientForm(true)} />
-                    <DeleteOutlined className='client-card-icon' onClick={() => handleDelete(id)} />
+                    <IdcardOutlined
+                      className='client-card-icon'
+                      onClick={() => setShowRoleAuthForm(true)}
+                    />
+                    <AimOutlined
+                      className='client-card-icon'
+                      onClick={() => setShowScopesCard(true)}
+                    />
+                    <EditOutlined
+                      className='client-card-icon'
+                      onClick={() => setShowClientForm(true)}
+                    />
+                    <DeleteOutlined
+                      className='client-card-icon'
+                      onClick={() => handleDelete(id)}
+                    />
                   </div>
                 </div>
                 <p className='parag'>Secret: {clientSecret}</p>
@@ -120,9 +153,23 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                 }
               </div>
             </div>
-            <div style={{ 'display': 'flex', 'justifyContent': 'space-around' }}>
-              <button onClick={() => generateAuthorizeEndpoint()}>Authorize endpoint</button>
-              <button onClick={() => generateTokenEndpoint()}>Token endpoint</button>
+            <div style={{ 
+              'display': 'flex',
+              'justifyContent': 'space-around',
+              'marginBottom': '1rem'
+              }}>
+              <button 
+                className='btn btn-secondary' 
+                onClick={() => generateAuthorizeEndpoint()}
+              >
+                Authorize endpoint
+              </button>
+              <button 
+                className='btn btn-secondary'
+                onClick={() => generateTokenEndpoint()}
+              >
+                Token endpoint
+              </button>
             </div>
           </div>
         ) : 
