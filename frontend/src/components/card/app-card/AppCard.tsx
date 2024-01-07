@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteApp } from '../../../store/app/appSlice'
+import { Modal } from 'antd'
 
 interface AppCardProps {
   id: string;
@@ -17,13 +18,21 @@ interface AppCardProps {
 
 const AppCard: React.FC<AppCardProps> = ({ id, title, description, to }) => {
   const [showAppForm, setShowAppForm] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   
   const dispatch = useAppDispatch()
 
-  const handleDelete = (id: string) => {
-    alert('Are you sure, you want to delete app with id: ' + id + '?')
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
 
+  const handleOk = () => {
+    setIsModalOpen(false)
     dispatch(deleteApp(id))
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
   }
 
   return ( 
@@ -36,8 +45,22 @@ const AppCard: React.FC<AppCardProps> = ({ id, title, description, to }) => {
                 <div className='app-card-top'>
                   <h2>{title}</h2>
                   <div>
-                    <EditOutlined className='app-card-icon' onClick={() => setShowAppForm(true)} />
-                    <DeleteOutlined className='app-card-icon' onClick={() => handleDelete(id)} />
+                    <EditOutlined
+                      className='app-card-icon'
+                      onClick={() => setShowAppForm(true)}
+                    />
+                    <DeleteOutlined
+                      className='app-card-icon'
+                      onClick={showModal}
+                    />
+                    <Modal
+                      title="Deletion"
+                      open={isModalOpen}
+                      onOk={handleOk}
+                      onCancel={handleCancel}
+                    >
+                      <p>Are you sure, you want to delete app with id: {id}?</p>
+                    </Modal>
                   </div>
                 </div>
                 <hr />

@@ -8,7 +8,7 @@ import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteClient } from '../../../store/client/clientSlice'
-import { message } from 'antd'
+import { message, Modal } from 'antd'
 
 interface ClientCardProps {
   id: string;
@@ -37,18 +37,13 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
   const [showClientForm, setShowClientForm] = useState(false)
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
   const [showScopesCard, setShowScopesCard] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   
   const [messageApi, contextHolder] = message.useMessage()
 
   const activeApp = location.pathname.split('/')[2]
 
   const dispatch = useAppDispatch()
-
-  const handleDelete = (id: string) => {
-    alert('Are you sure, you want to delete client with id: ' + id + '?')
-
-    dispatch(deleteClient(id))
-  }
 
   // endpoint should be used when redirecting a user to login page
   const generateAuthorizeEndpoint = () => {
@@ -74,20 +69,32 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
     }
   }
 
-  // antd message (pop up)
   const showSuccessPopup = (message: string) => {
     messageApi.open({
       type: 'success',
       content: message,
-    });
-  };
+    })
+  }
 
   const errorPopup = (message: string) => {
     messageApi.open({
       type: 'error',
       content: message,
-    });
-  };
+    })
+  }
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleOk = () => {
+    setIsModalOpen(false)
+    dispatch(deleteClient(id))
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
   return ( 
     <div>
@@ -116,8 +123,16 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                     />
                     <DeleteOutlined
                       className='client-card-icon'
-                      onClick={() => handleDelete(id)}
+                      onClick={showModal}
                     />
+                    <Modal
+                      title="Deletion"
+                      open={isModalOpen}
+                      onOk={handleOk}
+                      onCancel={handleCancel}
+                    >
+                      <p>Are you sure, you want to delete client with id: {id}?</p>
+                    </Modal>
                   </div>
                 </div>
                 <p className='parag'>Secret: {clientSecret}</p>

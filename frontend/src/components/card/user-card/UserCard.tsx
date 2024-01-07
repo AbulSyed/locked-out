@@ -7,6 +7,7 @@ import { IdcardOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteUser } from '../../../store/user/userSlice'
+import { Modal } from 'antd'
 
 interface UserCardProps {
   id: string;
@@ -32,13 +33,21 @@ interface Authority {
 const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phoneNumber, roles, authorities }) => {
   const [showUserForm, setShowUserForm] = useState(false)
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const dispatch = useAppDispatch()
 
-  const handleDelete = (id: string) => {
-    alert('Are you sure, you want to delete user with id: ' + id + '?')
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
 
+  const handleOk = () => {
+    setIsModalOpen(false)
     dispatch(deleteUser(id))
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
   }
 
   return ( 
@@ -53,9 +62,26 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
                 <div className='user-card-top'>
                   <p>{username}</p>
                   <div>
-                    <IdcardOutlined className='user-card-icon' onClick={() => setShowRoleAuthForm(true)} />
-                    <EditOutlined className='user-card-icon' onClick={() => setShowUserForm(true)} />
-                    <DeleteOutlined className='user-card-icon' onClick={() => handleDelete(id)} />
+                    <IdcardOutlined
+                      className='user-card-icon'
+                      onClick={() => setShowRoleAuthForm(true)}
+                    />
+                    <EditOutlined
+                      className='user-card-icon'
+                      onClick={() => setShowUserForm(true)}
+                    />
+                    <DeleteOutlined
+                      className='user-card-icon'
+                      onClick={showModal}
+                    />
+                    <Modal
+                      title="Deletion"
+                      open={isModalOpen}
+                      onOk={handleOk}
+                      onCancel={handleCancel}
+                    >
+                      <p>Are you sure, you want to delete user with id: {id}?</p>
+                    </Modal>
                   </div>
                 </div>
                 <p className='parag'>Email: {email}</p>
