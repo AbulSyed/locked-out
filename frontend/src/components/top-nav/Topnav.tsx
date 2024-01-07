@@ -17,8 +17,8 @@ const Topnav: React.FC<TopnavProps> = () => {
 						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/about">
 							About
 						</NavLink>
-						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/oauth">
-							OAuth2.0
+						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/faq">
+							FAQ
 						</NavLink>
 					</ul>
 					<ul className="secondary-links">

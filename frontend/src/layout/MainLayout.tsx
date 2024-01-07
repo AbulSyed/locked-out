@@ -2,6 +2,9 @@ import './MainLayout.scss'
 
 import Topnav from '../components/top-nav/Topnav'
 import Home from '../pages/home/Home'
+import About from '../pages/about/About'
+import Faq from '../pages/faq/Faq'
+import Docs from '../pages/docs/Docs'
 import Sidenav from '../components/side-nav/Sidenav'
 import Overview from '../components/app-details/overview/Overview'
 import Users from '../components/app-details/users/Users'
@@ -74,6 +77,9 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
           <Routes>
             <Route path='/' element={<Navigate to='/home' />} />
             <Route path='/home' element={<Home />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/faq' element={<Faq />} />
+            <Route path='/docs' element={<Docs />} />
             <Route path='/apps/:appname/overview' element={app ? <Overview /> : <Navigate to="/home" />} />
             <Route path='/apps/:appname/users' element={app ? <Users /> : <Navigate to="/home" />} />
             <Route path='/apps/:appname/clients' element={app ? <Clients /> : <Navigate to="/home" />} />
