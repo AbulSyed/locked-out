@@ -1,0 +1,1395 @@
+{
+	"info": {
+		"_postman_id": "b8cc30da-5257-4c82-a4b4-4cd450dee5ab",
+		"name": "locked-out",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth-service",
+			"item": [
+				{
+					"name": "info",
+					"item": [
+						{
+							"name": "well known",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/.well-known/openid-configuration",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										".well-known",
+										"openid-configuration"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "key endpoint",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/oauth2/jwks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"oauth2",
+										"jwks"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "token",
+					"item": [
+						{
+							"name": "do in browser",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/oauth2/authorize?response_type=code&client_id=client&redirect_uri=http://127.0.0.1:3000/authorized&appname=test&scope=openid%20email",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"oauth2",
+										"authorize"
+									],
+									"query": [
+										{
+											"key": "response_type",
+											"value": "code"
+										},
+										{
+											"key": "client_id",
+											"value": "client"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://127.0.0.1:3000/authorized"
+										},
+										{
+											"key": "code_challenge",
+											"value": "QYPAZ5NU8yvtlQ9erXrUYR-T5AGCjCF47vN-KsaI2A8",
+											"disabled": true
+										},
+										{
+											"key": "code_challenge_method",
+											"value": "S256",
+											"disabled": true
+										},
+										{
+											"key": "appname",
+											"value": "test"
+										},
+										{
+											"key": "scope",
+											"value": "openid%20email"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get access token",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "secret",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "client",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/oauth2/token?client_id=client&redirect_uri=http://127.0.0.1:3000/authorized&grant_type=authorization_code&code=Lgo_W6bOhpbtOQ7veZ2eWXBk8DBDB3S15QjIuXkuqMWmL2wsoKS-bCgBECF-4iDn5VOksmMUiXWSDnTrk5qa18e1uw3_n3Aez2zAqYCwQz07C4Xp04Y2KF-dFf6IdaSe&appname=test",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"oauth2",
+										"token"
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "client"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://127.0.0.1:3000/authorized"
+										},
+										{
+											"key": "grant_type",
+											"value": "authorization_code"
+										},
+										{
+											"key": "code",
+											"value": "Lgo_W6bOhpbtOQ7veZ2eWXBk8DBDB3S15QjIuXkuqMWmL2wsoKS-bCgBECF-4iDn5VOksmMUiXWSDnTrk5qa18e1uw3_n3Aez2zAqYCwQz07C4Xp04Y2KF-dFf6IdaSe"
+										},
+										{
+											"key": "appname",
+											"value": "test"
+										},
+										{
+											"key": "code_verifier",
+											"value": "qPsH306-ZDDaOE8DFzVn05TkN3ZZoVmI_6x4LsVglQI",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "health check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/health",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "identity-service",
+			"item": [
+				{
+					"name": "app controller",
+					"item": [
+						{
+							"name": "create app",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"create\",\n    \"description\": \"a\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/create-app",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"create-app"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get app",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-app/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-app",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get app v2",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-app-v2/test",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-app-v2",
+										"test"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get app list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-app-list?page=1&size=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-app-list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update app",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"test\",\n    \"description\": \"hello\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/update-app/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"update-app",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete app",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-app/15",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-app",
+										"15"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "user controller",
+					"item": [
+						{
+							"name": "create user",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"aaa\",\n    \"password\": \"test\",\n    \"email\": \"testa@m.com\",\n    \"phoneNumber\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/create-user/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"create-user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get user",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"qwe\",\n    \"password\": \"asdsads\",\n    \"email\": \"a@m.com\",\n    \"phoneNumber\": \"123435579\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/get-user?userId=21",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-user"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "21"
+										},
+										{
+											"key": "appName",
+											"value": "test",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get user list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-user-list?page=1&size=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-user-list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get user list by app id or name",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-user-list-by-app?appName=test&page=1&size=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-user-list-by-app"
+									],
+									"query": [
+										{
+											"key": "appId",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "appName",
+											"value": "test"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"updated2\",\n    \"password\": \"asdsads\",\n    \"email\": \"a@m.com\",\n    \"phoneNumber\": \"123435579\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/update-user/10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"update-user",
+										"10"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-user/19",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-user",
+										"19"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "client controller",
+					"item": [
+						{
+							"name": "create client",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clientId\": \"s\",\n    \"clientSecret\": \"secret\",\n    \"authMethod\": [\n        \"CLIENT_SECRET_BASIC\",\n        \"CLIENT_SECRET_POST\"\n    ],\n    \"authGrantType\": [\n        \"AUTHORIZATION_CODE\"\n    ],\n    \"redirectUri\": \"http://127.0.0.1:3000/authorized\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/create-client/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"create-client",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get client",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-client?appName=test&clientId=client",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-client"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "5",
+											"disabled": true
+										},
+										{
+											"key": "appName",
+											"value": "test"
+										},
+										{
+											"key": "clientId",
+											"value": "client"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get client list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-client-list?page=1&size=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-client-list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get client list by app id or name",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-client-list-by-app?appName=test&page=1&size=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-client-list-by-app"
+									],
+									"query": [
+										{
+											"key": "appName",
+											"value": "test"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "appId",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update client",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clientId\": \"aaa\",\n    \"clientSecret\": \"secret\",\n    \"authMethod\": [\n        \"CLIENT_SECRET_BASIC\"\n    ],\n    \"authGrantType\": [\n        \"AUTHORIZATION_CODE\"\n    ],\n    \"redirectUri\": \"http://google.co.uk\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/update-client/15",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"update-client",
+										"15"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete client",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-client/13",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-client",
+										"13"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "role controller",
+					"item": [
+						{
+							"name": "create role",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"ADMIN\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/create-role",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"create-role"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "alter user role/s",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userId\": \"21\",\n    \"roleIds\": [\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/alter-roles?addRoleTo=USER",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"alter-roles"
+									],
+									"query": [
+										{
+											"key": "addRoleTo",
+											"value": "USER"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "alter client role/s",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clientId\": \"1\",\n    \"roleIds\": [\n        \"14\", \"15\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/alter-roles?addRoleTo=CLIENT",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"alter-roles"
+									],
+									"query": [
+										{
+											"key": "addRoleTo",
+											"value": "CLIENT"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get role list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-role-list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-role-list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete role from user",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-role-from?deleteRoleFrom=USER&id=4&roleId=13",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-role-from"
+									],
+									"query": [
+										{
+											"key": "deleteRoleFrom",
+											"value": "USER"
+										},
+										{
+											"key": "id",
+											"value": "4"
+										},
+										{
+											"key": "roleId",
+											"value": "13"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete role from client",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-role-from?deleteRoleFrom=CLIENT&id=1&roleId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-role-from"
+									],
+									"query": [
+										{
+											"key": "deleteRoleFrom",
+											"value": "CLIENT"
+										},
+										{
+											"key": "id",
+											"value": "1"
+										},
+										{
+											"key": "roleId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete role entirely",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-role/12",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-role",
+										"12"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create authority",
+					"item": [
+						{
+							"name": "create authority",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"write\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/create-authority",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"create-authority"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "alter user authority/s",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userId\": \"21\",\n    \"authorityIds\": [\n        \"3\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/alter-authority?addAuthorityTo=USER",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"alter-authority"
+									],
+									"query": [
+										{
+											"key": "addAuthorityTo",
+											"value": "USER"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "alter client authority/s",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"clientId\": \"1\",\n    \"authorityIds\": [\n        \"3\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/alter-authority?addAuthorityTo=CLIENT",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"alter-authority"
+									],
+									"query": [
+										{
+											"key": "addAuthorityTo",
+											"value": "CLIENT"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get authority list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/get-authority-list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"get-authority-list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete authority from user",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-authority-from?deleteAuthorityFrom=USER&id=4&authorityId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-authority-from"
+									],
+									"query": [
+										{
+											"key": "deleteAuthorityFrom",
+											"value": "USER"
+										},
+										{
+											"key": "id",
+											"value": "4"
+										},
+										{
+											"key": "authorityId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete authority from client",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-authority-from?deleteAuthorityFrom=CLIENT&id=5&authorityId=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-authority-from"
+									],
+									"query": [
+										{
+											"key": "deleteAuthorityFrom",
+											"value": "CLIENT"
+										},
+										{
+											"key": "id",
+											"value": "5"
+										},
+										{
+											"key": "authorityId",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete authority entirely",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"url": {
+									"raw": "http://localhost:8081/delete-authority/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"delete-authority",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "alter scope",
+					"item": [
+						{
+							"name": "alter client scope",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "x-correlation-id",
+										"value": "1",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"scopes\": [\n        \"OPENID\",\n        \"EMAIL\",\n        \"PHONE\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/alter-client-scopes/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"alter-client-scopes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "health check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/health",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
