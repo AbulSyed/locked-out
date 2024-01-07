@@ -8,16 +8,21 @@ import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.domain.enums.AuthGrantTypeEnum;
 import com.syed.identityservice.domain.enums.AuthMethodEnum;
 import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientPageResponse;
 import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.impl.ClientServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.jupiter.api.BeforeEach;
+
+import com.syed.identityservice.utility.Utility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -28,8 +33,7 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ClientServiceImplTest extends BaseTest<Object> {
@@ -96,12 +100,27 @@ class ClientServiceImplTest extends BaseTest<Object> {
                 "http://localhost:3000", LocalDateTime.now());
         List<ClientEntity> clientEntityList = List.of(clientEntity);
 
-        when(clientRepository.findAll()).thenReturn(clientEntityList);
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
 
-        List<ClientResponse> res = clientService.getClientList();
+        Page<ClientEntity> clientEntityPage = mock(Page.class);
+
+        when(clientRepository.findAll(pageable)).thenReturn(clientEntityPage);
+
+        when(clientEntityPage.getContent()).thenReturn(clientEntityList);
+        when(clientEntityPage.getNumber()).thenReturn(0);
+        when(clientEntityPage.getSize()).thenReturn(10);
+        when(clientEntityPage.getTotalElements()).thenReturn(1L);
+        when(clientEntityPage.getTotalPages()).thenReturn(1);
+        when(clientEntityPage.isLast()).thenReturn(true);
+
+        ClientPageResponse res = clientService.getClientList(1, 10);
 
         assertThat(res).isNotNull()
-                .hasSize(1);
+                .hasFieldOrPropertyWithValue("page", 1)
+                .hasFieldOrPropertyWithValue("size", 10)
+                .hasFieldOrPropertyWithValue("totalElements", 1L)
+                .hasFieldOrPropertyWithValue("totalPages", 1)
+                .hasFieldOrPropertyWithValue("lastPage", true);
     }
 
     @Test
@@ -112,13 +131,28 @@ class ClientServiceImplTest extends BaseTest<Object> {
                 "http://localhost:3000", LocalDateTime.now());
         List<ClientEntity> clientEntityList = List.of(clientEntity);
 
-        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
-        when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class))).thenReturn(clientEntityList);
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
 
-        List<ClientResponse> res = clientService.getClientListByApp(1L, null);
+        Page<ClientEntity> clientEntityPage = mock(Page.class);
+
+        when(appRepository.findById(any(Long.class))).thenReturn(Optional.of(appEntity));
+        when(clientRepository.getClientEntitiesByUserApp(any(AppEntity.class), eq(pageable))).thenReturn(clientEntityPage);
+
+        when(clientEntityPage.getContent()).thenReturn(clientEntityList);
+        when(clientEntityPage.getNumber()).thenReturn(0);
+        when(clientEntityPage.getSize()).thenReturn(10);
+        when(clientEntityPage.getTotalElements()).thenReturn(1L);
+        when(clientEntityPage.getTotalPages()).thenReturn(1);
+        when(clientEntityPage.isLast()).thenReturn(true);
+
+        ClientPageResponse res = clientService.getClientListByApp(1L, null, 1, 10);
 
         assertThat(res).isNotNull()
-                .hasSize(1);
+                .hasFieldOrPropertyWithValue("page", 1)
+                .hasFieldOrPropertyWithValue("size", 10)
+                .hasFieldOrPropertyWithValue("totalElements", 1L)
+                .hasFieldOrPropertyWithValue("totalPages", 1)
+                .hasFieldOrPropertyWithValue("lastPage", true);
     }
 
     @Test

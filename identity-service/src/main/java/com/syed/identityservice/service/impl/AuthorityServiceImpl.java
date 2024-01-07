@@ -7,12 +7,14 @@ import com.syed.identityservice.data.repository.AuthorityRepository;
 import com.syed.identityservice.data.repository.ClientRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.AuthorityToEnum;
+import com.syed.identityservice.domain.model.request.AlterAuthorityRequest;
 import com.syed.identityservice.domain.model.request.AuthorityRequest;
 import com.syed.identityservice.domain.model.response.AuthorityResponse;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.AuthorityAlreadyPresentException;
 import com.syed.identityservice.exception.custom.FieldAlreadyExistsException;
+import com.syed.identityservice.exception.custom.InvalidRequestException;
 import com.syed.identityservice.exception.custom.ResourceNotFoundException;
 import com.syed.identityservice.service.AuthorityService;
 import com.syed.identityservice.utility.MapperUtil;
@@ -21,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @AllArgsConstructor
@@ -45,41 +48,68 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public MessageResponse addAuthority(AuthorityToEnum addAuthorityTo, Long id, Long authorityId) {
-        AuthorityEntity authorityEntity = authorityRepository.findById(authorityId).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage(AUTHORITY_WITH_ID + authorityId)));
+    public MessageResponse alterAuthority(AuthorityToEnum addAuthorityTo, AlterAuthorityRequest alterAuthorityRequest) {
+        Set<AuthorityEntity> authorityEntitySet = authorityRepository.findByIdIn(alterAuthorityRequest.getAuthorityIds());
+
+        if (authorityEntitySet.isEmpty() && !alterAuthorityRequest.getAuthorityIds().isEmpty()) {
+            return MessageResponse.builder()
+                    .message("No authorities found to add")
+                    .build();
+        }
 
         if (addAuthorityTo.toString().equals("USER")) {
-            log.info("we need to add a authority to a user with id {}", id);
-
-            UserEntity userEntity = userRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + id)));
-
-            if (userEntity.getAuthorities().contains(authorityEntity)) {
-                throw new AuthorityAlreadyPresentException(ErrorConstant.AUTHORITY_ALREADY_PRESENT.formatMessage("user " + userEntity.getUsername()));
-            } else {
-                userEntity.getAuthorities().add(authorityEntity);
-                userRepository.save(userEntity);
+            if (alterAuthorityRequest.getUserId() == null) {
+                throw new InvalidRequestException("User id must be present");
             }
 
+            log.info("we need to add authority/s to user with id {}", alterAuthorityRequest.getUserId());
+
+            UserEntity userEntity = userRepository.findById(alterAuthorityRequest.getUserId()).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("User with id " + alterAuthorityRequest.getUserId())));
+
+            if (alterAuthorityRequest.getAuthorityIds().isEmpty()) {
+                log.info("empty authorityIds[] request, hence removing all authorities");
+                userEntity.getAuthorities().clear();
+                userRepository.save(userEntity);
+
+                return MessageResponse.builder()
+                        .message("All authorities removed from user " + userEntity.getUsername())
+                        .build();
+            }
+
+            userEntity.getAuthorities().clear();
+            userEntity.setAuthorities(authorityEntitySet);
+            userRepository.save(userEntity);
+
             return MessageResponse.builder()
-                    .message("Authority " + authorityEntity.getName() + " added to user " + userEntity.getUsername())
+                    .message("Authority/s added to user " + userEntity.getUsername())
                     .build();
         } else if (addAuthorityTo.toString().equals("CLIENT")) {
-            log.info("we need to add a authority to a client with id {}", id);
-
-            ClientEntity clientEntity = clientRepository.findById(id).orElseThrow(() ->
-                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + id)));
-
-            if (clientEntity.getAuthorities().contains(authorityEntity)) {
-                throw new AuthorityAlreadyPresentException(ErrorConstant.AUTHORITY_ALREADY_PRESENT.formatMessage("client " + clientEntity.getClientId()));
-            } else {
-                clientEntity.getAuthorities().add(authorityEntity);
-                clientRepository.save(clientEntity);
+            if (alterAuthorityRequest.getClientId() == null) {
+                throw new InvalidRequestException("Client id must be present");
             }
 
+            log.info("we need to add authority/s to client with id {}", alterAuthorityRequest.getClientId());
+
+            ClientEntity clientEntity = clientRepository.findById(alterAuthorityRequest.getClientId()).orElseThrow(() ->
+                    new ResourceNotFoundException(ErrorConstant.RESOURCE_NOT_FOUND.formatMessage("Client with id " + alterAuthorityRequest.getClientId())));
+
+            if (alterAuthorityRequest.getAuthorityIds().isEmpty()) {
+                log.info("empty authorityIds[] request, hence removing all authorities");
+                clientEntity.getAuthorities().clear();
+                clientRepository.save(clientEntity);
+
+                return MessageResponse.builder()
+                        .message("All authorities removed from client " + clientEntity.getClientId())
+                        .build();
+            }
+
+            clientEntity.getAuthorities().clear();
+            clientEntity.setAuthorities(authorityEntitySet);
+            clientRepository.save(clientEntity);
+
             return MessageResponse.builder()
-                    .message("Authority " + authorityEntity.getName() + " added to client " + clientEntity.getClientId())
+                    .message("Authority/s added to client " + clientEntity.getClientId())
                     .build();
         }
         // no need for else clause as DefaultHandlerExceptionResolver exception
@@ -88,10 +118,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public List<String> getAuthorityList() {
+    public List<AuthorityResponse> getAuthorityList() {
         List<AuthorityEntity> authorityEntityList = authorityRepository.findAll();
 
-        return MapperUtil.mapAuthorityEntityListToStringList(authorityEntityList);
+        return MapperUtil.mapAuthorityEntityAuthorityResponseList(authorityEntityList);
     }
 
     @Override

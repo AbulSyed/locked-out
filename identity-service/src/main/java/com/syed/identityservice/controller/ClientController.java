@@ -5,6 +5,7 @@ import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.ClientRequest;
+import com.syed.identityservice.domain.model.response.ClientPageResponse;
 import com.syed.identityservice.domain.model.response.ClientResponse;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.InvalidRequestException;
@@ -13,8 +14,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -68,10 +67,12 @@ public class ClientController {
             log = "get client list request initiated"
     )
     @GetMapping("/get-client-list")
-    public ResponseEntity<List<ClientResponse>> getClientList(
-            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    public ResponseEntity<ClientPageResponse> getClientList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
-        return new ResponseEntity<>(clientService.getClientList(), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientList(page, size), HttpStatus.OK);
     }
 
     @AuditRequest(
@@ -82,16 +83,18 @@ public class ClientController {
             log = "get client list by app request initiated"
     )
     @GetMapping("/get-client-list-by-app")
-    public ResponseEntity<List<ClientResponse>> getClientListByApp(
+    public ResponseEntity<ClientPageResponse> getClientListByApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam(value = "appId", required = false) Long appId,
-            @RequestParam(value = "appName", required = false) String appName
+            @RequestParam(value = "appName", required = false) String appName,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
         if (appId == null && appName == null) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
-        return new ResponseEntity<>(clientService.getClientListByApp(appId, appName), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientListByApp(appId, appName, page, size), HttpStatus.OK);
     }
 
     @AuditRequest(
@@ -101,7 +104,7 @@ public class ClientController {
             requestStatus = RequestStatusEnum.PENDING,
             log = "update client request initiated"
     )
-    @PostMapping("/update-client/{clientId}")
+    @PutMapping("/update-client/{clientId}")
     public ResponseEntity<ClientResponse> updateClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @PathVariable Long clientId,

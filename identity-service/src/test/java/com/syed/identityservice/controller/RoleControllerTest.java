@@ -2,6 +2,7 @@ package com.syed.identityservice.controller;
 
 import com.syed.identityservice.BaseTest;
 import com.syed.identityservice.domain.enums.RoleToEnum;
+import com.syed.identityservice.domain.model.request.AlterRoleRequest;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.*;
 import com.syed.identityservice.service.RoleService;
@@ -45,13 +46,14 @@ class RoleControllerTest extends BaseTest<Object> {
     }
 
     @Test
-    void addRole_ToUser() {
-        MessageResponse addRoleResponse = createMessageResponse("Role ADMIN added to user Test");
+    void alterRoles_OfUser() {
+        MessageResponse addRoleResponse = createMessageResponse("Role/s added to user Test");
+        AlterRoleRequest alterRoleRequest = createAlterRoleRequest(1L, List.of(1L));
         ResponseEntity<Object> addRoleExpectedResponse = createExpectedResponse(HttpStatus.CREATED, addRoleResponse);
 
-        when(roleService.addRole(any(RoleToEnum.class), any(Long.class), any(Long.class))).thenReturn(addRoleResponse);
+        when(roleService.alterRoles(any(RoleToEnum.class), any(AlterRoleRequest.class))).thenReturn(addRoleResponse);
 
-        ResponseEntity<MessageResponse> res = roleController.addRole(correlationId, RoleToEnum.USER, 1L, 1L);
+        ResponseEntity<MessageResponse> res = roleController.alterRoles(correlationId, RoleToEnum.USER, alterRoleRequest);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), addRoleExpectedResponse.getStatusCode());
@@ -60,12 +62,12 @@ class RoleControllerTest extends BaseTest<Object> {
 
     @Test
     void getRoleList() {
-        List<String> getRoleListResponse = List.of("ADMIN");
+        List<RoleResponse> getRoleListResponse = List.of(new RoleResponse(1L, "ADMIN"));
         ResponseEntity<Object> getRoleListExpectedResponse = createExpectedResponse(HttpStatus.OK, getRoleListResponse);
 
         when(roleService.getRoleList()).thenReturn(getRoleListResponse);
 
-        ResponseEntity<List<String>> res = roleController.getRoleList(correlationId);
+        ResponseEntity<List<RoleResponse>> res = roleController.getRoleList(correlationId);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getRoleListExpectedResponse.getStatusCode());

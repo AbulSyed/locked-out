@@ -1,4 +1,4 @@
-.default-card {
+.default-client-card {
   background: #ffffff;
   color: #000;
   border: .5px solid #cccbcb;
@@ -8,26 +8,18 @@
   flex-direction: column;
   height: 100%;
 
-  .default-card-top-and-bottom {
+  .default-client-card-top-and-bottom {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
 
-    .default-card-top {
+    .default-client-card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
 
-      h2 {
-        color: var(--dark-color);
-        font-size: 1.5rem;
-        font-weight: 400;
-        margin-bottom: 1rem;
-      }
-
-      .default-card-icon {
-        // color: rgb(174, 174, 174);
+      .default-client-card-icon {
         transition: .5s all;
         margin-top: -.8rem;
 
@@ -39,17 +31,7 @@
     }
 
     .desc {
-      margin: 2rem 0;
-    }
-
-    .botton-icon {
-      display: flex;
-      justify-content: space-around;
-      transition: .5s all;
-      align-items: center;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      color: rgb(174, 174, 174);
+      margin-top: 1.5rem;
     }
   }
 }

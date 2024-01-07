@@ -1,40 +1,69 @@
 import './Sidenav.scss'
 
-import { NavLink } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
+import { useAppSelector, useAppDispatch } from '../../store/hooks'
+import { setActiveNavReducer } from '../../store/active-nav/activeNavSlice'
 
 interface SidenavProps {
-  route: string
 }
 
-const Sidenav: React.FC<SidenavProps> = ({ route }) => {
+const Sidenav: React.FC<SidenavProps> = () => {
+  const [activeNav, setActiveNav] = useState('Overview')
+  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Authorities', 'Scopes', 'Tokens']
+  
+  const state = useAppSelector(state => state.app)
+  const location = useLocation()
+  const dispatch = useAppDispatch()
+  const activeApp = location.pathname.split('/')[2]
+
+  useEffect(() => {
+    dispatch(setActiveNavReducer('Overview'))
+  }, [])
+
+  const updateActiveNav = (navItem: string) => {
+    setActiveNav(navItem)
+    dispatch(setActiveNavReducer(navItem))
+  }
+
   return (
     <div className='sidenav'>
-      <ul className='sidenav-list'>
-        <select className="app-select">
-          <option value="app-1">app-1</option>
-          <option value="app-2">app-2</option>
-          <option value="app-3">app-3</option>
+      <div className='sidenav-list'>
+        <select className='app-select'>
+          {
+            state.apps.map(app => (
+              <option
+                key={app.id}
+                value={app.name}
+                selected={app.name == activeApp}
+              >
+                {app.name}
+              </option>
+            ))
+          }
         </select>
-        <hr className="sidenav-hr"/>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/overview"}>
-          Overview
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/users"}>
-          Users
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/clients"}>
-          Clients
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/roles"}>
-          Roles
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/scopes"}>
-          Scopes
-        </NavLink>
-        <NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to={route + "/token"}>
-          Token
-        </NavLink>
-      </ul>
+
+        <hr className='sidenav-hr'/>
+
+        <ul>
+          {
+            navItems.map(navItem => (
+              <NavLink 
+                key={navItem}
+                to={`apps/${activeApp}/${navItem.toLowerCase()}`}
+              >
+                <li 
+                  key={navItem}
+                  className={activeNav == `${navItem}` ? 'li active-item' : 'li'}
+                  onClick={() => updateActiveNav(navItem)}
+                >
+                  {navItem}
+                </li>
+              </NavLink>
+            ))
+          }
+        </ul>
+      </div>
       <span className='version'>{import.meta.env.VITE_APP_VERSION}</span>
     </div>
   )

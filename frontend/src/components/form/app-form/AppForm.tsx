@@ -5,17 +5,18 @@ import { useAppDispatch } from '../../../store/hooks'
 import { createApp, updateApp } from '../../../store/app/appSlice'
 
 interface CreateAppFormInterface {
-  type: string,
-  id?: string,
-  initName: string,
-  initDesc: string,
-  showAppForm: boolean,
-  setShowAppForm: any
+  type: string;
+  id?: string;
+  initName: string;
+  initDesc: string;
+  showAppForm: boolean;
+  setShowAppForm: any;
 }
 
 const CreateAppForm: React.FC<CreateAppFormInterface> = ({ type, id, initName, initDesc, showAppForm, setShowAppForm }) => {
   const [name, setName] = useState(initName)
   const [desc, setDesc] = useState(initDesc)
+
   const dispatch = useAppDispatch()
 
   const handleSubmit = (e: any) => {

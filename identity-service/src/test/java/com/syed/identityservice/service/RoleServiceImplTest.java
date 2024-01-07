@@ -6,6 +6,7 @@ import com.syed.identityservice.data.entity.UserEntity;
 import com.syed.identityservice.data.repository.RoleRepository;
 import com.syed.identityservice.data.repository.UserRepository;
 import com.syed.identityservice.domain.enums.RoleToEnum;
+import com.syed.identityservice.domain.model.request.AlterRoleRequest;
 import com.syed.identityservice.domain.model.request.RoleRequest;
 import com.syed.identityservice.domain.model.response.MessageResponse;
 import com.syed.identityservice.domain.model.response.RoleResponse;
@@ -63,18 +64,19 @@ class RoleServiceImplTest extends BaseTest<Object> {
     }
 
     @Test
-    void addRole_ToUser() {
+    void alterRoles_OfUser() {
+        AlterRoleRequest alterRoleRequest = createAlterRoleRequest(1L, List.of(1L));
         RoleEntity roleEntity = createRoleEntity(1L, "ADMIN", new HashSet<>(), new HashSet<>());
         UserEntity userEntity = createUserEntity(1L, "abul", "123", "abul@mail.com", "079",
                 new HashSet<>(), new HashSet<>(), LocalDateTime.now());
 
-        when(roleRepository.findById(any(Long.class))).thenReturn(Optional.of(roleEntity));
+        when(roleRepository.findByIdIn(any())).thenReturn(Set.of(roleEntity));
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(userEntity));
 
-        MessageResponse res = roleService.addRole(RoleToEnum.USER, 1L, 1L);
+        MessageResponse res = roleService.alterRoles(RoleToEnum.USER, alterRoleRequest);
 
         assertThat(res).isNotNull()
-                .hasFieldOrPropertyWithValue("message", "Role ADMIN added to user abul");
+                .hasFieldOrPropertyWithValue("message", "Role/s added to user abul");
     }
 
     @Test
@@ -85,7 +87,7 @@ class RoleServiceImplTest extends BaseTest<Object> {
 
         when(roleRepository.findAll()).thenReturn(getRoleEntityList);
 
-        List<String> res = roleService.getRoleList();
+        List<RoleResponse> res = roleService.getRoleList();
 
         assertThat(res).isNotNull()
                 .hasSize(1);

@@ -6,6 +6,7 @@ import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
 import com.syed.identityservice.domain.model.request.UserRequest;
 import com.syed.identityservice.domain.model.response.UserResponse;
+import com.syed.identityservice.domain.model.response.UserV2PageResponse;
 import com.syed.identityservice.domain.model.response.UserV2Response;
 import com.syed.identityservice.exception.ErrorConstant;
 import com.syed.identityservice.exception.custom.InvalidRequestException;
@@ -14,8 +15,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -69,10 +68,12 @@ public class UserController {
             log = "get user list request initiated"
     )
     @GetMapping("/get-user-list")
-    public ResponseEntity<List<UserV2Response>> getUserList(
-            @RequestHeader(value = "x-correlation-id", required = true) String correlationId
+    public ResponseEntity<UserV2PageResponse> getUserList(
+            @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
-        return new ResponseEntity<>(userService.getUserList(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserList(page, size), HttpStatus.OK);
     }
 
     @AuditRequest(
@@ -83,16 +84,18 @@ public class UserController {
             log = "get user list by app request initiated"
     )
     @GetMapping("/get-user-list-by-app")
-    public ResponseEntity<List<UserV2Response>> getUserListByApp(
+    public ResponseEntity<UserV2PageResponse> getUserListByApp(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam(value = "appId", required = false) Long appId,
-            @RequestParam(value = "appName", required = false) String appName
+            @RequestParam(value = "appName", required = false) String appName,
+            @RequestParam(value = "page", required = true) int page,
+            @RequestParam(value = "size", required = true) int size
     ) {
         if (appId == null && appName == null) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
-        return new ResponseEntity<>(userService.getUserListByApp(appId, appName), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserListByApp(appId, appName, page, size), HttpStatus.OK);
     }
 
     @AuditRequest(

@@ -4,10 +4,7 @@ import com.syed.identityservice.data.entity.*;
 import com.syed.identityservice.domain.enums.ProcessEnum;
 import com.syed.identityservice.domain.enums.RequestStatusEnum;
 import com.syed.identityservice.domain.enums.RequestTypeEnum;
-import com.syed.identityservice.domain.model.AuthorityModel;
-import com.syed.identityservice.domain.model.ClientModel;
-import com.syed.identityservice.domain.model.RoleModel;
-import com.syed.identityservice.domain.model.UserModel;
+import com.syed.identityservice.domain.model.*;
 import com.syed.identityservice.domain.model.request.*;
 import com.syed.identityservice.domain.model.response.*;
 
@@ -155,6 +152,17 @@ public class MapperUtil {
         return appResponseList;
     }
 
+    public static AppPageResponse mapAppListResponseToAppPageResponse(List<AppResponse> apps, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return AppPageResponse.builder()
+                .apps(apps)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     public static UserEntity mapUserModelToEntity(UserRequest request) {
         return UserEntity.builder()
                 .username(request.getUsername())
@@ -224,10 +232,45 @@ public class MapperUtil {
                     .createdAt(userEntity.getCreatedAt())
                     .build();
 
+            Set<RoleModel> roleModels = new HashSet<>();
+
+            for (RoleEntity roleEntity : userEntity.getRoles()) {
+                RoleModel roleModel = RoleModel.builder()
+                        .id(roleEntity.getId())
+                        .name(roleEntity.getName())
+                        .build();
+
+                roleModels.add(roleModel);
+            }
+            getUserResponse.setRoles(roleModels);
+
+            Set<AuthorityModel> authorityModels = new HashSet<>();
+
+            for (AuthorityEntity authorityEntity : userEntity.getAuthorities()) {
+                AuthorityModel authorityModel = AuthorityModel.builder()
+                        .id(authorityEntity.getId())
+                        .name(authorityEntity.getName())
+                        .build();
+
+                authorityModels.add(authorityModel);
+            }
+            getUserResponse.setAuthorities(authorityModels);
+
             userResponseList.add(getUserResponse);
         }
 
         return userResponseList;
+    }
+
+    public static UserV2PageResponse mapUserV2ResponseListToUserV2PageResponse(List<UserV2Response> users, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return UserV2PageResponse.builder()
+                .users(users)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
     }
 
     public static ClientEntity mapClientModelToEntity(ClientRequest request) {
@@ -324,6 +367,17 @@ public class MapperUtil {
         return clientResponseList;
     }
 
+    public static ClientPageResponse mapClientResponseListToClientPageResponse(List<ClientResponse> clients, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return ClientPageResponse.builder()
+                .clients(clients)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     public static RoleEntity mapRoleModelToEntity(RoleRequest request) {
         return RoleEntity.builder()
                 .name(request.getName())
@@ -337,11 +391,11 @@ public class MapperUtil {
                 .build();
     }
 
-    public static List<String> mapRoleEntityListToStringList(List<RoleEntity> entityList) {
-        List<String> roles = new ArrayList<>();
+    public static List<RoleResponse> mapRoleEntityListToRoleResponseList(List<RoleEntity> entityList) {
+        List<RoleResponse> roles = new ArrayList<>();
 
         for (RoleEntity roleEntity : entityList) {
-            roles.add(roleEntity.getName());
+            roles.add(mapRoleEntityToResponse(roleEntity));
         }
         return roles;
     }
@@ -359,11 +413,11 @@ public class MapperUtil {
                 .build();
     }
 
-    public static List<String> mapAuthorityEntityListToStringList(List<AuthorityEntity> entityList) {
-        List<String> authorities = new ArrayList<>();
+    public static List<AuthorityResponse> mapAuthorityEntityAuthorityResponseList(List<AuthorityEntity> entityList) {
+        List<AuthorityResponse> authorities = new ArrayList<>();
 
         for (AuthorityEntity authorityEntity : entityList) {
-            authorities.add(authorityEntity.getName());
+            authorities.add(mapAuthorityEntityToResponse(authorityEntity));
         }
         return authorities;
     }

@@ -2,7 +2,10 @@ import './Topnav.scss'
 
 import { NavLink } from 'react-router-dom'
 
-const Topnav: React.FC = () => {
+interface TopnavProps {
+}
+
+const Topnav: React.FC<TopnavProps> = () => {
 	return (
 		<nav className="navbar">
 			<div className="container">
@@ -14,8 +17,8 @@ const Topnav: React.FC = () => {
 						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/about">
 							About
 						</NavLink>
-						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/oauth">
-							OAuth2.0
+						<NavLink className={({ isActive, isPending }) => isPending ? "pending li" : isActive ? "active li" : "li"} to="/faq">
+							FAQ
 						</NavLink>
 					</ul>
 					<ul className="secondary-links">

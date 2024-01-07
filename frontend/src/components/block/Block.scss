@@ -1,0 +1,25 @@
+.block {
+  padding: 1rem;
+  margin: 1rem;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  .block-item {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 1rem;
+    border: 1px rgb(10, 142, 109) solid;
+
+    .delete-icon {
+      transition: all .6s;
+
+      &:hover {
+        cursor: pointer;
+        color: red;
+      }
+    }
+  }
+}

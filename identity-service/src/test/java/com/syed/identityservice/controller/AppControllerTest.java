@@ -62,9 +62,9 @@ class AppControllerTest extends BaseTest<Object> {
         AppV2Response getAppV2Response = createAppV2Response(1L, "app", "test", LocalDateTime.now());
         ResponseEntity<Object> getAppV2ExpectedResponse = createExpectedResponse(HttpStatus.OK, getAppV2Response);
 
-        when(appService.getAppV2(any(Long.class))).thenReturn(getAppV2Response);
+        when(appService.getAppV2(any(String.class))).thenReturn(getAppV2Response);
 
-        ResponseEntity<AppV2Response> res = appController.getAppV2(correlationId, 1L);
+        ResponseEntity<AppV2Response> res = appController.getAppV2(correlationId, "test");
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAppV2ExpectedResponse.getStatusCode());
@@ -74,11 +74,12 @@ class AppControllerTest extends BaseTest<Object> {
     @Test
     void getAppList() {
         List<AppResponse> getAppListResponse = List.of(createAppResponse(1L, "app", "test", LocalDateTime.now()));
-        ResponseEntity<Object> getAppListExpectedResponse = createExpectedResponse(HttpStatus.OK, getAppListResponse);
+        AppPageResponse appPageResponse = createAppPageResponse(getAppListResponse, 1, 10, 5L, 1, true);
+        ResponseEntity<Object> getAppListExpectedResponse = createExpectedResponse(HttpStatus.OK, appPageResponse);
 
-        when(appService.getAppList()).thenReturn(getAppListResponse);
+        when(appService.getAppList(1, 10)).thenReturn(appPageResponse);
 
-        ResponseEntity<List<AppResponse>> res = appController.getAppList(correlationId);
+        ResponseEntity<AppPageResponse> res = appController.getAppList(correlationId, 1, 10);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getAppListExpectedResponse.getStatusCode());

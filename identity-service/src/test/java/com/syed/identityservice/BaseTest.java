@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public class BaseTest<T> {
@@ -33,6 +34,17 @@ public class BaseTest<T> {
                 .name(name)
                 .description(description)
                 .createdAt(createdAt)
+                .build();
+    }
+
+    protected AppPageResponse createAppPageResponse(List<AppResponse> apps, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return AppPageResponse.builder()
+                .apps(apps)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
                 .build();
     }
 
@@ -94,6 +106,17 @@ public class BaseTest<T> {
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .createdAt(createdAt)
+                .build();
+    }
+
+    protected UserV2PageResponse createUserV2PageResponse(List<UserV2Response> users, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return UserV2PageResponse.builder()
+                .users(users)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
                 .build();
     }
 
@@ -206,6 +229,17 @@ public class BaseTest<T> {
                 .build();
     }
 
+    protected ClientPageResponse createClientPageResponse(List<ClientResponse> clients, int page, int size, long totalElements, int totalPages, boolean lastPage) {
+        return ClientPageResponse.builder()
+                .clients(clients)
+                .page(page)
+                .size(size)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .lastPage(lastPage)
+                .build();
+    }
+
     protected RoleRequest createRoleRequest(String name) {
         return RoleRequest.builder()
                 .name(name)
@@ -225,6 +259,20 @@ public class BaseTest<T> {
                 .name(name)
                 .users(users)
                 .clients(clients)
+                .build();
+    }
+
+    protected AlterRoleRequest createAlterRoleRequest(Long userId, List<Long> roleIds) {
+        return AlterRoleRequest.builder()
+                .userId(userId)
+                .roleIds(roleIds)
+                .build();
+    }
+
+    protected AlterAuthorityRequest createAlterAuthorityRequest(Long userId, List<Long> authorityIds) {
+        return AlterAuthorityRequest.builder()
+                .userId(userId)
+                .authorityIds(authorityIds)
                 .build();
     }
 
