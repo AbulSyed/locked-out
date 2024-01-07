@@ -37,12 +37,34 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
   const [showRoleAuthForm, setShowRoleAuthForm] = useState(false)
   const [showScopesCard, setShowScopesCard] = useState(false)
 
+  const activeApp = location.pathname.split('/')[2]
+
   const dispatch = useAppDispatch()
 
   const handleDelete = (id: string) => {
     alert('Are you sure, you want to delete client with id: ' + id + '?')
 
     dispatch(deleteClient(id))
+  }
+
+  const generateAuthorizeEndpoint = () => {
+    if (authGrantType.includes('AUTHORIZATION_CODE')) {
+      const authendpoint =  `http://localhost:8080/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&appname=${activeApp}${scopes.length >= 1 ? '&scope=' : ''}${scopes.join('%20')}`
+      console.log(authendpoint)
+      navigator.clipboard.writeText(authendpoint)
+    } else {
+      alert('The oauth2/authorize endpoint requires client to have AUTHORIZATION_CODE grant type')
+    }
+  }
+
+  const generateTokenEndpoint = () => {
+    if (authGrantType.includes('AUTHORIZATION_CODE')) {
+      const tokenEndpoint = `http://localhost:8080/oauth2/token?client_id=${clientId}&redirect_uri=${redirectUri}&grant_type=authorization_code&code=YOUR_AUTH_CODE&appname=${activeApp}`
+      console.log(tokenEndpoint)
+      navigator.clipboard.writeText(tokenEndpoint)
+    } else {
+      alert('The oauth2/authorize endpoint requires client to have AUTHORIZATION_CODE grant type')
+    }
   }
 
   return ( 
@@ -95,8 +117,10 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                   ))
                 }
               </div>
-              <div>
-              </div>
+            </div>
+            <div style={{ 'display': 'flex', 'justifyContent': 'space-around' }}>
+              <button onClick={() => generateAuthorizeEndpoint()}>Authorize endpoint</button>
+              <button onClick={() => generateTokenEndpoint()}>Token endpoint</button>
             </div>
           </div>
         ) : 
