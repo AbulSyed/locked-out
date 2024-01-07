@@ -12,7 +12,6 @@ import Clients from '../components/app-details/clients/Clients'
 import Roles from '../components/app-details/roles/Roles'
 import Authority from '../components/app-details/authority/Authority'
 import Scopes from '../components/app-details/scopes/Scopes'
-import Tokens from '../components/app-details/tokens/Tokens'
 
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -69,7 +68,9 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
   return (
     <>
       <Topnav />
-      <div style={{ display: isShowingSidenav ? 'flex' : 'initial' }}>
+      <div
+        style={{ display: isShowingSidenav ? 'flex' : 'initial' }}
+      >
         {
           isShowingSidenav ? <Sidenav /> : null
         }
@@ -86,7 +87,6 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
             <Route path='/apps/:appname/roles' element={app ? <Roles /> : <Navigate to="/home" />} />
             <Route path='/apps/:appname/authorities' element={app ? <Authority /> : <Navigate to="/home" />} />
             <Route path='/apps/:appname/scopes' element={app ? <Scopes /> : <Navigate to="/home" />} />
-            <Route path='/apps/:appname/tokens' element={app ? <Tokens /> : <Navigate to="/home" />} />
           </Routes>
         </div>
       </div>
