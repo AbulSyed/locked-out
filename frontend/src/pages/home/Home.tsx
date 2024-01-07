@@ -4,12 +4,14 @@ import AppCard from '../../components/card/app-card/AppCard'
 import DefaultAppCard from '../../components/card/default-card/DefaultAppCard';
 
 import { useAppSelector } from '../../store/hooks'
+import { Spin } from 'antd'
 
 interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = () => {
   const state = useAppSelector(state => state.app)
+  const loading = useAppSelector(state => state.app.loading)
 
   return (
     <div>
@@ -18,9 +20,17 @@ const Home: React.FC<HomeProps> = () => {
         <div className='card-container'>
           <DefaultAppCard />
           {
-            state.apps.map((app) => (
-              <AppCard key={app.id} id={app.id} title={app.name} description={app.description} to={`/${app.name}`} />
-            ))
+            loading ? <Spin /> : (
+              state.apps.map((app) => (
+                <AppCard
+                  key={app.id}
+                  id={app.id}
+                  title={app.name}
+                  description={app.description}
+                  to={`/${app.name}`}
+                />
+              ))
+            )
           }
         </div>
       </div>
