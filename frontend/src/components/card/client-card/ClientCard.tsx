@@ -8,7 +8,7 @@ import { IdcardOutlined, AimOutlined, EditOutlined, DeleteOutlined } from '@ant-
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteClient } from '../../../store/client/clientSlice'
-import { message, Modal } from 'antd'
+import { message, Modal, Tooltip } from 'antd'
 
 interface ClientCardProps {
   id: string;
@@ -116,7 +116,9 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
             <div className="client-card-top-and-bottom p-1">
               <div>
                 <div className='client-card-top'>
-                  <p>{clientId}</p>
+                  <Tooltip title="Client ID">
+                    <p>{clientId}</p>
+                  </Tooltip>
                   <div>
                     <IdcardOutlined
                       className='client-card-icon'
@@ -144,35 +146,51 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                     </Modal>
                   </div>
                 </div>
-                <p className='parag'>Secret: {clientSecret}</p>
-                <p className='parag'>Redirect URI: {redirectUri}</p>
-                <p className='parag'>Auth Method: {authMethod && authMethod.map(am => (
-                  <>
-                    <span key={am}>{am}</span>
-                    <br />
-                  </>
-                ))}</p>
-                <p className='parag'>Auth Grant Type: {authGrantType && authGrantType.map(agt => (
-                  <>
-                    <span key={agt}>{agt}</span>
-                    <br />
-                  </>
-                ))}</p>
+                <div style={{ 
+                  'display': 'flex',
+                  'justifyContent': 'space-between',
+                  'marginBottom': '.5rem'
+                }}>
+                  <Tooltip title="Client secret">
+                    <span className='parag'>{clientSecret} </span>
+                  </Tooltip>
+                  <Tooltip title="Redirect uri">
+                    <span className='parag'> {redirectUri}</span>
+                  </Tooltip>
+                </div>
+                {
+                  authMethod && authMethod.map(am => (
+                    <Tooltip title="Auth method" color={'#5f6991'}>
+                      <p key={am} className='category am'>{am}</p>
+                    </Tooltip>
+                  ))
+                }
+                {
+                  authGrantType && authGrantType.map(agt => (
+                    <Tooltip title="Grant type" color={'#5100ff'}>
+                      <p key={agt} className='category agt'>{agt}</p>
+                    </Tooltip>
+                  ))
+                }
                 {
                   roles && roles.map(role => (
-                    <p key={role.id} className='category role'>{role.name}</p>
+                    <Tooltip title="Role" color={'#0033ff'}>
+                      <p key={role.id} className='category role'>{role.name}</p>
+                    </Tooltip>
                   ))
                 }
-                <br />
                 {
                   authorities && authorities.map(authority => (
-                    <p key={authority.id} className='category authority'>{authority.name}</p>
+                    <Tooltip title="Authority" color={'#28089b'}>
+                      <p key={authority.id} className='category authority'>{authority.name}</p>
+                    </Tooltip>
                   ))
                 }
-                <br />
                 {
                   scopes && scopes.map(scope => (
-                    <p key={scope} className='category scope'>{scope}</p>
+                    <Tooltip title="Authority" color={'#9b8308'}>
+                      <p key={scope} className='category scope'>{scope}</p>
+                    </Tooltip>
                   ))
                 }
               </div>
@@ -182,30 +200,30 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
               'justifyContent': 'space-around',
               'marginBottom': '1rem'
               }}>
-              <button 
-                className='btn btn-secondary' 
-                onClick={() => generateAuthorizeEndpoint()}
-              >
-                Authorize endpoint
-              </button>
-              <button 
-                className='btn btn-secondary'
-                onClick={() => generateTokenEndpoint()}
-              >
-                Token endpoint
-              </button>
+                <button 
+                  className='btn btn-secondary' 
+                  onClick={() => generateAuthorizeEndpoint()}
+                >
+                  Authorize endpoint
+                </button>
+                <button 
+                  className='btn btn-secondary'
+                  onClick={() => generateTokenEndpoint()}
+                >
+                  Token endpoint
+                </button>
             </div>
             <div style={{ 
               'display': 'flex',
               'justifyContent': 'space-around',
               'marginBottom': '1rem'
               }}>
-              <button 
-                className='btn btn-secondary'
-                onClick={() => generateClientCredentialsEndpoint()}
-              >
-                Client credentials endpoint
-              </button>
+                <button 
+                  className='btn btn-secondary'
+                  onClick={() => generateClientCredentialsEndpoint()}
+                >
+                  Client credentials endpoint
+                </button>
             </div>
           </div>
         ) : 

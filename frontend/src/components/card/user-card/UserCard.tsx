@@ -7,7 +7,7 @@ import { IdcardOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { deleteUser } from '../../../store/user/userSlice'
-import { Modal } from 'antd'
+import { Modal, Tooltip } from 'antd'
 
 interface UserCardProps {
   id: string;
@@ -89,13 +89,16 @@ const UserCard: React.FC<UserCardProps> = ({ id, username, password, email, phon
                 <p className='parag'>Phone: {phoneNumber}</p>
                 {
                   roles && roles.map(role => (
-                    <p key={role.id} className='category role'>{role.name}</p>
+                    <Tooltip title="Role" color={'#0033ff'}>
+                      <span key={role.id} className='category role'>{role.name}</span>
+                    </Tooltip>
                   ))
                 }
-                <br />
                 {
                   authorities && authorities.map(authority => (
-                    <p key={authority.id} className='category authority'>{authority.name}</p>
+                    <Tooltip title="Authority" color={'#28089b'}>
+                      <span key={authority.id} className='category authority'>{authority.name}</span>
+                    </Tooltip>
                   ))
                 }
               </div>
