@@ -48,10 +48,9 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
   // endpoint should be used when redirecting a user to login page
   const generateAuthorizeEndpoint = () => {
     if (authGrantType.includes('AUTHORIZATION_CODE')) {
-      const authendpoint =  `http://localhost:8080/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&appname=${activeApp}${scopes.length >= 1 ? '&scope=' : ''}${scopes.join('%20')}`
-      console.log(authendpoint)
+      const authendpoint =  `http://localhost:8080/oauth2/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&appname=${activeApp}${scopes.length >= 1 ? '&scope=' : ''}${scopes.join('%20').toLowerCase()}`
       navigator.clipboard.writeText(authendpoint)
-      showSuccessPopup('Authorize endpoint copied')
+      showSuccessPopup('Authorize endpoint copied - GET')
     } else {
       errorPopup('The oauth2/authorize endpoint requires client to have AUTHORIZATION_CODE grant type')
     }
@@ -61,11 +60,21 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
   const generateTokenEndpoint = () => {
     if (authGrantType.includes('AUTHORIZATION_CODE')) {
       const tokenEndpoint = `http://localhost:8080/oauth2/token?client_id=${clientId}&redirect_uri=${redirectUri}&grant_type=authorization_code&code=YOUR_AUTH_CODE&appname=${activeApp}`
-      console.log(tokenEndpoint)
       navigator.clipboard.writeText(tokenEndpoint)
-      showSuccessPopup('Token endpoint copied')
+      showSuccessPopup('Token endpoint copied - POST')
     } else {
       errorPopup('The oauth2/token endpoint requires client to have AUTHORIZATION_CODE grant type')
+    }
+  }
+
+  // endpoint should be used to obtain an access token via client_credentials grant flow
+  const generateClientCredentialsEndpoint = () => {
+    if (authGrantType.includes('CLIENT_CREDENTIALS')) {
+      const ccEndpoint = `http://localhost:8080/oauth2/token?client_id=${clientId}&grant_type=client_credentials&appname=${activeApp}`
+      navigator.clipboard.writeText(ccEndpoint)
+      showSuccessPopup('Client credentials endpoint copied - POST')
+    } else {
+      errorPopup('This endpoint requires client to have CLIENT_CREDENTIALS grant type')
     }
   }
 
@@ -184,6 +193,18 @@ const ClientCard: React.FC<ClientCardProps> = ({ id, clientId, clientSecret, rol
                 onClick={() => generateTokenEndpoint()}
               >
                 Token endpoint
+              </button>
+            </div>
+            <div style={{ 
+              'display': 'flex',
+              'justifyContent': 'space-around',
+              'marginBottom': '1rem'
+              }}>
+              <button 
+                className='btn btn-secondary'
+                onClick={() => generateClientCredentialsEndpoint()}
+              >
+                Client credentials endpoint
               </button>
             </div>
           </div>

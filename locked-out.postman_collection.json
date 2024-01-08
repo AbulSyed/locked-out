@@ -109,7 +109,7 @@
 							"response": []
 						},
 						{
-							"name": "get access token",
+							"name": "get access token via AC",
 							"request": {
 								"auth": {
 									"type": "basic",
@@ -129,7 +129,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/oauth2/token?client_id=client&redirect_uri=http://127.0.0.1:3000/authorized&grant_type=authorization_code&code=Lgo_W6bOhpbtOQ7veZ2eWXBk8DBDB3S15QjIuXkuqMWmL2wsoKS-bCgBECF-4iDn5VOksmMUiXWSDnTrk5qa18e1uw3_n3Aez2zAqYCwQz07C4Xp04Y2KF-dFf6IdaSe&appname=test",
+									"raw": "http://localhost:8080/oauth2/token?client_id=client&redirect_uri=http://127.0.0.1:3000/authorized&grant_type=authorization_code&code=f5irFzhRisaVvTEGNbfl2DmlvrDGWk44hIDRtuyJppp-9Zgv9AoeEw-Qjt6qdlNblhBjtSUalRcIM7knHh22wk4w_mDyxj7gzgN8t_K4SiGoL-eZgw2HfWYh9I6pen4l&appname=test",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -154,7 +154,7 @@
 										},
 										{
 											"key": "code",
-											"value": "Lgo_W6bOhpbtOQ7veZ2eWXBk8DBDB3S15QjIuXkuqMWmL2wsoKS-bCgBECF-4iDn5VOksmMUiXWSDnTrk5qa18e1uw3_n3Aez2zAqYCwQz07C4Xp04Y2KF-dFf6IdaSe"
+											"value": "f5irFzhRisaVvTEGNbfl2DmlvrDGWk44hIDRtuyJppp-9Zgv9AoeEw-Qjt6qdlNblhBjtSUalRcIM7knHh22wk4w_mDyxj7gzgN8t_K4SiGoL-eZgw2HfWYh9I6pen4l"
 										},
 										{
 											"key": "appname",
@@ -164,6 +164,55 @@
 											"key": "code_verifier",
 											"value": "qPsH306-ZDDaOE8DFzVn05TkN3ZZoVmI_6x4LsVglQI",
 											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get access token via CC",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "secret",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "client",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/oauth2/token?client_id=client&grant_type=client_credentials&appname=test",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"oauth2",
+										"token"
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "client"
+										},
+										{
+											"key": "grant_type",
+											"value": "client_credentials"
+										},
+										{
+											"key": "appname",
+											"value": "test"
 										}
 									]
 								}
