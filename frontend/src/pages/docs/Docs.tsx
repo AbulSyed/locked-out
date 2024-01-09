@@ -91,6 +91,16 @@ const Docs: React.FC<DocsProps> = () => {
   return (
     <div>
       <div className='docs-container'>
+        <p className='m-heading py-1'>Prerequisites:</p>
+        <u>1. Ensure ports: 3000, 5432, 8080, 8081 are available</u>
+        <br />
+        <br />
+        <u>2. Run the services within the docker-compose folder</u>
+        <br />
+        <br />
+        <pre className='code-block'>
+          docker compose -f docker-compose.dev.yml up -d
+        </pre>
         <p className='m-heading py-1'>To connect a Spring Boot resource server to LockedOut:</p>
         <u>1. Add dependencies</u>
         <pre className='code-block'>

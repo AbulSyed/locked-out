@@ -28,7 +28,7 @@ const DefaultUserCard: React.FC<DefaultUserCardProps> = () => {
                   <br />
                   <hr />
                   <p className='desc'>Users will obtain an access tokens</p>
-                  <p>using the authorization_code grant flow.</p>
+                  <p>using the authorization_code grant flow</p>
                 </div>
             </div>
         </div> :
