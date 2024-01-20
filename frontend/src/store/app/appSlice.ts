@@ -36,7 +36,7 @@ interface CreateAppDto {
 }
 
 interface PaginationData {
-  page: string;
+  // page: string;
   size: string;
 }
 
@@ -103,7 +103,7 @@ export const createApp = createAsyncThunk('app/createApp', async (data: CreateAp
 
 export const getApps = createAsyncThunk('app/getApps', async (data: PaginationData) => {
   try {
-    const res = await identityServiceApi.get(`/get-app-list?page=${data.page}&size=${data.size}`, {
+    const res = await identityServiceApi.get(`/get-app-list?size=${data.size}`, {
       headers: {
         'x-correlation-id': 'frontend/getApps'
       }

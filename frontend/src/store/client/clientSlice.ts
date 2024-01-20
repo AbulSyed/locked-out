@@ -48,7 +48,7 @@ interface CreateClientDto {
 
 interface GetClientsByAppNameReqData {
   appName: string;
-  page: string;
+  // page: string;
   size: string;
 }
 
@@ -89,7 +89,7 @@ export const createClient = createAsyncThunk('client/createClient', async (data:
 
 export const getClientsByAppName = createAsyncThunk('client/getClientsByAppName', async (data: GetClientsByAppNameReqData) => {
   try {
-    const res = await identityServiceApi.get(`/get-client-list-by-app?appName=${data.appName}&page=${data.page}&size=${data.size}`, {
+    const res = await identityServiceApi.get(`/get-client-list-by-app?appName=${data.appName}&size=${data.size}`, {
       headers: {
         'x-correlation-id': 'frontend/getClientByAppName'
       }

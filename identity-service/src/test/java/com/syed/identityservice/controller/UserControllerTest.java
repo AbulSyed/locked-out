@@ -68,9 +68,9 @@ class UserControllerTest extends BaseTest<Object> {
         UserV2PageResponse userV2PageResponse = createUserV2PageResponse(getUserListResponse, 1, 10, 5L, 1, true);
         ResponseEntity<Object> getUserListExpectedResponse = createExpectedResponse(HttpStatus.OK, userV2PageResponse);
 
-        when(userService.getUserList(1, 10)).thenReturn(userV2PageResponse);
+        when(userService.getUserList(any(Integer.class), eq(null))).thenReturn(userV2PageResponse);
 
-        ResponseEntity<UserV2PageResponse> res = userController.getUserList(correlationId, 1, 10);
+        ResponseEntity<UserV2PageResponse> res = userController.getUserList(correlationId, 10, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());
@@ -85,9 +85,9 @@ class UserControllerTest extends BaseTest<Object> {
         UserV2PageResponse userV2PageResponse = createUserV2PageResponse(getUserListResponse, 1, 10, 5L, 1, true);
         ResponseEntity<Object> getUserListExpectedResponse = createExpectedResponse(HttpStatus.OK, userV2PageResponse);
 
-        when(userService.getUserListByApp(any(Long.class), eq(null), any(Integer.class), any(Integer.class))).thenReturn(userV2PageResponse);
+        when(userService.getUserListByApp(any(Long.class), eq(null), any(Integer.class), eq(null))).thenReturn(userV2PageResponse);
 
-        ResponseEntity<UserV2PageResponse> res = userController.getUserListByApp(correlationId, 1L, null, 1, 10);
+        ResponseEntity<UserV2PageResponse> res = userController.getUserListByApp(correlationId, 1L, null, 10, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getUserListExpectedResponse.getStatusCode());

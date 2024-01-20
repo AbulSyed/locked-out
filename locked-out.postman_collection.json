@@ -345,7 +345,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8081/get-app-list?page=1&size=10",
+									"raw": "http://localhost:8081/get-app-list?size=10&cursor=2023-11-30T12:26:34.135825",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -356,12 +356,12 @@
 									],
 									"query": [
 										{
-											"key": "page",
-											"value": "1"
-										},
-										{
 											"key": "size",
 											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "2023-11-30T12:26:34.135825"
 										}
 									]
 								}
@@ -534,7 +534,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8081/get-user-list?page=1&size=10",
+									"raw": "http://localhost:8081/get-user-list?size=10&cursor=2024-01-07T11:19:14.664193",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -545,12 +545,12 @@
 									],
 									"query": [
 										{
-											"key": "page",
-											"value": "1"
-										},
-										{
 											"key": "size",
 											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "2024-01-07T11:19:14.664193"
 										}
 									]
 								}
@@ -569,7 +569,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8081/get-user-list-by-app?appName=test&page=1&size=10",
+									"raw": "http://localhost:8081/get-user-list-by-app?appName=test&size=10&cursor=2024-01-07T11:19:14.664193",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -589,12 +589,12 @@
 											"value": "test"
 										},
 										{
-											"key": "page",
-											"value": "1"
-										},
-										{
 											"key": "size",
 											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "2024-01-07T11:19:14.664193"
 										}
 									]
 								}
@@ -754,7 +754,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8081/get-client-list?page=1&size=10",
+									"raw": "http://localhost:8081/get-client-list?size=10&cursor=2024-01-06T17:52:43.729920",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -765,12 +765,12 @@
 									],
 									"query": [
 										{
-											"key": "page",
-											"value": "1"
-										},
-										{
 											"key": "size",
 											"value": "10"
+										},
+										{
+											"key": "cursor",
+											"value": "2024-01-06T17:52:43.729920"
 										}
 									]
 								}
@@ -789,7 +789,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://localhost:8081/get-client-list-by-app?appName=test&page=1&size=10",
+									"raw": "http://localhost:8081/get-client-list-by-app?appName=test&size=10&cursor=2024-01-06T17:52:43.729920",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -804,10 +804,6 @@
 											"value": "test"
 										},
 										{
-											"key": "page",
-											"value": "1"
-										},
-										{
 											"key": "size",
 											"value": "10"
 										},
@@ -815,6 +811,10 @@
 											"key": "appId",
 											"value": "1",
 											"disabled": true
+										},
+										{
+											"key": "cursor",
+											"value": "2024-01-06T17:52:43.729920"
 										}
 									]
 								}

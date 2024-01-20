@@ -85,7 +85,7 @@ class UserServiceImplTest extends BaseTest<Object> {
         UserEntity userEntity = createUserEntity(1L, "joe", "123", "joe@mail.com", "079", appEntity,
                 Collections.emptySet(), Collections.emptySet(), LocalDateTime.now());
 
-        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "username"));
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
 
         Page<UserEntity> userEntityPage = mock(Page.class);
 
@@ -98,7 +98,7 @@ class UserServiceImplTest extends BaseTest<Object> {
         when(userEntityPage.getTotalPages()).thenReturn(1);
         when(userEntityPage.isLast()).thenReturn(true);
 
-        UserV2PageResponse res = userService.getUserList(1, 10);
+        UserV2PageResponse res = userService.getUserList(10, null);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("page", 1)
@@ -115,7 +115,7 @@ class UserServiceImplTest extends BaseTest<Object> {
         UserEntity userEntity = createUserEntity(1L, "joe", "123", "joe@mail.com", "079", appEntity,
                 Collections.emptySet(), Collections.emptySet(), LocalDateTime.now());
 
-        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "username"));
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
 
         Page<UserEntity> userEntityPage = mock(Page.class);
 
@@ -129,7 +129,7 @@ class UserServiceImplTest extends BaseTest<Object> {
         when(userEntityPage.getTotalPages()).thenReturn(1);
         when(userEntityPage.isLast()).thenReturn(true);
 
-        UserV2PageResponse res = userService.getUserListByApp(1L, null, 1, 10);
+        UserV2PageResponse res = userService.getUserListByApp(1L, null, 10, null);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("page", 1)

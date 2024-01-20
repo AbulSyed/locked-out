@@ -42,12 +42,12 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
         dispatch(getAppDetails(activeApp))
         dispatch(getUsersByAppName({
           "appName": activeApp,
-          "page": "1",
+          // "page": "1",
           "size": "100"
         }))
         dispatch(getClientsByAppName({
           "appName": activeApp,
-          "page": "1",
+          // "page": "1",
           "size": "100"
         }))
       }
@@ -58,7 +58,7 @@ const MainLayout: React.FC<MainLayoutProps> = () => {
 
   useEffect(() => {
     dispatch(getApps({
-      "page": "1",
+      // "page": "1",
       "size": "100"
     }))
     dispatch(getRoles())

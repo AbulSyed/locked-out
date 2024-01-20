@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
@@ -61,10 +63,17 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public AppPageResponse getAppList(int page, int size) {
-        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "name"));
+    public AppPageResponse getAppList(int size, String cursor) {
+        Pageable pageable = Utility.createPageable(1, size, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
+        Page<AppEntity> appEntityPage;
 
-        Page<AppEntity> appEntityPage = appRepository.findAll(pageable);
+        if (cursor == null) {
+            appEntityPage = appRepository.findAll(pageable);
+        } else {
+            LocalDateTime formattedCursor = LocalDateTime.parse(cursor, DateTimeFormatter.ISO_DATE_TIME);
+            appEntityPage = appRepository.findAllByCreatedAtGreaterThan(formattedCursor, pageable);
+        }
+
         List<AppEntity> appEntityList = appEntityPage.getContent();
 
         List<AppResponse> appResponseList = MapperUtil.mapAppEntityListToAppListResponse(appEntityList);
