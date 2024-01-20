@@ -122,7 +122,7 @@ class AppServiceImplTest extends BaseTest<Object> {
         List<AppEntity> appEntityList = List.of(
                 createAppEntity(1L,"app","test", new HashSet<>(), new HashSet<>(), LocalDateTime.now())
         );
-        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "name"));
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
 
         Page<AppEntity> appEntityPage = mock(Page.class);
 
@@ -135,7 +135,7 @@ class AppServiceImplTest extends BaseTest<Object> {
         when(appEntityPage.getTotalPages()).thenReturn(1);
         when(appEntityPage.isLast()).thenReturn(true);
 
-        AppPageResponse res = appService.getAppList(1, 10);
+        AppPageResponse res = appService.getAppList(10, null);
 
         assertThat(res)
                 .isNotNull()
