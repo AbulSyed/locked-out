@@ -8,8 +8,8 @@ public interface ClientService {
 
     ClientResponse createClient(Long appId, ClientRequest request);
     ClientResponse getClient(Long id, String appName, String clientId);
-    ClientPageResponse getClientList(int page, int size);
-    ClientPageResponse getClientListByApp(Long appId, String appName, int page, int size);
+    ClientPageResponse getClientList(int size, String cursor);
+    ClientPageResponse getClientListByApp(Long appId, String appName, int size, String cursor);
     ClientResponse updateClient(Long clientId, ClientRequest request);
     void deleteClient(Long clientId);
 }

@@ -100,7 +100,7 @@ class ClientServiceImplTest extends BaseTest<Object> {
                 "http://localhost:3000", LocalDateTime.now());
         List<ClientEntity> clientEntityList = List.of(clientEntity);
 
-        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
 
         Page<ClientEntity> clientEntityPage = mock(Page.class);
 
@@ -113,7 +113,7 @@ class ClientServiceImplTest extends BaseTest<Object> {
         when(clientEntityPage.getTotalPages()).thenReturn(1);
         when(clientEntityPage.isLast()).thenReturn(true);
 
-        ClientPageResponse res = clientService.getClientList(1, 10);
+        ClientPageResponse res = clientService.getClientList(10, null);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("page", 1)
@@ -131,7 +131,7 @@ class ClientServiceImplTest extends BaseTest<Object> {
                 "http://localhost:3000", LocalDateTime.now());
         List<ClientEntity> clientEntityList = List.of(clientEntity);
 
-        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
+        Pageable pageable = Utility.createPageable(1, 10, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
 
         Page<ClientEntity> clientEntityPage = mock(Page.class);
 
@@ -145,7 +145,7 @@ class ClientServiceImplTest extends BaseTest<Object> {
         when(clientEntityPage.getTotalPages()).thenReturn(1);
         when(clientEntityPage.isLast()).thenReturn(true);
 
-        ClientPageResponse res = clientService.getClientListByApp(1L, null, 1, 10);
+        ClientPageResponse res = clientService.getClientListByApp(1L, null, 10, null);
 
         assertThat(res).isNotNull()
                 .hasFieldOrPropertyWithValue("page", 1)

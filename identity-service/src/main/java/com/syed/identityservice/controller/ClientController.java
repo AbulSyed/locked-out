@@ -69,10 +69,10 @@ public class ClientController {
     @GetMapping("/get-client-list")
     public ResponseEntity<ClientPageResponse> getClientList(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @RequestParam(value = "page", required = true) int page,
-            @RequestParam(value = "size", required = true) int size
+            @RequestParam(value = "size", required = true) int size,
+            @RequestParam(value = "cursor", required = false) String cursor
     ) {
-        return new ResponseEntity<>(clientService.getClientList(page, size), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientList(size, cursor), HttpStatus.OK);
     }
 
     @AuditRequest(
@@ -87,14 +87,14 @@ public class ClientController {
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam(value = "appId", required = false) Long appId,
             @RequestParam(value = "appName", required = false) String appName,
-            @RequestParam(value = "page", required = true) int page,
-            @RequestParam(value = "size", required = true) int size
+            @RequestParam(value = "size", required = true) int size,
+            @RequestParam(value = "cursor", required = false) String cursor
     ) {
         if (appId == null && appName == null) {
             throw new InvalidRequestException(ErrorConstant.INVALID_REQUEST.getValue());
         }
 
-        return new ResponseEntity<>(clientService.getClientListByApp(appId, appName, page, size), HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientListByApp(appId, appName, size, cursor), HttpStatus.OK);
     }
 
     @AuditRequest(

@@ -70,9 +70,9 @@ class ClientControllerTest extends BaseTest<Object> {
         ClientPageResponse clientPageResponse = createClientPageResponse(getClientListResponse, 1, 10, 5L, 1, true);
         ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, clientPageResponse);
 
-        when(clientService.getClientList(1, 10)).thenReturn(clientPageResponse);
+        when(clientService.getClientList(any(Integer.class), eq(null))).thenReturn(clientPageResponse);
 
-        ResponseEntity<ClientPageResponse> res = clientController.getClientList(correlationId, 1, 10);
+        ResponseEntity<ClientPageResponse> res = clientController.getClientList(correlationId, 1, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientListExpectedResponse.getStatusCode());
@@ -87,9 +87,9 @@ class ClientControllerTest extends BaseTest<Object> {
         ClientPageResponse clientPageResponse = createClientPageResponse(getClientListResponse, 1, 10, 5L, 1, true);
         ResponseEntity<Object> getClientListExpectedResponse = createExpectedResponse(HttpStatus.OK, clientPageResponse);
 
-        when(clientService.getClientListByApp(any(Long.class), eq(null), any(Integer.class), any(Integer.class))).thenReturn(clientPageResponse);
+        when(clientService.getClientListByApp(any(Long.class), eq(null), any(Integer.class), eq(null))).thenReturn(clientPageResponse);
 
-        ResponseEntity<ClientPageResponse> res = clientController.getClientListByApp(correlationId, 1L, null, 1, 10);
+        ResponseEntity<ClientPageResponse> res = clientController.getClientListByApp(correlationId, 1L, null, 1, null);
 
         assertNotNull(res);
         assertEquals(res.getStatusCode(), getClientListExpectedResponse.getStatusCode());
