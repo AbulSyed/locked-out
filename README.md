@@ -8,7 +8,7 @@ LockedOut is a authorization server that utilises the OAuth2.0 & OIDC protocol. 
 
 Click screenshot to view walkthrough of LockedOut
 
-[<img src="./LockedOutSS.png" width=500/>](https://youtu.be/2qv0FWRXvbk)
+[<img src="./LockedOutSS.png" width=600/>](https://youtu.be/2qv0FWRXvbk)
 
 ### Architecture overview
 
