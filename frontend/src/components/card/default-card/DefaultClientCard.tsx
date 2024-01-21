@@ -27,8 +27,8 @@ const DefaultClientCard: React.FC<DefaultClientCardProps> = () => {
                   </div>
                   <br />
                   <hr />
-                  <p className='desc'>A client represents a backend service and</p>
-                  <p>obtains tokens using the client_credentials grant flow.</p>
+                  <p className='desc'>Clients make resource requests</p>
+                  {/* <p>obtains tokens using the client_credentials grant flow.</p> */}
                 </div>
             </div>
         </div> :

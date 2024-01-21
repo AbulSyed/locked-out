@@ -34,7 +34,8 @@ public class VerifyAppClientFilter extends OncePerRequestFilter {
 
         // 1. only enter if user is attempting to get authorization_code as we don't want this logic always being executed
         if (request.getParameter("response_type") != null && request.getParameter("response_type").equals("code")
-            || request.getParameter("grant_type") != null && request.getParameter("grant_type").equals("authorization_code")) {
+            || request.getParameter("grant_type") != null && request.getParameter("grant_type").equals("authorization_code")
+            || request.getParameter("grant_type") != null && request.getParameter("grant_type").equals("client_credentials")) {
             // 2. app null check
             if (request.getParameter("appname") == null) {
                 response.getWriter().println("appname is null, you must provide it in the request params");

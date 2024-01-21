@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
@@ -77,10 +79,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserV2PageResponse getUserList(int page, int size) {
-        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "username"));
+    public UserV2PageResponse getUserList(int size, String cursor) {
+        Pageable pageable = Utility.createPageable(1, size, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
+        Page<UserEntity> userEntityPage;
 
-        Page<UserEntity> userEntityPage = userRepository.findAll(pageable);
+        if (cursor == null) {
+            userEntityPage = userRepository.findAll(pageable);
+        } else {
+            LocalDateTime formattedCursor = LocalDateTime.parse(cursor, DateTimeFormatter.ISO_DATE_TIME);
+            userEntityPage = userRepository.findAllByCreatedAtGreaterThan(formattedCursor, pageable);
+        }
+
         List<UserEntity> userEntityList = userEntityPage.getContent();
 
         List<UserV2Response> userV2ResponseList = MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);
@@ -96,8 +105,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserV2PageResponse getUserListByApp(Long appId, String appName, int page, int size) {
-        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "username"));
+    public UserV2PageResponse getUserListByApp(Long appId, String appName, int size, String cursor) {
+        Pageable pageable = Utility.createPageable(1, size, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
 
         AppEntity app = null;
 
@@ -111,7 +120,15 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        Page<UserEntity> userEntityPage = userRepository.getUserEntitiesByUserApp(app, pageable);
+        Page<UserEntity> userEntityPage;
+
+        if (cursor == null) {
+            userEntityPage = userRepository.getUserEntitiesByUserApp(app, pageable);
+        } else {
+            LocalDateTime formattedCursor = LocalDateTime.parse(cursor, DateTimeFormatter.ISO_DATE_TIME);
+            userEntityPage = userRepository.getUserEntitiesByUserAppAndCreatedAtGreaterThan(app, formattedCursor, pageable);
+        }
+
         List<UserEntity> userEntityList = userEntityPage.getContent();
 
         List<UserV2Response> userV2ResponseList = MapperUtil.mapUserEntityListToUserV2ResponseList(userEntityList);

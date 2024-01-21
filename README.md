@@ -4,15 +4,21 @@
 
 LockedOut is a authorization server that utilises the OAuth2.0 & OIDC protocol. LockedOut can be used in applications to support authentication & authorization. A user interface, can also be used to CRUD users/OAuth2.0 clients apps.
 
+### Demo
+
+Click screenshot to view walkthrough of LockedOut
+
+[<img src="./LockedOutSS.png" width=600/>](https://youtu.be/2qv0FWRXvbk)
+
 ### Architecture overview
 
 ```
 |----------|
 | Frontend | -------------
 |----------|             ↓
-                 |--------------| -----> |-------|
-                 | Identity API |        | PG DB |
-                 |--------------| <----- |-------|    
+                 |--------------| -----> |------------|
+                 | Identity API |        | PostgreSql |
+                 |--------------| <----- |------------|    
 |----------|             ↑
 | Auth API | -------------
 |----------|

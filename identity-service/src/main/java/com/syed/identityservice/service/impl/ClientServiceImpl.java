@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
@@ -70,10 +72,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientPageResponse getClientList(int page, int size) {
-        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
+    public ClientPageResponse getClientList(int size, String cursor) {
+        Pageable pageable = Utility.createPageable(1, size, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
+        Page<ClientEntity> clientEntityPage;
 
-        Page<ClientEntity> clientEntityPage = clientRepository.findAll(pageable);
+        if (cursor == null) {
+            clientEntityPage = clientRepository.findAll(pageable);
+        } else {
+            LocalDateTime formattedCursor = LocalDateTime.parse(cursor, DateTimeFormatter.ISO_DATE_TIME);
+            clientEntityPage = clientRepository.findAllByCreatedAtGreaterThan(formattedCursor, pageable);
+        }
+
         List<ClientEntity> clientEntityList = clientEntityPage.getContent();
 
         List<ClientResponse> clientResponseList = MapperUtil.mapClientEntityListToGetClientListResponse(clientEntityList);
@@ -89,8 +98,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientPageResponse getClientListByApp(Long appId, String appName, int page, int size) {
-        Pageable pageable = Utility.createPageable(page, size, Sort.by(Sort.DEFAULT_DIRECTION, "clientId"));
+    public ClientPageResponse getClientListByApp(Long appId, String appName, int size, String cursor) {
+        Pageable pageable = Utility.createPageable(1, size, Sort.by(Sort.DEFAULT_DIRECTION, "createdAt"));
 
         AppEntity app = null;
 
@@ -104,7 +113,15 @@ public class ClientServiceImpl implements ClientService {
             }
         }
 
-        Page<ClientEntity> clientEntityPage = clientRepository.getClientEntitiesByUserApp(app, pageable);
+        Page<ClientEntity> clientEntityPage;
+
+        if (cursor == null) {
+            clientEntityPage = clientRepository.getClientEntitiesByUserApp(app, pageable);
+        } else {
+            LocalDateTime formattedCursor = LocalDateTime.parse(cursor, DateTimeFormatter.ISO_DATE_TIME);
+            clientEntityPage = clientRepository.getClientEntitiesByUserAppAndCreatedAtGreaterThan(app, formattedCursor, pageable);
+        }
+
         List<ClientEntity> clientEntityList = clientEntityPage.getContent();
 
         List<ClientResponse> clientResponseList = MapperUtil.mapClientEntityListToGetClientListResponse(clientEntityList);

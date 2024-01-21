@@ -75,10 +75,10 @@ public class AppController {
     @GetMapping("/get-app-list")
     public ResponseEntity<AppPageResponse> getAppList(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
-            @RequestParam(value = "page", required = true) int page,
-            @RequestParam(value = "size", required = true) int size
+            @RequestParam(value = "size", required = true) int size,
+            @RequestParam(value = "cursor", required = false) String cursor
     ) {
-        return new ResponseEntity<>(appService.getAppList(page, size), HttpStatus.OK);
+        return new ResponseEntity<>(appService.getAppList(size, cursor), HttpStatus.OK);
     }
 
     @AuditRequest(

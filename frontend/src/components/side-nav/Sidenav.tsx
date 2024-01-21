@@ -1,35 +1,62 @@
 import './Sidenav.scss'
 
-import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useAppSelector, useAppDispatch } from '../../store/hooks'
 import { setActiveNavReducer } from '../../store/active-nav/activeNavSlice'
+import { getAppDetails } from '../../store/app/appSlice'
+import { getUsersByAppName } from '../../store/user/userSlice'
+import { getClientsByAppName } from '../../store/client/clientSlice'
 
 interface SidenavProps {
 }
 
 const Sidenav: React.FC<SidenavProps> = () => {
-  const [activeNav, setActiveNav] = useState('Overview')
-  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Authorities', 'Scopes', 'Tokens']
+  const navItems = ['Overview', 'Users', 'Clients', 'Roles', 'Authorities', 'Scopes']
   
+  const activeNav = useAppSelector(state => state.activeNav.activeNav)
   const state = useAppSelector(state => state.app)
   const location = useLocation()
   const dispatch = useAppDispatch()
   const activeApp = location.pathname.split('/')[2]
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(setActiveNavReducer('Overview'))
   }, [])
 
   const updateActiveNav = (navItem: string) => {
-    setActiveNav(navItem)
     dispatch(setActiveNavReducer(navItem))
+  }
+
+  const handleSelectChange = (e: any) => {
+    const app = e.target.value
+
+    navigate(`/apps/${app}/overview`)
+
+    dispatch(setActiveNavReducer('Overview'))
+
+    dispatch(getAppDetails(app))
+    dispatch(getUsersByAppName({
+      "appName": app,
+      "page": "1",
+      "size": "100"
+    }))
+    dispatch(getClientsByAppName({
+      "appName": app,
+      "page": "1",
+      "size": "100"
+    }))
   }
 
   return (
     <div className='sidenav'>
       <div className='sidenav-list'>
-        <select className='app-select'>
+        <select
+          className='app-select'
+          onChange={handleSelectChange}
+        >
           {
             state.apps.map(app => (
               <option

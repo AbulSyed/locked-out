@@ -16,7 +16,7 @@ interface InitialState {
 
 interface GetUsersByAppNameReqData {
   appName: string;
-  page: string;
+  // page: string;
   size: string;
 }
 
@@ -67,7 +67,7 @@ interface AlterUserAuthorityDto {
 
 export const getUsersByAppName = createAsyncThunk('user/getUsersByAppName', async (data: GetUsersByAppNameReqData) => {
   try {
-    const res = await identityServiceApi.get(`/get-user-list-by-app?appName=${data.appName}&page=${data.page}&size=${data.size}`, {
+    const res = await identityServiceApi.get(`/get-user-list-by-app?appName=${data.appName}&size=${data.size}`, {
       headers: {
         'x-correlation-id': 'frontend/getUsersByAppName'
       }
