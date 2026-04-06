@@ -11,91 +11,53 @@ on:
       - 'identity-service/**'
 
 jobs:
-  unit_tests:
+  run-message:
     runs-on: ubuntu-latest
+    outputs: # to make var available for another job
+      PR_NUM_OR_MAIN: ${{ steps.set-pr-or-main.outputs.PR_NUM_OR_MAIN }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - name: Set up JDK 17
-      uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Run unit tests
+      - name: Set correct commit SHA
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+          else
+            echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+          fi
+
+      - name: Set PR number or main
+        id: set-pr-or-main
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "PR_NUMBER_OR_MAIN=PR-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+            echo "PR_NUM_OR_MAIN=PR-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          else
+            echo "PR_NUMBER_OR_MAIN=main" >> $GITHUB_ENV
+            echo "PR_NUM_OR_MAIN=main" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run init message
+        run: |
+          echo "Running Identity Service CI/CD for: $PR_NUMBER_OR_MAIN, commit: $COMMIT_SHA"
+
+  tests:
+    needs: [ run-message ]
+    uses: ./.github/workflows/run-backend-tests.yml
+    with:
       working-directory: ./identity-service
-      run: ./gradlew test
+      test-report-artifact-name: Identity-Service-Test-Reports-${{ needs.run-message.outputs.PR_NUM_OR_MAIN }}
 
-  integration_tests:
-    runs-on: ubuntu-latest
-    needs: unit_tests
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Set up JDK 17
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Run integration tests
-        working-directory: ./identity-service
-        run: ./gradlew integrationTest
-
-  functional_tests:
-    runs-on: ubuntu-latest
-    needs: [unit_tests, integration_tests]
-#    services:
-#     postgres-db:
-#       image: postgres:14.2-alpine
-#       ports:
-#         - 5432:5432
-#       env:
-#         POSTGRES_DB: locked_out
-#         POSTGRES_USER: admin
-#         POSTGRES_PASSWORD: admin
-#       options: >-
-#         --health-cmd pg_isready
-#         --health-interval 10s
-#         --health-timeout 5s
-#         --health-retries 5
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Set up JDK 17
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Run functional tests
-        working-directory: ./identity-service
-        run: ./gradlew functionalTest
-
-  contract_tests:
-    runs-on: ubuntu-latest
-    needs: [unit_tests, integration_tests, functional_tests]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Set up JDK 17
-        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Run contract tests
-        working-directory: ./identity-service
-        run: ./gradlew contractTest
-
-  build_and_push_image:
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    needs: [unit_tests, integration_tests, functional_tests, contract_tests]
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - name: Build and Push the Docker image
-      working-directory: ./identity-service
-      run: |
-        timestamp=$(TZ="Europe/London" date +'%Y%m%d%H%M')
-        tag="v$timestamp"
-        docker build . --file Dockerfile --tag abulsy3d/locked-out-identity-service:$tag
-        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u abulsy3d --password-stdin
-        docker push abulsy3d/locked-out-identity-service:$tag
+#  build_and_push_image:
+#    if: ${{ github.event_name == 'push' }}
+#    runs-on: ubuntu-latest
+#    needs: [unit_tests, integration_tests, functional_tests, contract_tests]
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+#    - name: Build and Push the Docker image
+#      working-directory: ./identity-service
+#      run: |
+#        timestamp=$(TZ="Europe/London" date +'%Y%m%d%H%M')
+#        tag="v$timestamp"
+#        docker build . --file Dockerfile --tag abulsy3d/locked-out-identity-service:$tag
+#        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u abulsy3d --password-stdin
+#        docker push abulsy3d/locked-out-identity-service:$tag
