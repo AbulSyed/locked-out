@@ -11,40 +11,36 @@ on:
       - 'auth-service/**'
 
 jobs:
-  run-message:
+  context:
     runs-on: ubuntu-latest
-    outputs: # to make var available for another job
-      PR_NUM_OR_MAIN: ${{ steps.set-pr-or-main.outputs.PR_NUM_OR_MAIN }}
-    steps:
-      - name: Set correct commit SHA
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
-          else
-            echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
-          fi
+    outputs:
+      commit_sha: ${{ steps.context.outputs.commit_sha }}
+      pr_label: ${{ steps.context.outputs.pr_label }}
 
-      - name: Set PR number or main
-        id: set-pr-or-main
+    steps:
+      - name: Set PR label and commit SHA
+        id: context
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "PR_NUMBER_OR_MAIN=PR-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-            echo "PR_NUM_OR_MAIN=PR-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+            echo "commit_sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+            echo "pr_label=PR-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
           else
-            echo "PR_NUMBER_OR_MAIN=main" >> $GITHUB_ENV
-            echo "PR_NUM_OR_MAIN=main" >> $GITHUB_OUTPUT
+            echo "commit_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+            echo "pr_label=main" >> $GITHUB_OUTPUT
           fi
 
       - name: Run init message
         run: |
-          echo "Running Auth Service CI/CD for: $PR_NUMBER_OR_MAIN, commit: $COMMIT_SHA"
+          echo "Running Auth Service CI/CD for: \
+          ${{ steps.context.outputs.pr_label }}, \
+          commit: ${{ steps.context.outputs.commit_sha }}"
 
   tests:
-    needs: [run-message]
+    needs: [context]
     uses: ./.github/workflows/run-backend-tests.yml
     with:
       working-directory: ./auth-service
-      test-report-artifact-name: Auth-Service-Test-Reports-${{ needs.run-message.outputs.PR_NUM_OR_MAIN }}
+      test-report-artifact-name: Auth-Service-Test-Reports-${{ needs.context.outputs.pr_label }}
 
 #  build_and_push_image:
 #    if: ${{ github.event_name == 'push' }}
