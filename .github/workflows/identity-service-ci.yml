@@ -31,9 +31,7 @@ jobs:
 
       - name: Run init message
         run: |
-          echo "Running Identity Service CI/CD for: \
-          ${{ steps.context.outputs.pr_label }}, \
-          commit: ${{ steps.context.outputs.commit_sha }}"
+          echo "Running Identity Service CI/CD for: ${{ steps.context.outputs.pr_label }}, commit: ${{ steps.context.outputs.commit_sha }}"
 
   tests:
     needs: [context]
