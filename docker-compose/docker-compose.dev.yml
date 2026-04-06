@@ -3,7 +3,7 @@ version: "3"
 services:
   postgres-db:
     image: postgres:14.2-alpine
-    container_name: postgres-db
+    container_name: lo-postgres-db
     ports:
       - 5432:5432
     environment:
@@ -25,7 +25,7 @@ services:
 
   identity-service:
     build: ../identity-service
-    container_name: identity-service
+    container_name: lo-identity-service
     ports:
       - 8081:8081
     environment:
@@ -44,7 +44,7 @@ services:
 
   auth-service:
     build: ../auth-service
-    container_name: auth-service
+    container_name: lo-auth-service
     ports:
       - 8080:8080
     environment:
@@ -60,7 +60,7 @@ services:
 
   frontend:
     build: ../frontend
-    container_name: frontend
+    container_name: lo-frontend
     ports:
       - 3000:3000
     environment:
@@ -71,7 +71,7 @@ services:
 
   sonarqube:
     image: sonarqube:latest
-    container_name: sonarqube
+    container_name: lo-sonarqube
     ports:
       - 9000:9000
     environment:
@@ -82,17 +82,29 @@ services:
       - postgres-db
     restart: always
 
+  pact-broker-db:
+    image: postgres:14.2-alpine
+    container_name: lo-pack-broker-db
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_DB=pact_broker
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    restart: always
+
   pact-broker:
     image: pactfoundation/pact-broker
-    container_name: pact-broker
+    container_name: lo-pact-broker
     ports:
       - 9292:9292
     environment:
-      PACT_BROKER_DATABASE_HOST: postgres-db
+      PACT_BROKER_DATABASE_HOST: pact-broker-db
+      PACT_BROKER_DATABASE_PORT: 5432
       PACT_BROKER_DATABASE_USERNAME: admin
       PACT_BROKER_DATABASE_PASSWORD: admin
-      PACT_BROKER_DATABASE_NAME: locked_out
+      PACT_BROKER_DATABASE_NAME: pact_broker
       PACT_BROKER_LOG_LEVEL: DEBUG
     depends_on:
-      - postgres-db
+      - pact-broker-db
     restart: always
