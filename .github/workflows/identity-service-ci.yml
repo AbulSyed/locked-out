@@ -10,6 +10,10 @@ on:
     paths:
       - 'identity-service/**'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   context:
     runs-on: ubuntu-latest
