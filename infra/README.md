@@ -18,7 +18,7 @@ See [PR-85](https://github.com/AbulSyed/locked-out/pull/85):
 
 Docker images are stored in AWS ECR. See ECR module `modules/ecr` for infra config [PR-86](https://github.com/AbulSyed/locked-out/pull/86).
 
-GitHub Actions has been configured to build and push images to ECR.
+### GitHub OIDC
 
 GitHub OIDC has been configured to allow GitHub Actions to authenticate with AWS to prevent the storing of secrets in GitHub. With OIDC GitHub requests a short-lived identity token from AWS, AWS verifies it and issues temporary credentials. So no stored credentials, leaked secrets & rotation required.
 
