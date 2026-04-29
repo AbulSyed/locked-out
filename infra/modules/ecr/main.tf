@@ -1,4 +1,4 @@
-resource "aws_ecr_repository" "this" {
+resource "aws_ecr_repository" "locked_out_ecr" {
   name = var.name
 
   image_scanning_configuration {
