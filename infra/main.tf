@@ -18,3 +18,9 @@ module "frontend_ecr" {
   service = "frontend"
   env     = "dev"
 }
+
+module "vpc" {
+  source   = "./modules/vpc"
+  name     = "vpc"
+  ip_range = "10.0.0.0/24"
+}

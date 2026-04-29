@@ -28,3 +28,13 @@ In `iam.tf`:
 - configured GitHub as a trusted identity provider in AWS
 - created IAM role GitHub can assume
 - created IAM policy for ECR push and attached to IAM role 
+
+### AWS Network
+
+#### VPC
+
+Isolated virtual network in AWS where your compute resources live.
+
+#### CIDR block
+
+Defines a range of IP addresses your network can support for your resources. Everything inside your VPC - like EC2, ECS, RDS gets an IP from this range.
