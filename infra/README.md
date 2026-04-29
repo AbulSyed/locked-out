@@ -38,3 +38,7 @@ Isolated virtual network in AWS where your compute resources live.
 #### CIDR block
 
 Defines a range of IP addresses your network can support for your resources. Everything inside your VPC - like EC2, ECS, RDS gets an IP from this range.
+
+#### Subnets
+
+Section of VPC which organises public and private services. Public subnets can be reached from outside like load balancers. Private subnets can’t be accessed from outside the network e.g. ECS.
