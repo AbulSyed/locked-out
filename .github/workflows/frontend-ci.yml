@@ -19,4 +19,4 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     uses: ./.github/workflows/build-deploy.yml
     with:
-      service: frontend-service
+      service: locked-out-frontend-service
