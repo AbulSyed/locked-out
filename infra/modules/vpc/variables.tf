@@ -8,27 +8,18 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "public_subnet_name" {
-  description = "Public subnet name"
-  type        = string
+variable "public_subnets" {
+  description = "Public subnet config"
+  type = map(object({
+    cidr = string
+    az   = string
+  }))
 }
 
-variable "public_subnet_cidr" {
-  description = "Public Subnet CIDR"
-  type        = string
-}
-
-variable "private_subnet_name" {
-  description = "Private subnet name"
-  type        = string
-}
-
-variable "private_subnet_cidr" {
-  description = "Private Subnet CIDR"
-  type        = string
-}
-
-variable "subnet_availability_zone" {
-  description = "Subnet availability zone"
-  type        = string
+variable "private_subnets" {
+  description = "Private subnet config"
+  type = map(object({
+    cidr = string
+    az   = string
+  }))
 }
