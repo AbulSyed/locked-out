@@ -50,11 +50,11 @@ variable "nat_gateway_name" {
 }
 
 variable "private_rt_destination_ip" {
-  description = "Public route table destination IP"
+  description = "Private route table destination IP"
   type        = string
 }
 
 variable "private_rt_name" {
-  description = "Public route table name"
+  description = "Private route table name"
   type        = string
 }
