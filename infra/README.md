@@ -42,3 +42,15 @@ Defines a range of IP addresses your network can support for your resources. Eve
 #### Subnets
 
 Section of VPC which organises public and private services. Public subnets can be reached from outside like load balancers. Private subnets can’t be accessed from outside the network e.g. ECS.
+
+#### Internet Gateway
+
+Internet Gateway allows inbound & outbound traffic between VPC and the internet for resources in subnets that are routed and allowed by security groups.
+
+#### NAT Gateway
+
+Allows resources in a private subnet to access the internet.
+
+#### Route tables
+
+Used to direct traffic flow.
