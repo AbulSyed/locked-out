@@ -58,36 +58,42 @@ resource "aws_route_table_association" "public_rt_subnet_association" {
 }
 
 resource "aws_eip" "nat_eip" {
+  for_each = var.public_subnets
+
   domain = "vpc"
 
   tags = {
-    Name = var.nat_eip_name
+    Name = "${var.nat_eip_name} ${each.key}"
   }
 }
 
 resource "aws_nat_gateway" "ngw" {
-  allocation_id = aws_eip.nat_eip.id
+  for_each = var.public_subnets
 
-  # public subnet, as NAT needs internet access via IGW
-  subnet_id = values(aws_subnet.public_subnets)[0].id
+  allocation_id = aws_eip.nat_eip[each.key].id
+
+  # Place each NAT Gateway in its AZ's public subnet so traffic stays within the same AZ
+  subnet_id = aws_subnet.public_subnets[each.key].id
 
   depends_on = [aws_internet_gateway.gw]
 
   tags = {
-    Name = var.nat_gateway_name
+    Name = "${var.nat_gateway_name} ${each.key}"
   }
 }
 
 resource "aws_route_table" "private_rt" {
+  for_each = var.private_subnets
+
   vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = var.private_rt_destination_ip
-    nat_gateway_id = aws_nat_gateway.ngw.id
+    nat_gateway_id = aws_nat_gateway.ngw[each.key].id
   }
 
   tags = {
-    Name = var.private_rt_name
+    Name = "${var.private_rt_name} ${each.key}"
   }
 }
 
@@ -95,5 +101,5 @@ resource "aws_route_table_association" "private_rt_subnet_association" {
   for_each = var.private_subnets
 
   subnet_id      = aws_subnet.private_subnets[each.key].id
-  route_table_id = aws_route_table.private_rt.id
+  route_table_id = aws_route_table.private_rt[each.key].id
 }
