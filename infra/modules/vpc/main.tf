@@ -56,3 +56,44 @@ resource "aws_route_table_association" "public_rt_subnet_association" {
   subnet_id      = aws_subnet.public_subnets[each.key].id
   route_table_id = aws_route_table.public_rt.id
 }
+
+resource "aws_eip" "nat_eip" {
+  domain = "vpc"
+
+  tags = {
+    Name = var.nat_eip_name
+  }
+}
+
+resource "aws_nat_gateway" "ngw" {
+  allocation_id = aws_eip.nat_eip.id
+
+  # public subnet, as NAT needs internet access via IGW
+  subnet_id = values(aws_subnet.public_subnets)[0].id
+
+  depends_on = [aws_internet_gateway.gw]
+
+  tags = {
+    Name = var.nat_gateway_name
+  }
+}
+
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block     = var.private_rt_destination_ip
+    nat_gateway_id = aws_nat_gateway.ngw.id
+  }
+
+  tags = {
+    Name = var.private_rt_name
+  }
+}
+
+resource "aws_route_table_association" "private_rt_subnet_association" {
+  for_each = var.private_subnets
+
+  subnet_id      = aws_subnet.private_subnets[each.key].id
+  route_table_id = aws_route_table.private_rt.id
+}
