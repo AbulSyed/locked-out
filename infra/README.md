@@ -28,3 +28,29 @@ In `iam.tf`:
 - configured GitHub as a trusted identity provider in AWS
 - created IAM role GitHub can assume
 - created IAM policy for ECR push and attached to IAM role 
+
+### AWS Network
+
+#### VPC
+
+Isolated virtual network in AWS where your compute resources live.
+
+#### CIDR block
+
+Defines a range of IP addresses your network can support for your resources. Everything inside your VPC - like EC2, ECS, RDS gets an IP from this range.
+
+#### Subnets
+
+Section of VPC which organises public and private services. Public subnets can be reached from outside like load balancers. Private subnets can’t be accessed from outside the network e.g. ECS.
+
+#### Internet Gateway
+
+Internet Gateway allows inbound & outbound traffic between VPC and the internet for resources in subnets that are routed and allowed by security groups.
+
+#### NAT Gateway
+
+Allows resources in a private subnet to access the internet.
+
+#### Route tables
+
+Used to direct traffic flow.
