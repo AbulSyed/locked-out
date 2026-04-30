@@ -14,7 +14,7 @@ module "identity_ecr" {
 
 module "frontend_ecr" {
   source  = "./modules/ecr"
-  name    = "locked-out-frontend-service"
+  name    = "locked-out-frontend"
   service = "frontend"
   env     = "dev"
 }

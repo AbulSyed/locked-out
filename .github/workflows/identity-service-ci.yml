@@ -49,4 +49,4 @@ jobs:
     needs: [ context, tests ]
     uses: ./.github/workflows/build-deploy.yml
     with:
-      service: locked-out-identity-service
+      service: identity-service
