@@ -29,3 +29,30 @@ resource "aws_subnet" "private_subnets" {
     Name = "Locked Out Private ${each.key}"
   }
 }
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = var.internet_gateway_name
+  }
+}
+
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.vpc.id
+
+  route {
+    cidr_block = var.public_rt_destination_ip
+    gateway_id = aws_internet_gateway.gw.id
+  }
+
+  tags = {
+    Name = var.public_rt_name
+  }
+}
+
+resource "aws_route_table_association" "public_rt_subnet_association" {
+  for_each       = var.public_subnets
+  subnet_id      = aws_subnet.public_subnets[each.key].id
+  route_table_id = aws_route_table.public_rt.id
+}

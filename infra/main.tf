@@ -20,9 +20,12 @@ module "frontend_ecr" {
 }
 
 module "vpc" {
-  source          = "./modules/vpc"
-  vpc_name        = "Locked Out VPC"
-  vpc_cidr        = "10.0.0.0/16"
-  public_subnets  = local.public_subnets
-  private_subnets = local.private_subnets
+  source                   = "./modules/vpc"
+  vpc_name                 = "Locked Out VPC"
+  vpc_cidr                 = "10.0.0.0/16"
+  public_subnets           = local.public_subnets
+  private_subnets          = local.private_subnets
+  internet_gateway_name    = "Locked Out Internet Gateway"
+  public_rt_destination_ip = "0.0.0.0/0"
+  public_rt_name           = "Locked Out Public Route Table"
 }
