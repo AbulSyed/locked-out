@@ -31,7 +31,11 @@ module "vpc" {
 }
 
 module "sg" {
-  source      = "./modules/sg"
-  alb_sg_name = "Locked Out Load Balancer SG"
-  vpc_id      = module.vpc.vpc_id
+  source                = "./modules/sg"
+  alb_sg_name           = "Locked Out Load Balancer SG"
+  vpc_id                = module.vpc.vpc_id
+  ecs_sg_name           = "Locked Out ECS SG"
+  auth_service_port     = 8080
+  identity_service_port = 8081
+  frontend_port         = 3000
 }
