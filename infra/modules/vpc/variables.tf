@@ -40,12 +40,12 @@ variable "public_rt_name" {
 }
 
 variable "nat_eip_name" {
-  description = "NAT EIP name prefix (one EIP is created per AZ)"
+  description = "NAT EIP name"
   type        = string
 }
 
 variable "nat_gateway_name" {
-  description = "NAT Gateway name prefix (one NAT Gateway is created per AZ)"
+  description = "NAT Gateway name"
   type        = string
 }
 
@@ -55,6 +55,6 @@ variable "private_rt_destination_ip" {
 }
 
 variable "private_rt_name" {
-  description = "Private route table name prefix (one route table is created per AZ)"
+  description = "Private route table name"
   type        = string
 }
