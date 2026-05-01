@@ -29,3 +29,9 @@ module "vpc" {
   public_rt_destination_ip = "0.0.0.0/0"
   public_rt_name           = "Locked Out Public Route Table"
 }
+
+module "sg" {
+  source      = "./modules/sg"
+  alb_sg_name = "Locked Out Load Balancer SG"
+  vpc_id      = module.vpc.vpc_id
+}
