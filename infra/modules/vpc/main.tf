@@ -72,7 +72,7 @@ resource "aws_nat_gateway" "ngw" {
 
   allocation_id = aws_eip.nat_eip[each.key].id
 
-  # Place each NAT Gateway in its AZ's public subnet so traffic stays within the same AZ
+  # public subnet, as NAT needs internet access via IGW
   subnet_id = aws_subnet.public_subnets[each.key].id
 
   depends_on = [aws_internet_gateway.gw]
