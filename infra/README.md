@@ -8,21 +8,20 @@ Folder to manage AWS infrastructure using terraform
 
 ### Terraform state file / Remote backend
 
-Terraform state file is stored in AWS S3. Since state files contains sensitive info it should never be stored in version control systems. Also, S3 provides state locking which prevent concurrent modifications which could result in corruption of the state file.
+Terraform state file is stored in AWS S3. Since state files contains sensitive info it should never be stored in version control systems. Also, S3 provides state locking which prevent concurrent modifications.
 
-See [PR-85](https://github.com/AbulSyed/locked-out/pull/85):
 - `bootstrap-backend.tf` - creation of S3 with versioning, encryption & blocking public access.
 - `backend.tf` - configuring terraform to use S3 as remote backend
 
 ### ECR
 
-Docker images are stored in AWS ECR. See ECR module `modules/ecr` for infra config [PR-86](https://github.com/AbulSyed/locked-out/pull/86).
+Docker images are stored in AWS ECR.
 
 ### GitHub OIDC
 
 GitHub OIDC has been configured to allow GitHub Actions to authenticate with AWS to prevent the storing of secrets in GitHub. With OIDC GitHub requests a short-lived identity token from AWS, AWS verifies it and issues temporary credentials. So no stored credentials, leaked secrets & rotation required.
 
-To configure GitHub OIDC [PR-87](https://github.com/AbulSyed/locked-out/pull/87):
+To configure GitHub OIDC:
 
 In `iam.tf`:
 - configured GitHub as a trusted identity provider in AWS
