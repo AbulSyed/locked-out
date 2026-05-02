@@ -32,7 +32,7 @@ jobs:
 
       - name: Tag image
         run: |
-          docker tag locked-out-${{ inputs.service }}:latest \
+          docker tag ${{ inputs.service }}:latest \
           ${{ steps.login-ecr.outputs.registry }}/locked-out-${{ inputs.service }}:latest
 
       - name: Push image
