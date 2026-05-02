@@ -39,3 +39,8 @@ module "sg" {
   identity_service_port = 8081
   frontend_port         = 3000
 }
+
+module "ecs" {
+  source       = "./modules/ecs"
+  cluster_name = "locked-out-ecs-cluster"
+}
