@@ -27,3 +27,17 @@ resource "aws_ecs_task_definition" "auth_service" {
     }
   ])
 }
+
+resource "aws_ecs_service" "auth_ecs_service" {
+  name            = var.service_name
+  cluster         = var.cluster_id
+  task_definition = aws_ecs_task_definition.auth_service.arn
+
+  desired_count = var.desired_count
+  launch_type   = "FARGATE"
+
+  network_configuration {
+    subnets         = var.private_subnet_ids
+    security_groups = [var.ecs_sg_id]
+  }
+}

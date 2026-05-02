@@ -27,3 +27,28 @@ variable "container_port" {
   description = "Container port"
   type        = number
 }
+
+variable "service_name" {
+  description = "Name of ECS service"
+  type        = string
+}
+
+variable "cluster_id" {
+  description = "Cluster ID"
+  type        = string
+}
+
+variable "desired_count" {
+  description = "Desired number of running instances"
+  type        = number
+}
+
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs"
+  type        = list(string)
+}
+
+variable "ecs_sg_id" {
+  description = "ECS Security Group ID"
+  type        = string
+}

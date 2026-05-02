@@ -72,4 +72,10 @@ module "auth_ecs" {
   task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
   container_port          = 8080
   ecr_url                 = module.auth_ecr.repository_url
+
+  service_name       = "auth-task-definition-service"
+  cluster_id         = aws_ecs_cluster.ecs_cluster.id
+  desired_count      = 0
+  private_subnet_ids = module.vpc.private_subnet_ids
+  ecs_sg_id          = module.sg.ecs_sg_id
 }
