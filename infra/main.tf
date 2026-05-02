@@ -39,3 +39,43 @@ module "sg" {
   identity_service_port = 8081
   frontend_port         = 3000
 }
+
+resource "aws_ecs_cluster" "ecs_cluster" {
+  name = "locked-out-ecs-cluster"
+}
+
+resource "aws_iam_role" "ecs_execution_role" {
+  name = "lockedOutEcsTaskExecutionRole"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "ecs-tasks.amazonaws.com"
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
+  role       = aws_iam_role.ecs_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+module "auth_ecs" {
+  source                  = "./modules/ecs"
+  task_def_ecs_family     = "locked-out-auth-service-task-definition"
+  task_def_cpu            = "256"
+  task_def_memory         = "512"
+  task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
+  container_port          = 8080
+  ecr_url                 = module.auth_ecr.repository_url
+
+  service_name       = "auth-task-definition-service"
+  cluster_id         = aws_ecs_cluster.ecs_cluster.id
+  desired_count      = 0
+  private_subnet_ids = module.vpc.private_subnet_ids
+  ecs_sg_id          = module.sg.ecs_sg_id
+}
