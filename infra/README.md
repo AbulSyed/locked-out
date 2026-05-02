@@ -72,3 +72,11 @@ IAM role which defines permissions your application needs to access AWS services
 ##### Task execution role
 
 IAM role which defines permissions ECS needs to start your container e.g. pulling image from ECR, sending logs to cloudwatch, fetching secrets from secrets manager & fetching parameters from parameter store.
+
+##### Task
+
+Represents a single running instance of a Task Definition.
+
+##### Service
+
+Ensures a specified number of tasks are always running. If 1 task crashes ECS automatically starts another.
