@@ -40,7 +40,6 @@ module "sg" {
   frontend_port         = 3000
 }
 
-module "ecs" {
-  source       = "./modules/ecs"
-  cluster_name = "locked-out-ecs-cluster"
+resource "aws_ecs_cluster" "ecs_cluster" {
+  name = "locked-out-ecs-cluster"
 }

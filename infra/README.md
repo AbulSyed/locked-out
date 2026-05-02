@@ -8,11 +8,11 @@ Folder to manage AWS infrastructure using terraform
 
 ### Terraform state file / Remote backend
 
-Terraform state file is stored in AWS S3. This is because since state files contains sensitive info it should never be stored in version control systems. Also, S3 provides state locking which prevent concurrent modifications which could result in corruption of the state file.
+Terraform state file is stored in AWS S3. Since state files contains sensitive info it should never be stored in version control systems. Also, S3 provides state locking which prevent concurrent modifications which could result in corruption of the state file.
 
 See [PR-85](https://github.com/AbulSyed/locked-out/pull/85):
 - `bootstrap-backend.tf` - creation of S3 with versioning, encryption & blocking public access.
-- `backend.tf` - configuring terraform to S3 as remote backend
+- `backend.tf` - configuring terraform to use S3 as remote backend
 
 ### ECR
 
@@ -54,3 +54,22 @@ Allows resources in a private subnet to access the internet.
 #### Route tables
 
 Used to direct traffic flow.
+
+#### Security group
+
+Firewall that controls inbound & outbound traffic by restricting to specific protocols, ports, and sources or destinations.
+
+- Ingress - Incoming traffic
+- Egress - Outgoing traffic
+
+#### ECS
+
+Container orchestration service that allows you to deploy, run & scale docker containers. It uses task definitions to define containers, tasks to run them, and services to maintain the desired number of running containers.
+
+##### Task role
+
+IAM role which defines permissions your application needs to access AWS services e.g. RDS, SQS.
+
+##### Task execution role
+
+IAM role which defines permissions ECS needs to start your container e.g. pulling image from ECR, sending logs to cloudwatch, fetching secrets from secrets manager & fetching parameters from parameter store.

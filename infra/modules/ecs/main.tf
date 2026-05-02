@@ -1,3 +1,1 @@
-resource "aws_ecs_cluster" "ecs_cluster" {
-  name = var.cluster_name
-}
+# ECS Cluster resource defined in main.tf
