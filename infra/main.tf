@@ -79,3 +79,11 @@ module "auth_ecs" {
   private_subnet_ids = module.vpc.private_subnet_ids
   ecs_sg_id          = module.sg.ecs_sg_id
 }
+
+module "auth_cloudwatch" {
+  source             = "./modules/cloudwatch"
+  cluster_name       = aws_ecs_cluster.ecs_cluster.name
+  service            = "auth"
+  log_retention_days = 5
+  env                = "dev"
+}
