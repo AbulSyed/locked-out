@@ -18,6 +18,11 @@ variable "task_execution_role_arn" {
   type        = string
 }
 
+variable "service" {
+  description = "Name of service"
+  type        = string
+}
+
 variable "ecr_url" {
   description = "ECR URL"
   type        = string
@@ -26,11 +31,6 @@ variable "ecr_url" {
 variable "container_port" {
   description = "Container port"
   type        = number
-}
-
-variable "service_name" {
-  description = "Name of ECS service"
-  type        = string
 }
 
 variable "cluster_id" {
