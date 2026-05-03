@@ -63,9 +63,18 @@ resource "aws_iam_role" "ecs_execution_role" {
   })
 }
 
+# covers required ECR & CloudWatch permissions
 resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
   role       = aws_iam_role.ecs_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+module "auth_cloudwatch" {
+  source             = "./modules/cloudwatch"
+  cluster_name       = aws_ecs_cluster.ecs_cluster.name
+  service            = "auth"
+  log_retention_days = 5
+  env                = "dev"
 }
 
 module "auth_ecs" {
@@ -74,10 +83,12 @@ module "auth_ecs" {
   task_def_cpu            = "256"
   task_def_memory         = "512"
   task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
-  container_port          = 8080
+  service                 = "auth-service"
   ecr_url                 = module.auth_ecr.repository_url
+  container_port          = 8080
+  log_group_name          = module.auth_cloudwatch.log_group_name
+  log_region              = "eu-west-2"
 
-  service_name       = "auth-task-definition-service"
   cluster_id         = aws_ecs_cluster.ecs_cluster.id
   desired_count      = 0
   private_subnet_ids = module.vpc.private_subnet_ids
