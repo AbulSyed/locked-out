@@ -18,6 +18,11 @@ variable "task_execution_role_arn" {
   type        = string
 }
 
+variable "service" {
+  description = "Name of service"
+  type        = string
+}
+
 variable "ecr_url" {
   description = "ECR URL"
   type        = string
@@ -28,8 +33,13 @@ variable "container_port" {
   type        = number
 }
 
-variable "service_name" {
-  description = "Name of ECS service"
+variable "log_group_name" {
+  description = "Log group name"
+  type        = string
+}
+
+variable "log_region" {
+  description = "AWS region"
   type        = string
 }
 

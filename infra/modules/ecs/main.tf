@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "auth_service" {
 
   container_definitions = jsonencode([
     {
-      name  = "app"
+      name  = var.service
       image = "${var.ecr_url}:latest"
 
       portMappings = [
@@ -24,12 +24,21 @@ resource "aws_ecs_task_definition" "auth_service" {
       ]
 
       essential = true
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = var.log_group_name
+          awslogs-region        = var.log_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 }
 
 resource "aws_ecs_service" "auth_ecs_service" {
-  name            = var.service_name
+  name            = var.service
   cluster         = var.cluster_id
   task_definition = aws_ecs_task_definition.auth_service.arn
 
