@@ -24,6 +24,15 @@ resource "aws_ecs_task_definition" "auth_service" {
       ]
 
       essential = true
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = var.log_group_name
+          awslogs-region        = var.log_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
 }

@@ -33,6 +33,16 @@ variable "container_port" {
   type        = number
 }
 
+variable "log_group_name" {
+  description = "Log group name"
+  type        = string
+}
+
+variable "log_region" {
+  description = "AWS region"
+  type        = string
+}
+
 variable "cluster_id" {
   description = "Cluster ID"
   type        = string
