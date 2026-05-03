@@ -38,3 +38,23 @@ variable "public_rt_name" {
   description = "Public route table name"
   type        = string
 }
+
+variable "nat_eip_name" {
+  description = "NAT EIP name"
+  type        = string
+}
+
+variable "nat_gateway_name" {
+  description = "NAT Gateway name"
+  type        = string
+}
+
+variable "private_rt_destination_ip" {
+  description = "Private route table destination IP"
+  type        = string
+}
+
+variable "private_rt_name" {
+  description = "Private route table name"
+  type        = string
+}
