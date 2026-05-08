@@ -13,7 +13,22 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "lb_arn" {
-  description = "Load Balancer ARN"
+variable "listener_arn" {
+  description = "Listener ARN"
+  type        = string
+}
+
+variable "priority" {
+  description = "Listener rule priority"
+  type        = number
+}
+
+variable "target_group_arn" {
+  description = "Target group ARN"
+  type        = string
+}
+
+variable "path" {
+  description = "Path"
   type        = string
 }
