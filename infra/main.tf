@@ -95,7 +95,7 @@ module "auth_ecs" {
   ecs_sg_id          = module.sg.ecs_sg_id
 
   target_group_arn      = module.auth_alb.target_group_arn
-  alb_http_listener_arn = module.auth_alb.http_listener_arn
+  alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
 }
 
 resource "aws_lb" "alb" {
@@ -115,8 +115,29 @@ resource "aws_lb" "alb" {
 
 module "auth_alb" {
   source            = "./modules/alb"
-  target_group_name = "locked-out-lb-tg"
+  target_group_name = "locked-out-auth-tg"
   container_port    = 8080
   vpc_id            = module.vpc.vpc_id
-  lb_arn            = aws_lb.alb.arn
+
+  listener_arn     = aws_lb_listener.default_http_listener.arn
+  priority         = 100
+  target_group_arn = module.auth_alb.target_group_arn
+  path             = "/auth/*"
+}
+
+resource "aws_lb_listener" "default_http_listener" {
+  load_balancer_arn = aws_lb.alb.arn
+
+  port     = 80
+  protocol = "HTTP"
+
+  default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Not Found"
+      status_code  = "404"
+    }
+  }
 }

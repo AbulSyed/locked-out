@@ -17,15 +17,21 @@ resource "aws_lb_target_group" "target_group" {
   }
 }
 
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = var.lb_arn
+# default listener returns 404 in main.tf
 
-  port     = 80
-  protocol = "HTTP"
+resource "aws_lb_listener_rule" "service_rule" {
+  listener_arn = var.listener_arn
+  priority     = var.priority
 
-  default_action {
+  action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group.arn
+    target_group_arn = var.target_group_arn
+  }
+
+  condition {
+    path_pattern {
+      values = [var.path]
+    }
   }
 }
 
