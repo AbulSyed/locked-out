@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPath": "/get-user",
+    "urlPath": "/identity/get-user",
     "headers": {
       "x-correlation-id": {
         "equalTo": "auth-service"

@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface IdentityServiceClient {
 
-    @GetMapping("/get-client")
+    @GetMapping("/identity/get-client")
     ResponseEntity<ClientResponse> getClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam(value = "appName", required = false) String appName,
             @RequestParam(value = "clientId", required = false) String clientId
     );
 
-    @GetMapping("/get-user")
+    @GetMapping("/identity/get-user")
     ResponseEntity<UserV2Response> getUser(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
             @RequestParam(value = "userId", required = false) Long userId,
