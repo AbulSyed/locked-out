@@ -1,6 +1,6 @@
 variable "security_group_id" {
   description = "ALB Security group ID"
-  type        = list(string)
+  type        = string
 }
 
 variable "public_subnet_ids" {
