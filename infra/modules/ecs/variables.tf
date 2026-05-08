@@ -62,3 +62,13 @@ variable "ecs_sg_id" {
   description = "ECS Security Group ID"
   type        = string
 }
+
+variable "target_group_arn" {
+  description = "Target group ARN"
+  type        = string
+}
+
+variable "alb_http_listener_arn" {
+  description = "ALB HTTP listener ARN"
+  type        = string
+}

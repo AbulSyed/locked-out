@@ -93,4 +93,17 @@ module "auth_ecs" {
   desired_count      = 0
   private_subnet_ids = module.vpc.private_subnet_ids
   ecs_sg_id          = module.sg.ecs_sg_id
+
+  target_group_arn      = module.alb.target_group_arn
+  alb_http_listener_arn = module.alb.http_listener_arn
+}
+
+module "alb" {
+  source            = "./modules/alb"
+  security_group_id = module.sg.alb_sg_id
+  public_subnet_ids = module.vpc.public_subnet_ids
+  lb_name           = "locked-out-lb"
+  target_group_name = "locked-out-lb-tg"
+  container_port    = 8080
+  vpc_id            = module.vpc.vpc_id
 }
