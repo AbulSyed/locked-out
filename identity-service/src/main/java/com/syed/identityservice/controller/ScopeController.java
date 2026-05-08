@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("/identity")
 public class ScopeController {
 
     private final ScopeService scopeService;
