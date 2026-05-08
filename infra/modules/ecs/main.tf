@@ -54,7 +54,7 @@ resource "aws_ecs_service" "ecs_service" {
   load_balancer {
     target_group_arn = var.target_group_arn
     container_name   = var.service
-    container_port   = 8080
+    container_port   = var.container_port
   }
 
   depends_on = [var.alb_http_listener_arn]

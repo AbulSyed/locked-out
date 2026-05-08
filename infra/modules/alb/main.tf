@@ -1,17 +1,4 @@
-resource "aws_lb" "alb" {
-  name               = var.lb_name
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [var.security_group_id]
-  subnets            = var.public_subnet_ids
-
-  # just for development for terraform destroy
-  enable_deletion_protection = false
-
-  tags = {
-    name = var.lb_name
-  }
-}
+# alb resource in main.tf
 
 resource "aws_lb_target_group" "target_group" {
   name        = var.target_group_name
@@ -31,7 +18,7 @@ resource "aws_lb_target_group" "target_group" {
 }
 
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.alb.arn
+  load_balancer_arn = var.lb_arn
 
   port     = 80
   protocol = "HTTP"

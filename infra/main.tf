@@ -94,16 +94,29 @@ module "auth_ecs" {
   private_subnet_ids = module.vpc.private_subnet_ids
   ecs_sg_id          = module.sg.ecs_sg_id
 
-  target_group_arn      = module.alb.target_group_arn
-  alb_http_listener_arn = module.alb.http_listener_arn
+  target_group_arn      = module.auth_alb.target_group_arn
+  alb_http_listener_arn = module.auth_alb.http_listener_arn
 }
 
-module "alb" {
+resource "aws_lb" "alb" {
+  name               = "locked-out-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [module.sg.alb_sg_id]
+  subnets            = module.vpc.public_subnet_ids
+
+  # just for development for terraform destroy
+  enable_deletion_protection = false
+
+  tags = {
+    name = "locked-out-lb"
+  }
+}
+
+module "auth_alb" {
   source            = "./modules/alb"
-  security_group_id = module.sg.alb_sg_id
-  public_subnet_ids = module.vpc.public_subnet_ids
-  lb_name           = "locked-out-lb"
   target_group_name = "locked-out-lb-tg"
   container_port    = 8080
   vpc_id            = module.vpc.vpc_id
+  lb_arn            = aws_lb.alb.arn
 }
