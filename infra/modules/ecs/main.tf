@@ -1,6 +1,6 @@
 # ECS Cluster resource & task execution role defined in main.tf
 
-resource "aws_ecs_task_definition" "auth_service" {
+resource "aws_ecs_task_definition" "task_definition" {
   family                   = var.task_def_ecs_family
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
@@ -37,10 +37,10 @@ resource "aws_ecs_task_definition" "auth_service" {
   ])
 }
 
-resource "aws_ecs_service" "auth_ecs_service" {
+resource "aws_ecs_service" "ecs_service" {
   name            = var.service
   cluster         = var.cluster_id
-  task_definition = aws_ecs_task_definition.auth_service.arn
+  task_definition = aws_ecs_task_definition.task_definition.arn
 
   desired_count = var.desired_count
   launch_type   = "FARGATE"
