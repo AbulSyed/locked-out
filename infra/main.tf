@@ -143,3 +143,13 @@ resource "aws_lb_listener" "default_http_listener" {
     }
   }
 }
+
+module "parameters" {
+  source         = "./modules/ssm"
+  ssm_parameters = local.ssm_parameters
+}
+
+module "secrets" {
+  source  = "./modules/secrets-manager"
+  secrets = local.secrets
+}

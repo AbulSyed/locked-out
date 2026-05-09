@@ -20,4 +20,10 @@ locals {
       az   = "eu-west-2b"
     }
   }
+
+  ssm_parameters = {
+    "/locked-out/postgres_port" : "5432"
+  }
+
+  secrets = jsondecode(file("secrets.json"))
 }
