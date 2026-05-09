@@ -115,7 +115,7 @@ module "auth_alb" {
   container_port    = 8080
   vpc_id            = module.vpc.vpc_id
 
-  health_path = "/identity/health"
+  health_path = "/auth/health"
 
   listener_arn     = aws_lb_listener.default_http_listener.arn
   priority         = 100
