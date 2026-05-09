@@ -20,4 +20,8 @@ locals {
       az   = "eu-west-2b"
     }
   }
+
+  ssm_parameters = {
+    "postgres_port" : "5432"
+  }
 }

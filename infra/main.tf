@@ -139,3 +139,8 @@ resource "aws_lb_listener" "default_http_listener" {
     }
   }
 }
+
+module "ssm" {
+  source = "./modules/ssm"
+  ssm_parameters = local.ssm_parameters
+}
