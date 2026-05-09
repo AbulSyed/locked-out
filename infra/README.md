@@ -80,3 +80,14 @@ Represents a single running instance of a Task Definition.
 ##### Service
 
 Ensures a specified number of tasks are always running. If 1 task crashes ECS automatically starts another.
+
+### Secret
+
+This repository stores secrets encrypted using `git-crypt`.
+
+1. Install git-crypt `arch -arm64 brew install git-crypt`
+2. Initialize git-crypt in root `git-crypt init` (1 time process)
+3. `.gitattributes` defines what gets encrypted
+4. Anything in secret files get encrypted automatically on commit
+5. Add users using `git-crypt add-gpg-user user@example.com`
+6. git-crypt unlock
