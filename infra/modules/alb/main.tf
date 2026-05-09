@@ -8,7 +8,7 @@ resource "aws_lb_target_group" "target_group" {
   target_type = "ip"
 
   health_check {
-    path                = "/health"
+    path                = var.health_path
     matcher             = "200"
     healthy_threshold   = 2
     unhealthy_threshold = 2

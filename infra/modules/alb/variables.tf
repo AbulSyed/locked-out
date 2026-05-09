@@ -13,6 +13,11 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "health_path" {
+  description = "Health check path"
+  type        = string
+}
+
 variable "listener_arn" {
   description = "Listener ARN"
   type        = string
