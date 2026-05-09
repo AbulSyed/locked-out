@@ -91,3 +91,14 @@ This repository stores secrets encrypted using `git-crypt`.
 4. Anything in secret files get encrypted automatically on commit
 5. Add users using `git-crypt add-gpg-user user@example.com`
 6. git-crypt unlock
+
+
+### Config values and secrets
+
+#### Parameter Store
+
+Non-sensitive values are stored in Parameter store
+
+#### Secrets Manager
+
+Sensitive values are stored in Secrets Manager
