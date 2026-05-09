@@ -86,7 +86,7 @@ public class SecurityConfig {
         http.formLogin(Customizer.withDefaults());
 
         http.authorizeHttpRequests(authorize -> {
-            authorize.requestMatchers("/health").permitAll()
+            authorize.requestMatchers("/auth/health").permitAll()
                     .anyRequest().authenticated();
         });
 
