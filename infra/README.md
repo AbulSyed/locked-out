@@ -81,7 +81,7 @@ Represents a single running instance of a Task Definition.
 
 Ensures a specified number of tasks are always running. If 1 task crashes ECS automatically starts another.
 
-### Secret
+### Secrets
 
 This repository stores secrets encrypted using `git-crypt`.
 
