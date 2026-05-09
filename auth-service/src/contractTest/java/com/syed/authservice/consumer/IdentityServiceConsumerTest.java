@@ -37,7 +37,7 @@ class IdentityServiceConsumerTest {
         return builder
                 .given("Get client by appName & clientId")
                 .uponReceiving("A request for a client by appName & clientId")
-                .path("/get-client")
+                .path("/identity/get-client")
                 .query("appName=myapp&clientId=client1")
                 .headers("x-correlation-id", "123")
                 .method("GET")
@@ -52,7 +52,7 @@ class IdentityServiceConsumerTest {
         return builder
                 .given("Get user by username")
                 .uponReceiving("A request for a user by username")
-                .path("/get-user")
+                .path("/identity/get-user")
                 .query("username=admin")
                 .headers("x-correlation-id", "123")
                 .method("GET")

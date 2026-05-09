@@ -20,6 +20,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("/identity")
 public class RoleController {
 
     private final RoleService roleService;

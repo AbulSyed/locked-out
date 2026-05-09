@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("/identity")
 public class AppController {
 
     private final AppService appService;

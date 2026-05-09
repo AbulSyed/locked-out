@@ -38,7 +38,7 @@ public class AppControllerIntegrationTest extends ControllerBaseTest {
     void createApp() throws Exception {
         AppRequest createAppRequest = appRequest("app", "desc");
 
-        ResultActions response = mockMvc.perform(post("/create-app")
+        ResultActions response = mockMvc.perform(post("/identity/create-app")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(X_CORRELATION_ID, X_CORRELATION_VALUE)
                 .content(objectMapper.writeValueAsString(createAppRequest)));
@@ -53,7 +53,7 @@ public class AppControllerIntegrationTest extends ControllerBaseTest {
     @Test
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:create-app.sql")
     void getApp() throws Exception {
-        ResultActions response = mockMvc.perform(get("/get-app/100")
+        ResultActions response = mockMvc.perform(get("/identity/get-app/100")
                 .header(X_CORRELATION_ID, X_CORRELATION_VALUE));
 
         response.andDo(print())
@@ -70,7 +70,7 @@ public class AppControllerIntegrationTest extends ControllerBaseTest {
 
         String cursor = dateTime.format(DateTimeFormatter.ISO_DATE_TIME);
 
-        ResultActions response = mockMvc.perform(get("/get-app-list?size=10&cursor=" + cursor)
+        ResultActions response = mockMvc.perform(get("/identity/get-app-list?size=10&cursor=" + cursor)
                 .header(X_CORRELATION_ID, X_CORRELATION_VALUE));
 
         response.andDo(print())
@@ -84,7 +84,7 @@ public class AppControllerIntegrationTest extends ControllerBaseTest {
     void updateApp() throws Exception {
         AppRequest updateAppRequest = appRequest("updated app", "updated desc");
 
-        ResultActions response = mockMvc.perform(put("/update-app/100")
+        ResultActions response = mockMvc.perform(put("/identity/update-app/100")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(X_CORRELATION_ID, X_CORRELATION_VALUE)
                 .content(objectMapper.writeValueAsString(updateAppRequest)));
@@ -99,7 +99,7 @@ public class AppControllerIntegrationTest extends ControllerBaseTest {
     @Test
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:create-app.sql")
     void deleteApp() throws Exception {
-        ResultActions response = mockMvc.perform(delete("/delete-app/100")
+        ResultActions response = mockMvc.perform(delete("/identity/delete-app/100")
                 .header(X_CORRELATION_ID, X_CORRELATION_VALUE));
 
         response.andDo(print())

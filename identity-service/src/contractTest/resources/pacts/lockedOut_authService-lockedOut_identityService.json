@@ -19,7 +19,7 @@
           ]
         },
         "method": "GET",
-        "path": "/get-client",
+        "path": "/identity/get-client",
         "query": {
           "appName": [
             "myapp"
@@ -137,7 +137,7 @@
           ]
         },
         "method": "GET",
-        "path": "/get-user",
+        "path": "/identity/get-user",
         "query": {
           "username": [
             "admin"
