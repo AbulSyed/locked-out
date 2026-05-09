@@ -89,55 +89,6 @@ module "auth_ecs" {
   desired_count      = 0
   private_subnet_ids = module.vpc.private_subnet_ids
   ecs_sg_id          = module.sg.ecs_sg_id
-
-  target_group_arn      = module.auth_alb.target_group_arn
-  alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
-}
-
-resource "aws_lb" "alb" {
-  name               = "locked-out-lb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [module.sg.alb_sg_id]
-  subnets            = module.vpc.public_subnet_ids
-
-  # just for development for terraform destroy
-  enable_deletion_protection = false
-
-  tags = {
-    name = "locked-out-lb"
-  }
-}
-
-module "auth_alb" {
-  source            = "./modules/alb"
-  target_group_name = "locked-out-auth-tg"
-  container_port    = 8080
-  vpc_id            = module.vpc.vpc_id
-
-  health_path = "/auth/health"
-
-  listener_arn     = aws_lb_listener.default_http_listener.arn
-  priority         = 100
-  target_group_arn = module.auth_alb.target_group_arn
-  path             = "/auth/*"
-}
-
-resource "aws_lb_listener" "default_http_listener" {
-  load_balancer_arn = aws_lb.alb.arn
-
-  port     = 80
-  protocol = "HTTP"
-
-  default_action {
-    type = "fixed-response"
-
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "Not Found"
-      status_code  = "404"
-    }
-  }
 }
 
 module "parameters" {
