@@ -22,6 +22,6 @@ locals {
   }
 
   ssm_parameters = {
-    "postgres_port" : "5432"
+    "/locked-out/postgres_port" : "5432"
   }
 }
