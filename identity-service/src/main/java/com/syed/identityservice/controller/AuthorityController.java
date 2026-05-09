@@ -17,6 +17,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("/identity")
 public class AuthorityController {
 
     private final AuthorityService authorityService;
