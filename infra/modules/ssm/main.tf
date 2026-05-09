@@ -1,4 +1,4 @@
-resource "aws_ssm_parameter" "hardcoded_ssm_values" {
+resource "aws_ssm_parameter" "ssm" {
   for_each = var.ssm_parameters
 
   name  = each.key
