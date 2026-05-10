@@ -22,7 +22,7 @@ locals {
   }
 
   ssm_parameters = {
-    "/locked-out/postgres_user" : "admin"
+    "/locked-out/postgres_user" : "locked_out_user"
   }
 
   secrets = jsondecode(file("secrets.json"))
