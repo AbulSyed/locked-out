@@ -160,7 +160,8 @@ module "rds" {
   engine_version       = "15"
   instance_class       = "db.t3.micro"
   allocated_storage    = 20
-  username             = "postgres"
+  db_name              = "locked_out"
+  username             = data.aws_ssm_parameter.postgres_user.value
   password             = data.aws_secretsmanager_secret_version.postgres_secret_value.secret_string
   rds_sg_id            = module.sg.rds_sg_id
 }
