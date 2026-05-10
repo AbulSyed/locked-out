@@ -95,6 +95,10 @@ module "auth_ecs" {
   service                 = "auth-service"
   ecr_url                 = module.auth_ecr.repository_url
   container_port          = 8080
+
+  environment_vars = []
+  secret_vars = []
+
   log_group_name          = module.auth_cloudwatch.log_group_name
   log_region              = "eu-west-2"
 
@@ -116,6 +120,24 @@ module "identity_ecs" {
   service                 = "identity-service"
   ecr_url                 = module.identity_ecr.repository_url
   container_port          = 8081
+
+  environment_vars = [
+    {
+      name  = "POSTGRES_HOST"
+      value = module.rds.postgres_host
+    },
+    {
+      name  = "POSTGRES_USERNAME"
+      value = data.aws_ssm_parameter.postgres_user.arn
+    }
+  ]
+  secret_vars = [
+    {
+      name  = "POSTGRES_PASSWORD"
+      value = data.aws_secretsmanager_secret.postgres_secret.arn
+    }
+  ]
+
   log_group_name          = module.identity_cloudwatch.log_group_name
   log_region              = "eu-west-2"
 

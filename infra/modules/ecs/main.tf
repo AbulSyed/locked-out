@@ -23,6 +23,9 @@ resource "aws_ecs_task_definition" "task_definition" {
         }
       ]
 
+      environment = var.environment_vars
+      secrets = var.secret_vars
+
       essential = true
 
       logConfiguration = {

@@ -33,6 +33,22 @@ variable "container_port" {
   type        = number
 }
 
+variable "environment_vars" {
+  description = "Environment variables (non secret)"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+}
+
+variable "secret_vars" {
+  description = "Secret environment variables"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+}
+
 variable "log_group_name" {
   description = "Log group name"
   type        = string
