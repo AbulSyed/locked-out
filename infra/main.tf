@@ -167,7 +167,7 @@ module "identity_alb" {
 
   listener_arn     = aws_lb_listener.default_http_listener.arn
   priority         = 101
-  target_group_arn = module.auth_alb.target_group_arn
+  target_group_arn = module.identity_alb.target_group_arn
   path             = "/identity/*"
 }
 
