@@ -9,7 +9,7 @@ resource "aws_ecs_task_definition" "task_definition" {
   memory = var.task_def_memory
 
   execution_role_arn = var.task_execution_role_arn
-  # task_role_arn      = aws_iam_role.ecs_task_role.arn
+  task_role_arn      = var.task_role_arn
 
   container_definitions = jsonencode([
     {
@@ -24,7 +24,7 @@ resource "aws_ecs_task_definition" "task_definition" {
       ]
 
       environment = var.environment_vars
-      secrets = var.secret_vars
+      secrets     = var.secret_vars
 
       essential = true
 

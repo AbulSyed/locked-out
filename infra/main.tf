@@ -49,6 +49,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   name = "locked-out-ecs-cluster"
 }
 
+# Task Execution Role
 resource "aws_iam_role" "ecs_execution_role" {
   name = "lockedOutEcsTaskExecutionRole"
 
@@ -64,10 +65,47 @@ resource "aws_iam_role" "ecs_execution_role" {
   })
 }
 
-# covers required ECR & CloudWatch permissions
+resource "aws_iam_policy" "ecs_execution_role_policy" {
+  name = "lockedOutEcsTaskExecutionRolePolicy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource" : "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
   role       = aws_iam_role.ecs_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  policy_arn = aws_iam_policy.ecs_execution_role_policy.arn
 }
 
 module "auth_cloudwatch" {
@@ -92,15 +130,16 @@ module "auth_ecs" {
   task_def_cpu            = "256"
   task_def_memory         = "512"
   task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
+  task_role_arn           = ""
   service                 = "auth-service"
   ecr_url                 = module.auth_ecr.repository_url
   container_port          = 8080
 
   environment_vars = []
-  secret_vars = []
+  secret_vars      = []
 
-  log_group_name          = module.auth_cloudwatch.log_group_name
-  log_region              = "eu-west-2"
+  log_group_name = module.auth_cloudwatch.log_group_name
+  log_region     = "eu-west-2"
 
   cluster_id         = aws_ecs_cluster.ecs_cluster.id
   desired_count      = 0
@@ -117,6 +156,7 @@ module "identity_ecs" {
   task_def_cpu            = "256"
   task_def_memory         = "512"
   task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
+  task_role_arn           = ""
   service                 = "identity-service"
   ecr_url                 = module.identity_ecr.repository_url
   container_port          = 8081
@@ -133,13 +173,13 @@ module "identity_ecs" {
   ]
   secret_vars = [
     {
-      name  = "POSTGRES_PASSWORD"
+      name      = "POSTGRES_PASSWORD"
       valueFrom = data.aws_secretsmanager_secret.postgres_secret.arn
     }
   ]
 
-  log_group_name          = module.identity_cloudwatch.log_group_name
-  log_region              = "eu-west-2"
+  log_group_name = module.identity_cloudwatch.log_group_name
+  log_region     = "eu-west-2"
 
   cluster_id         = aws_ecs_cluster.ecs_cluster.id
   desired_count      = 0

@@ -18,6 +18,11 @@ variable "task_execution_role_arn" {
   type        = string
 }
 
+variable "task_role_arn" {
+  description = "Task Role ARN"
+  type        = string
+}
+
 variable "service" {
   description = "Name of service"
   type        = string
@@ -44,7 +49,7 @@ variable "environment_vars" {
 variable "secret_vars" {
   description = "Secret environment variables"
   type = list(object({
-    name  = string
+    name      = string
     valueFrom = string
   }))
 }
