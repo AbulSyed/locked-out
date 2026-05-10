@@ -46,16 +46,7 @@ resource "aws_ecs_service" "ecs_service" {
   launch_type   = "FARGATE"
 
   network_configuration {
-    subnets          = var.private_subnet_ids
-    security_groups  = [var.ecs_sg_id]
-    assign_public_ip = false
+    subnets         = var.private_subnet_ids
+    security_groups = [var.ecs_sg_id]
   }
-
-  load_balancer {
-    target_group_arn = var.target_group_arn
-    container_name   = var.service
-    container_port   = var.container_port
-  }
-
-  depends_on = [var.alb_http_listener_arn]
 }
