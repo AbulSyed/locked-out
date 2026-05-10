@@ -45,7 +45,7 @@ variable "secret_vars" {
   description = "Secret environment variables"
   type = list(object({
     name  = string
-    value = string
+    valueFrom = string
   }))
 }
 

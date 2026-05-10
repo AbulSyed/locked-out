@@ -128,13 +128,13 @@ module "identity_ecs" {
     },
     {
       name  = "POSTGRES_USERNAME"
-      value = data.aws_ssm_parameter.postgres_user.arn
+      value = data.aws_ssm_parameter.postgres_user.value
     }
   ]
   secret_vars = [
     {
       name  = "POSTGRES_PASSWORD"
-      value = data.aws_secretsmanager_secret.postgres_secret.arn
+      valueFrom = data.aws_secretsmanager_secret.postgres_secret.arn
     }
   ]
 
