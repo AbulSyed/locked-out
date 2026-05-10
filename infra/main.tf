@@ -78,6 +78,14 @@ module "auth_cloudwatch" {
   env                = "dev"
 }
 
+module "identity_cloudwatch" {
+  source             = "./modules/cloudwatch"
+  cluster_name       = aws_ecs_cluster.ecs_cluster.name
+  service            = "identity"
+  log_retention_days = 5
+  env                = "dev"
+}
+
 module "auth_ecs" {
   source                  = "./modules/ecs"
   task_def_ecs_family     = "locked-out-auth-service-task-definition"
@@ -96,6 +104,27 @@ module "auth_ecs" {
   ecs_sg_id          = module.sg.ecs_sg_id
 
   target_group_arn      = module.auth_alb.target_group_arn
+  alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
+}
+
+module "identity_ecs" {
+  source                  = "./modules/ecs"
+  task_def_ecs_family     = "locked-out-identity-service-task-definition"
+  task_def_cpu            = "256"
+  task_def_memory         = "512"
+  task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
+  service                 = "identity-service"
+  ecr_url                 = module.identity_ecr.repository_url
+  container_port          = 8081
+  log_group_name          = module.identity_cloudwatch.log_group_name
+  log_region              = "eu-west-2"
+
+  cluster_id         = aws_ecs_cluster.ecs_cluster.id
+  desired_count      = 0
+  private_subnet_ids = module.vpc.private_subnet_ids
+  ecs_sg_id          = module.sg.ecs_sg_id
+
+  target_group_arn      = module.identity_alb.target_group_arn
   alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
 }
 
@@ -126,6 +155,20 @@ module "auth_alb" {
   priority         = 100
   target_group_arn = module.auth_alb.target_group_arn
   path             = "/auth/*"
+}
+
+module "identity_alb" {
+  source            = "./modules/alb"
+  target_group_name = "locked-out-identity-tg"
+  container_port    = 8081
+  vpc_id            = module.vpc.vpc_id
+
+  health_path = "/identity/health"
+
+  listener_arn     = aws_lb_listener.default_http_listener.arn
+  priority         = 101
+  target_group_arn = module.auth_alb.target_group_arn
+  path             = "/identity/*"
 }
 
 resource "aws_lb_listener" "default_http_listener" {
