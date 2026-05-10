@@ -38,6 +38,7 @@ module "sg" {
   auth_service_port     = 8080
   identity_service_port = 8081
   frontend_port         = 3000
+  rds_sg_name           = "Locked Out RDS SG"
 }
 
 resource "aws_ecs_cluster" "ecs_cluster" {
@@ -160,6 +161,6 @@ module "rds" {
   instance_class       = "db.t3.micro"
   allocated_storage    = 20
   username             = "postgres"
-  password             = "password"
+  password             = data.aws_secretsmanager_secret_version.postgres_secret_value.secret_string
   rds_sg_id            = module.sg.rds_sg_id
 }

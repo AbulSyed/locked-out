@@ -41,6 +41,7 @@ variable "username" {
 variable "password" {
   description = "Database password"
   type        = string
+  sensitive   = true
 }
 
 variable "rds_sg_id" {
