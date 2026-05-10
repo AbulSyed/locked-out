@@ -27,3 +27,8 @@ variable "frontend_port" {
   description = "Frontend Port"
   type        = number
 }
+
+variable "rds_sg_name" {
+  description = "RDS Security Group name"
+  type        = string
+}

@@ -149,3 +149,17 @@ module "secrets" {
   source  = "./modules/secrets-manager"
   secrets = local.secrets
 }
+
+module "rds" {
+  source               = "./modules/rds"
+  db_subnet_group_name = "locked-out-db-subnet-group"
+  private_subnet_ids   = module.vpc.private_subnet_ids
+  db_identifier        = "locked-out-database"
+  engine               = "postgres"
+  engine_version       = "15"
+  instance_class       = "db.t3.micro"
+  allocated_storage    = 20
+  username             = "postgres"
+  password             = "password"
+  rds_sg_id            = module.sg.rds_sg_id
+}
