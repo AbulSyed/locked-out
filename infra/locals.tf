@@ -22,7 +22,7 @@ locals {
   }
 
   ssm_parameters = {
-    "/locked-out/postgres_port" : "5432"
+    "/locked-out/postgres_user" : "admin"
   }
 
   secrets = jsondecode(file("secrets.json"))
