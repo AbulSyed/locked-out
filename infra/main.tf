@@ -42,6 +42,7 @@ module "sg" {
   auth_service_port     = 8080
   identity_service_port = 8081
   frontend_port         = 3000
+  rds_sg_name           = "Locked Out RDS SG"
 }
 
 resource "aws_ecs_cluster" "ecs_cluster" {
@@ -152,4 +153,19 @@ module "parameters" {
 module "secrets" {
   source  = "./modules/secrets-manager"
   secrets = local.secrets
+}
+
+module "rds" {
+  source               = "./modules/rds"
+  db_subnet_group_name = "locked-out-db-subnet-group"
+  private_subnet_ids   = module.vpc.private_subnet_ids
+  db_identifier        = "locked-out-database"
+  engine               = "postgres"
+  engine_version       = "15"
+  instance_class       = "db.t3.micro"
+  allocated_storage    = 20
+  db_name              = "locked_out"
+  username             = data.aws_ssm_parameter.postgres_user.value
+  password             = data.aws_secretsmanager_secret_version.postgres_secret_value.secret_string
+  rds_sg_id            = module.sg.rds_sg_id
 }

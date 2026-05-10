@@ -6,8 +6,8 @@ spring:
     name: identity-service
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/locked_out
-    username: admin
-    password: admin
+    username: ${POSTGRES_USERNAME:admin}
+    password: ${POSTGRES_PASSWORD:admin}
   jpa:
     properties:
       hibernate:
