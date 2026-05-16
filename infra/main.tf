@@ -190,6 +190,37 @@ module "identity_ecs" {
   alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
 }
 
+module "frontend_ecs" {
+  source                  = "./modules/ecs"
+  task_def_ecs_family     = "locked-out-frontend-service-task-definition"
+  task_def_cpu            = "256"
+  task_def_memory         = "512"
+  task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
+  task_role_arn           = null
+  service                 = "frontend-service"
+  ecr_url                 = module.frontend_ecr.repository_url
+  container_port          = 3000
+
+  environment_vars = [
+    {
+      name  = "VITE_IDENTITY_SERVICE_HOST"
+      value = "http://${aws_lb.alb.dns_name}/identity"
+    }
+  ]
+  secret_vars = []
+
+  log_group_name = null
+  log_region     = null
+
+  cluster_id         = aws_ecs_cluster.ecs_cluster.id
+  desired_count      = 1
+  private_subnet_ids = module.vpc.private_subnet_ids
+  ecs_sg_id          = module.sg.ecs_sg_id
+
+  target_group_arn      = module.frontend_alb.target_group_arn
+  alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
+}
+
 resource "aws_lb" "alb" {
   name               = "locked-out-lb"
   internal           = false
@@ -231,6 +262,20 @@ module "identity_alb" {
   priority         = 101
   target_group_arn = module.identity_alb.target_group_arn
   path             = "/identity/*"
+}
+
+module "frontend_alb" {
+  source            = "./modules/alb"
+  target_group_name = "locked-out-frontend-tg"
+  container_port    = 80
+  vpc_id            = module.vpc.vpc_id
+
+  health_path = "/health" # see frontend/nginx.conf
+
+  listener_arn     = aws_lb_listener.default_http_listener.arn
+  priority         = 102 # lowest priority
+  target_group_arn = module.frontend_alb.target_group_arn
+  path             = "/*"
 }
 
 resource "aws_lb_listener" "default_http_listener" {
