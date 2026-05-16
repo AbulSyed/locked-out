@@ -18,6 +18,12 @@ variable "task_execution_role_arn" {
   type        = string
 }
 
+variable "task_role_arn" {
+  description = "Task Role ARN"
+  type        = string
+  nullable    = true
+}
+
 variable "service" {
   description = "Name of service"
   type        = string
@@ -31,6 +37,22 @@ variable "ecr_url" {
 variable "container_port" {
   description = "Container port"
   type        = number
+}
+
+variable "environment_vars" {
+  description = "Environment variables (non secret)"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+}
+
+variable "secret_vars" {
+  description = "Secret environment variables"
+  type = list(object({
+    name      = string
+    valueFrom = string
+  }))
 }
 
 variable "log_group_name" {
