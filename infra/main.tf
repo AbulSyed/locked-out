@@ -72,8 +72,8 @@ resource "aws_iam_policy" "ecs_execution_role_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        "Effect" : "Allow",
-        "Action" : [
+        "Effect" = "Allow",
+        "Action" = [
           "ecr:GetAuthorizationToken",
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
@@ -81,7 +81,7 @@ resource "aws_iam_policy" "ecs_execution_role_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource" : "*"
+        "Resource" = "*"
       },
       {
         Effect = "Allow"
@@ -130,7 +130,7 @@ module "auth_ecs" {
   task_def_cpu            = "256"
   task_def_memory         = "512"
   task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
-  task_role_arn           = ""
+  task_role_arn           = null
   service                 = "auth-service"
   ecr_url                 = module.auth_ecr.repository_url
   container_port          = 8080
@@ -156,7 +156,7 @@ module "identity_ecs" {
   task_def_cpu            = "256"
   task_def_memory         = "512"
   task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
-  task_role_arn           = ""
+  task_role_arn           = null
   service                 = "identity-service"
   ecr_url                 = module.identity_ecr.repository_url
   container_port          = 8081

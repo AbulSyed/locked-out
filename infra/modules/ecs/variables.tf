@@ -21,6 +21,7 @@ variable "task_execution_role_arn" {
 variable "task_role_arn" {
   description = "Task Role ARN"
   type        = string
+  nullable    = true
 }
 
 variable "service" {
