@@ -41,7 +41,7 @@ module "sg" {
   ecs_sg_name           = "Locked Out ECS SG"
   auth_service_port     = 8080
   identity_service_port = 8081
-  frontend_port         = 3000
+  frontend_port         = 80
   rds_sg_name           = "Locked Out RDS SG"
 }
 
@@ -207,21 +207,16 @@ module "frontend_ecs" {
   task_role_arn           = null
   service                 = "frontend-service"
   ecr_url                 = module.frontend_ecr.repository_url
-  container_port          = 3000
+  container_port          = 80
 
-  environment_vars = [
-    {
-      name  = "VITE_IDENTITY_SERVICE_HOST"
-      value = "http://${aws_lb.alb.dns_name}/identity"
-    }
-  ]
+  environment_vars = []
   secret_vars = []
 
   log_group_name = module.frontend_cloudwatch.log_group_name
   log_region     = "eu-west-2"
 
   cluster_id         = aws_ecs_cluster.ecs_cluster.id
-  desired_count      = 1
+  desired_count      = 0
   private_subnet_ids = module.vpc.private_subnet_ids
   ecs_sg_id          = module.sg.ecs_sg_id
 
