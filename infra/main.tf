@@ -41,7 +41,7 @@ module "sg" {
   ecs_sg_name           = "Locked Out ECS SG"
   auth_service_port     = 8080
   identity_service_port = 8081
-  frontend_port         = 3000
+  frontend_port         = 80
   rds_sg_name           = "Locked Out RDS SG"
 }
 
@@ -124,6 +124,14 @@ module "identity_cloudwatch" {
   env                = "dev"
 }
 
+module "frontend_cloudwatch" {
+  source             = "./modules/cloudwatch"
+  cluster_name       = aws_ecs_cluster.ecs_cluster.name
+  service            = "frontend"
+  log_retention_days = 5
+  env                = "dev"
+}
+
 module "auth_ecs" {
   source                  = "./modules/ecs"
   task_def_ecs_family     = "locked-out-auth-service-task-definition"
@@ -190,6 +198,32 @@ module "identity_ecs" {
   alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
 }
 
+module "frontend_ecs" {
+  source                  = "./modules/ecs"
+  task_def_ecs_family     = "locked-out-frontend-service-task-definition"
+  task_def_cpu            = "256"
+  task_def_memory         = "512"
+  task_execution_role_arn = aws_iam_role.ecs_execution_role.arn
+  task_role_arn           = null
+  service                 = "frontend-service"
+  ecr_url                 = module.frontend_ecr.repository_url
+  container_port          = 80
+
+  environment_vars = []
+  secret_vars = []
+
+  log_group_name = module.frontend_cloudwatch.log_group_name
+  log_region     = "eu-west-2"
+
+  cluster_id         = aws_ecs_cluster.ecs_cluster.id
+  desired_count      = 0
+  private_subnet_ids = module.vpc.private_subnet_ids
+  ecs_sg_id          = module.sg.ecs_sg_id
+
+  target_group_arn      = module.frontend_alb.target_group_arn
+  alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
+}
+
 resource "aws_lb" "alb" {
   name               = "locked-out-lb"
   internal           = false
@@ -231,6 +265,20 @@ module "identity_alb" {
   priority         = 101
   target_group_arn = module.identity_alb.target_group_arn
   path             = "/identity/*"
+}
+
+module "frontend_alb" {
+  source            = "./modules/alb"
+  target_group_name = "locked-out-frontend-tg"
+  container_port    = 80
+  vpc_id            = module.vpc.vpc_id
+
+  health_path = "/health" # see frontend/nginx.conf
+
+  listener_arn     = aws_lb_listener.default_http_listener.arn
+  priority         = 102 # lowest priority
+  target_group_arn = module.frontend_alb.target_group_arn
+  path             = "/*"
 }
 
 resource "aws_lb_listener" "default_http_listener" {
