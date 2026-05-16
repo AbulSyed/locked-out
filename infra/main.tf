@@ -124,6 +124,14 @@ module "identity_cloudwatch" {
   env                = "dev"
 }
 
+module "frontend_cloudwatch" {
+  source             = "./modules/cloudwatch"
+  cluster_name       = aws_ecs_cluster.ecs_cluster.name
+  service            = "frontend"
+  log_retention_days = 5
+  env                = "dev"
+}
+
 module "auth_ecs" {
   source                  = "./modules/ecs"
   task_def_ecs_family     = "locked-out-auth-service-task-definition"
@@ -209,8 +217,8 @@ module "frontend_ecs" {
   ]
   secret_vars = []
 
-  log_group_name = null
-  log_region     = null
+  log_group_name = module.frontend_cloudwatch.log_group_name
+  log_region     = "eu-west-2"
 
   cluster_id         = aws_ecs_cluster.ecs_cluster.id
   desired_count      = 1
