@@ -4,6 +4,10 @@ on:
       service:
         required: true
         type: string
+      image_args:
+        required: false
+        type: string
+        default: ""
 
 permissions:
   id-token: write
@@ -28,7 +32,9 @@ jobs:
 
       - name: Build image
         run: |
-          docker build -t ${{ inputs.service }} ./${{ inputs.service }}
+          docker build \
+            ${{ inputs.image_args }} \
+            -t ${{ inputs.service }} ./${{ inputs.service }}
 
       - name: Tag image
         run: |
