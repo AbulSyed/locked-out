@@ -21,4 +21,4 @@ jobs:
     with:
       service: frontend
       image_args: >
-        --build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ env.LOAD_BALANCER_DNS_NAME }}/identity
+        --build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ vars.LOAD_BALANCER_DNS_NAME }}/identity
