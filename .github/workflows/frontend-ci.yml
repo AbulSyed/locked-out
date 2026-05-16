@@ -20,5 +20,4 @@ jobs:
     uses: ./.github/workflows/build-deploy.yml
     with:
       service: frontend
-      image_args: >
-        --build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ vars.LOAD_BALANCER_DNS_NAME }}/identity
+      image_args: "--build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ vars.LOAD_BALANCER_DNS_NAME }}/identity"
