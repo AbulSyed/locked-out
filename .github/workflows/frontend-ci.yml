@@ -44,4 +44,4 @@ jobs:
     with:
       service: frontend
       image_args: >
-        --build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ needs.get-alb.outputs.alb_dns }}/identity
+        --build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ needs.get-alb-dns-name.outputs.alb_dns }}/identity

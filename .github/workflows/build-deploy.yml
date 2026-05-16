@@ -4,10 +4,10 @@ on:
       service:
         required: true
         type: string
-    image_args:
-      required: false
-      type: string
-      default: ""
+      image_args:
+        required: false
+        type: string
+        default: ""
 
 permissions:
   id-token: write
