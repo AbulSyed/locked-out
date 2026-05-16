@@ -59,12 +59,13 @@ services:
 #    restart: always
 
   frontend:
-    build: ../frontend
+    build:
+      context: ../frontend
+      args:
+        VITE_IDENTITY_SERVICE_HOST: http://localhost:8081/identity
     container_name: lo-frontend
     ports:
       - 3000:80
-    environment:
-      VITE_IDENTITY_SERVICE_HOST: http://localhost:8081
     depends_on:
       - identity-service
 #    restart: always
