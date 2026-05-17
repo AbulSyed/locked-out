@@ -8,6 +8,9 @@ on:
         required: false
         type: string
         default: ""
+      ecs_service:
+        required: true
+        type: string
 
 permissions:
   id-token: write
@@ -45,3 +48,7 @@ jobs:
         run: |
           docker push \
           ${{ steps.login-ecr.outputs.registry }}/locked-out-${{ inputs.service }}:latest
+
+      - name: ECS deployment
+        run: |
+          aws ecs update-service --cluster locked-out-ecs-cluster --service ${{ inputs.ecs_service }} --force-new-deployment

@@ -50,3 +50,4 @@ jobs:
     uses: ./.github/workflows/build-deploy.yml
     with:
       service: identity-service
+      ecs_service: identity-service
