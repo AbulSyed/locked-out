@@ -6,7 +6,7 @@ spring:
     name: auth-service
 
 app:
-  version: v202605171128
+  version: v202605171213
 
 feign:
   client:

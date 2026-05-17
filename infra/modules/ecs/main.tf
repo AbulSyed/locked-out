@@ -48,6 +48,8 @@ resource "aws_ecs_service" "ecs_service" {
   desired_count = var.desired_count
   launch_type   = "FARGATE"
 
+  health_check_grace_period_seconds = 60
+
   network_configuration {
     subnets          = var.private_subnet_ids
     security_groups  = [var.ecs_sg_id]
