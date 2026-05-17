@@ -210,7 +210,7 @@ module "frontend_ecs" {
   container_port          = 80
 
   environment_vars = []
-  secret_vars = []
+  secret_vars      = []
 
   log_group_name = module.frontend_cloudwatch.log_group_name
   log_region     = "eu-west-2"
