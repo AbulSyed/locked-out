@@ -69,3 +69,26 @@ resource "aws_iam_role_policy" "github_build" {
   role   = aws_iam_role.github_oidc.id
   policy = data.aws_iam_policy_document.build.json
 }
+
+data "aws_iam_policy_document" "deploy" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ecs:UpdateService",
+      "ecs:DescribeServices"
+    ]
+
+    resources = [
+      module.auth_ecs.ecs_arn,
+      module.identity_ecs.ecs_arn,
+      module.frontend_ecs.ecs_arn
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "github_deploy" {
+  name   = "github-deploy-policy"
+  role   = aws_iam_role.github_oidc.id
+  policy = data.aws_iam_policy_document.deploy.json
+}
