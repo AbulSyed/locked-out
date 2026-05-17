@@ -11,9 +11,9 @@ resource "aws_lb_target_group" "target_group" {
     path                = var.health_path
     matcher             = "200"
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 3
     interval            = 30
-    timeout             = 5
+    timeout             = 10
   }
 }
 

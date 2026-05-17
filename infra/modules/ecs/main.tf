@@ -28,14 +28,14 @@ resource "aws_ecs_task_definition" "task_definition" {
 
       essential = true
 
-      logConfiguration = {
+      logConfiguration = var.log_group_name != null ? {
         logDriver = "awslogs"
         options = {
           awslogs-group         = var.log_group_name
           awslogs-region        = var.log_region
           awslogs-stream-prefix = "ecs"
         }
-      }
+      } : null
     }
   ])
 }
@@ -47,6 +47,8 @@ resource "aws_ecs_service" "ecs_service" {
 
   desired_count = var.desired_count
   launch_type   = "FARGATE"
+
+  health_check_grace_period_seconds = 60
 
   network_configuration {
     subnets          = var.private_subnet_ids
