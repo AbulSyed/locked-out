@@ -20,4 +20,8 @@ locals {
       az   = "eu-west-2b"
     }
   }
+
+  ssm_parameters = {
+    "/service/postgres_user" : "pg_user"
+  }
 }

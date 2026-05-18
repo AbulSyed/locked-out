@@ -22,9 +22,15 @@ module "vpc" {
   private_rt_name           = "My Private Route Table"
 }
 
-module "vpc" {
+module "s3" {
   source = "git::https://github.com/AbulSyed/aws-terraform-modules.git//s3"
 
   bucket      = "state-bucket-123"
   bucket_name = "Terraform State Bucket"
+}
+
+module "ssm" {
+  source = "git::https://github.com/AbulSyed/aws-terraform-modules.git//ssm"
+
+  ssm_parameters = local.ssm_parameters
 }
