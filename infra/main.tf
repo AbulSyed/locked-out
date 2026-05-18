@@ -25,6 +25,6 @@ module "vpc" {
 module "vpc" {
   source = "git::https://github.com/AbulSyed/aws-terraform-modules.git//s3"
 
-  bucket = "state-bucket-123"
+  bucket      = "state-bucket-123"
   bucket_name = "Terraform State Bucket"
 }
