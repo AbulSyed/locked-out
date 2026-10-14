@@ -9,6 +9,7 @@ on:
 #    branches: [ "main" ]
     paths:
       - 'identity-service/**'
+  workflow_dispatch:
 
 permissions:
   id-token: write
@@ -45,7 +46,7 @@ jobs:
       test-report-artifact-name: Identity-Service-Test-Reports-${{ needs.context.outputs.pr_label }}
 
   deploy:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     needs: [ context, tests ]
     uses: ./.github/workflows/build-deploy.yml
     with:
