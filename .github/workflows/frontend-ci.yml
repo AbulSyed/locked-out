@@ -15,10 +15,33 @@ permissions:
   contents: read
 
 jobs:
+  get-alb-dns-name:
+    runs-on: ubuntu-latest
+    outputs:
+      alb_dns: ${{ steps.tf.outputs.alb_dns }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+
+      - name: Terraform init
+        working-directory: ./infra
+        run: terraform init
+
+      - name: Get ALB output
+        id: tf
+        working-directory: ./infra
+        run: |
+          echo "alb_dns=$(terraform output -raw alb_dns_name)" >> $GITHUB_OUTPUT
+
   deploy:
     if: ${{ github.event_name == 'push' }}
+    needs: get-alb-dns-name
     uses: ./.github/workflows/build-deploy.yml
     with:
       service: frontend
-      image_args: "--build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ vars.LOAD_BALANCER_DNS_NAME }}/identity"
-      ecs_service: frontend-service
+      image_args: >
+        --build-arg VITE_IDENTITY_SERVICE_HOST=http://${{ needs.get-alb-dns-name.outputs.alb_dns }}/identity
