@@ -53,5 +53,5 @@ jobs:
         run: |
           aws ecs update-service --cluster locked-out-ecs-cluster --service ${{ inputs.ecs_service }} --force-new-deployment
 
-      - name: Wait for service stability
-        run: aws ecs wait services-stable --cluster locked-out-ecs-cluster --services ${{ inputs.ecs_service }}
+#      - name: Wait for service stability
+#        run: aws ecs wait services-stable --cluster locked-out-ecs-cluster --services ${{ inputs.ecs_service }}
