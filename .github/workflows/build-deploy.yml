@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy_docker_image:
+  build_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -52,3 +52,6 @@ jobs:
       - name: ECS deployment
         run: |
           aws ecs update-service --cluster locked-out-ecs-cluster --service ${{ inputs.ecs_service }} --force-new-deployment
+
+      - name: Wait for service stability
+        run: aws ecs wait services-stable --cluster locked-out-ecs-cluster --services ${{ inputs.ecs_service }}
