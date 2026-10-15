@@ -88,7 +88,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorize -> {
             authorize.requestMatchers("/auth/health").permitAll()
                     .requestMatchers("/auth/test1").permitAll()
-                    .requestMatchers("/auth/identity/test2").permitAll()
+                    .requestMatchers("/auth/test2").permitAll()
                     .anyRequest().authenticated();
         });
 
