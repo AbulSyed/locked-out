@@ -3,11 +3,13 @@ package com.syed.authservice.controller;
 import com.syed.authservice.clients.IdentityServiceClient;
 import com.syed.authservice.domain.model.response.ClientResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
@@ -20,8 +22,11 @@ public class TestController {
         return "hi";
     }
 
-    @GetMapping("/identity/test2")
+    @GetMapping("/test2")
     public ResponseEntity<ClientResponse> test2() {
-        return identityServiceClient.getClient("1", "app", "client");
+        log.info("test2 invoked");
+        var res =  identityServiceClient.getClient("1", "app", "client");
+        log.info("test2 finished");
+        return res;
     }
 }
