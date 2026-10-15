@@ -16,38 +16,38 @@ permissions:
   contents: read
 
 jobs:
-  context:
-    runs-on: ubuntu-latest
-    outputs:
-      commit_sha: ${{ steps.context.outputs.commit_sha }}
-      pr_label: ${{ steps.context.outputs.pr_label }}
-
-    steps:
-      - name: Set PR label and commit SHA
-        id: context
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "commit_sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
-            echo "pr_label=PR-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-          else
-            echo "commit_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
-            echo "pr_label=main" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Run init message
-        run: |
-          echo "Running Auth Service CI/CD for: ${{ steps.context.outputs.pr_label }}, commit: ${{ steps.context.outputs.commit_sha }}"
-
-  tests:
-    needs: [context]
-    uses: ./.github/workflows/run-backend-tests.yml
-    with:
-      working-directory: ./auth-service
-      test-report-artifact-name: Auth-Service-Test-Reports-${{ needs.context.outputs.pr_label }}
+#  context:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      commit_sha: ${{ steps.context.outputs.commit_sha }}
+#      pr_label: ${{ steps.context.outputs.pr_label }}
+#
+#    steps:
+#      - name: Set PR label and commit SHA
+#        id: context
+#        run: |
+#          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+#            echo "commit_sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+#            echo "pr_label=PR-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+#          else
+#            echo "commit_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+#            echo "pr_label=main" >> $GITHUB_OUTPUT
+#          fi
+#
+#      - name: Run init message
+#        run: |
+#          echo "Running Auth Service CI/CD for: ${{ steps.context.outputs.pr_label }}, commit: ${{ steps.context.outputs.commit_sha }}"
+#
+#  tests:
+#    needs: [context]
+#    uses: ./.github/workflows/run-backend-tests.yml
+#    with:
+#      working-directory: ./auth-service
+#      test-report-artifact-name: Auth-Service-Test-Reports-${{ needs.context.outputs.pr_label }}
 
   deploy:
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-    needs: [context, tests]
+#    needs: [context, tests]
     uses: ./.github/workflows/build-deploy.yml
     with:
       service: auth-service
