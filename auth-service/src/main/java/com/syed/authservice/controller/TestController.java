@@ -1,7 +1,6 @@
 package com.syed.authservice.controller;
 
 import com.syed.authservice.clients.IdentityServiceClient;
-import com.syed.authservice.domain.model.response.ClientResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +22,9 @@ public class TestController {
     }
 
     @GetMapping("/test2")
-    public ResponseEntity<ClientResponse> test2() {
+    public ResponseEntity<String> test2() {
         log.info("test2 invoked");
-        var res =  identityServiceClient.getClient("1", "app", "client");
+        var res =  identityServiceClient.getHealth();
         log.info("test2 finished");
         return res;
     }
