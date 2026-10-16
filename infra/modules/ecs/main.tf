@@ -18,6 +18,7 @@ resource "aws_ecs_task_definition" "task_definition" {
 
       portMappings = [
         {
+          name          = "http"
           containerPort = var.container_port
           protocol      = "tcp"
         }
@@ -60,6 +61,25 @@ resource "aws_ecs_service" "ecs_service" {
     target_group_arn = var.target_group_arn
     container_name   = var.service
     container_port   = var.container_port
+  }
+
+  service_connect_configuration {
+    enabled   = var.service_connect_enabled
+    namespace = var.service_connect_namespace_arn
+
+    dynamic "service" {
+      for_each = var.service_connect_discovery_name != null ? [1] : []
+
+      content {
+        port_name      = "http"
+        discovery_name = var.service_connect_discovery_name
+
+        client_alias {
+          dns_name = var.service_connect_discovery_name
+          port     = var.container_port
+        }
+      }
+    }
   }
 
   depends_on = [var.alb_http_listener_arn]
