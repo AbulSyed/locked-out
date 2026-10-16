@@ -1,9 +1,13 @@
-resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
+# resource "aws_iam_openid_connect_provider" "github" {
+#   url = "https://token.actions.githubusercontent.com"
+#
+#   client_id_list = [
+#     "sts.amazonaws.com"
+#   ]
+# }
 
-  client_id_list = [
-    "sts.amazonaws.com"
-  ]
+data "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
 }
 
 data "aws_iam_policy_document" "github_oidc_assume_role_policy" {
@@ -12,7 +16,7 @@ data "aws_iam_policy_document" "github_oidc_assume_role_policy" {
 
     principals {
       type        = "Federated"
-      identifiers = [aws_iam_openid_connect_provider.github.arn]
+      identifiers = [data.aws_iam_openid_connect_provider.github.arn]
     }
 
     condition {
