@@ -143,7 +143,12 @@ module "auth_ecs" {
   ecr_url                 = module.auth_ecr.repository_url
   container_port          = 8080
 
-  environment_vars = []
+  environment_vars = [
+    {
+      name  = "IDENTITY_SERVICE_URL"
+      value = "http://identity-service:8081"
+    }
+  ]
   secret_vars      = []
 
   log_group_name = module.auth_cloudwatch.log_group_name
@@ -153,6 +158,9 @@ module "auth_ecs" {
   desired_count      = 0
   private_subnet_ids = module.vpc.private_subnet_ids
   ecs_sg_id          = module.sg.ecs_sg_id
+
+  service_connect_enabled       = true
+  service_connect_namespace_arn = aws_service_discovery_http_namespace.services.arn
 
   target_group_arn      = module.auth_alb.target_group_arn
   alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
@@ -194,6 +202,10 @@ module "identity_ecs" {
   private_subnet_ids = module.vpc.private_subnet_ids
   ecs_sg_id          = module.sg.ecs_sg_id
 
+  service_connect_enabled        = true
+  service_connect_namespace_arn  = aws_service_discovery_http_namespace.services.arn
+  service_connect_discovery_name = "identity-service"
+
   target_group_arn      = module.identity_alb.target_group_arn
   alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
 }
@@ -222,6 +234,10 @@ module "frontend_ecs" {
 
   target_group_arn      = module.frontend_alb.target_group_arn
   alb_http_listener_arn = aws_lb_listener.default_http_listener.arn
+}
+
+resource "aws_service_discovery_http_namespace" "services" {
+  name = "locked-out"
 }
 
 resource "aws_lb" "alb" {
