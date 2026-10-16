@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  deploy_docker_image:
+  build_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
