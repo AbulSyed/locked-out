@@ -70,6 +70,16 @@ resource "aws_security_group_rule" "ecs_ingress_from_alb_frontend" {
   source_security_group_id = aws_security_group.alb_sg.id
 }
 
+resource "aws_security_group_rule" "ecs_ingress_service_connect" {
+  type                     = "ingress"
+  from_port                = var.identity_service_port
+  to_port                  = var.identity_service_port
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.ecs_sg.id
+  source_security_group_id = aws_security_group.ecs_sg.id
+  description              = "Allow ECS services to communicate with identity service"
+}
+
 resource "aws_security_group_rule" "ecs_egress" {
   type              = "egress"
   from_port         = 0
