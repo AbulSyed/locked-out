@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 )
 public interface IdentityServiceClient {
 
+    @GetMapping("/identity/health")
+    ResponseEntity<String> getHealth();
+
     @GetMapping("/identity/get-client")
     ResponseEntity<ClientResponse> getClient(
             @RequestHeader(value = "x-correlation-id", required = true) String correlationId,
