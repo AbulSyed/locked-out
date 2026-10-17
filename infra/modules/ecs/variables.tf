@@ -94,3 +94,18 @@ variable "alb_http_listener_arn" {
   description = "ALB HTTP listener ARN"
   type        = string
 }
+
+variable "service_connect_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "service_connect_namespace_arn" {
+  type    = string
+  default = null
+}
+
+variable "service_connect_discovery_name" {
+  type    = string
+  default = null
+}
