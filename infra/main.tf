@@ -149,7 +149,7 @@ module "auth_ecs" {
       value = "http://identity-service:8081"
     }
   ]
-  secret_vars      = []
+  secret_vars = []
 
   log_group_name = module.auth_cloudwatch.log_group_name
   log_region     = "eu-west-2"
