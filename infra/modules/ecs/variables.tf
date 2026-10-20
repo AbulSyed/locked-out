@@ -39,6 +39,12 @@ variable "container_port" {
   type        = number
 }
 
+variable "health_path" {
+  description = "Health check path"
+  type        = string
+  default     = null
+}
+
 variable "environment_vars" {
   description = "Environment variables (non secret)"
   type = list(object({
