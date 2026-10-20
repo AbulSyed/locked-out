@@ -142,6 +142,7 @@ module "auth_ecs" {
   service                 = "auth-service"
   ecr_url                 = module.auth_ecr.repository_url
   container_port          = 8080
+  health_path             = "/auth/health"
 
   environment_vars = [
     {
@@ -176,6 +177,7 @@ module "identity_ecs" {
   service                 = "identity-service"
   ecr_url                 = module.identity_ecr.repository_url
   container_port          = 8081
+  health_path             = "/identity/health"
 
   environment_vars = [
     {

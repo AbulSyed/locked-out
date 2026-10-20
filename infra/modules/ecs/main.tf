@@ -24,6 +24,17 @@ resource "aws_ecs_task_definition" "task_definition" {
         }
       ]
 
+      healthCheck = var.health_path != null ? {
+        command = [
+          "CMD-SHELL",
+          "curl -f http://localhost:${var.container_port}${var.health_path} || exit 1"
+        ]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      } : null
+
       environment = var.environment_vars
       secrets     = var.secret_vars
 
