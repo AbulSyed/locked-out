@@ -33,6 +33,18 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@376925c9d111252e87ae59691e5a442dd100ef6a # v2.1.3
 
+      - name: Set up JDK 17
+        if: inputs.service != 'frontend'
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build JAR
+        if: inputs.service != 'frontend'
+        working-directory: ./${{ inputs.service }}
+        run: ./gradlew clean build -x test
+
       - name: Build image
         run: |
           docker build \
