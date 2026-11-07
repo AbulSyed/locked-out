@@ -2,7 +2,7 @@
 
 ### Purpose
 
-LockedOut is a authorization server that utilises the OAuth2.0 & OIDC protocol. LockedOut can be used in applications to support authentication & authorization. A user interface, can also be used to CRUD users/OAuth2.0 clients apps.
+LockedOut is an authorization server that utilises the OAuth2.0 & OIDC protocol. LockedOut can be used in applications to support authentication & authorization. A user interface, can also be used to CRUD users/OAuth2.0 clients apps.
 
 ### Demo
 
@@ -46,8 +46,14 @@ For detailed information on how to integrate with your project, please see the d
 
 Ensure ports: 3000, 5432, 8080, 8081 are available.
 
+- Run the below command in auth-service & identity-service to builder the JAR:
+
+```bash
+./gradlew clean build -x test
+```
+
 Start the application using Docker Compose. Ensure you are inside the `docker-compose` folder.
 
 ```
-docker compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.yml up -d
 ```
