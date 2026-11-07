@@ -22,6 +22,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/locked_out
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
+      NEW_RELIC_API_KEY: ${NEW_RELIC_API_KEY}
     depends_on:
       - postgres-db
 #    restart: always
@@ -31,8 +32,9 @@ services:
     container_name: lo-auth-service
     ports:
       - 8080:8080
-#    environment:
+    environment:
       # SPRING_PROFILES_ACTIVE: dev
+      NEW_RELIC_API_KEY: ${NEW_RELIC_API_KEY}
     depends_on:
       - identity-service
 #    restart: always
