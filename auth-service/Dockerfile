@@ -25,6 +25,6 @@ ENV JAVA_TOOL_OPTIONS="\
     -Dotel.javaagent.logging=application \
     -Dotel.traces.sampler=parentbased_traceidratio"
 
-EXPOSE 8081
+EXPOSE 8080
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
